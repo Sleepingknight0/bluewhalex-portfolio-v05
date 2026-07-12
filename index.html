@@ -359,14 +359,6 @@ section.in .hero-brand,body.ready #hero .hero-brand{opacity:1;transform:none}
   flex:1;max-width:140px;height:1px;
   background:linear-gradient(90deg, rgba(255,255,255,.45), transparent);
 }
-.hero-watermark{
-  position:absolute;right:-2%;bottom:12%;z-index:2;pointer-events:none;
-  width:min(42vw,480px);opacity:.07;
-  filter:grayscale(1);user-select:none;
-}
-.hero-watermark .logo{width:100%;height:auto}
-@media(max-width:800px){.hero-watermark{display:none}}
-
 /* rail */
 .rail{
   position:fixed;right:calc(1.1rem + var(--safe-r));top:50%;transform:translateY(-50%) translateX(16px);
@@ -800,7 +792,7 @@ section.in .hero-meta{opacity:1}
 .catalog-search input:focus{border-color:#fff;box-shadow:0 0 0 1px #fff}
 .catalog-search input::placeholder{color:#838589}
 .catalog-count{padding-bottom:.8rem;white-space:nowrap}
-.project-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.project-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:1rem}
 .project-card{
   position:relative;min-width:0;background:#070707;border:1px solid rgba(255,255,255,.18);
   overflow:hidden;transition:transform .3s var(--e-out),border-color .25s,box-shadow .3s;
@@ -1407,6 +1399,33 @@ body.modal-open{overflow:hidden}
 }
 .dossier-close:hover,.dossier-close:focus-visible{background:#fff;color:#000;border-color:#fff}
 .dossier-scroll{overflow:auto;overscroll-behavior:contain;padding:clamp(1.25rem,3vw,2.5rem)}
+.dossier-gallery{display:block;min-height:0;overflow:visible;padding-bottom:2rem;margin-bottom:2rem;border-bottom:1px solid var(--line)}
+.dossier-gallery-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:.85rem}
+.dossier-gallery-label,.dossier-gallery-count{
+  font-family:var(--fm);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:#c2c3c5;
+}
+.dossier-gallery-count{color:#fff;white-space:nowrap}
+.dossier-gallery-track{
+  display:flex;align-items:flex-start;gap:.85rem;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;
+  scrollbar-width:none;padding-bottom:.35rem;outline:none;
+}
+.dossier-gallery-track::-webkit-scrollbar{display:none}
+.dossier-gallery-track:focus-visible{box-shadow:0 0 0 2px #fff}
+.dossier-shot{
+  flex:0 0 min(86%,820px);scroll-snap-align:start;margin:0;border:1px solid rgba(255,255,255,.2);
+  background:#030303;overflow:hidden;
+}
+.dossier-shot img{display:block;width:100%;height:clamp(186px,46vw,460px);object-fit:contain;background:#111}
+.dossier-shot figcaption{
+  min-height:48px;display:flex;align-items:center;padding:.75rem .9rem;border-top:1px solid var(--line);
+  color:#b8b9bc;font-size:.82rem;line-height:1.45;
+}
+.dossier-gallery-controls{display:flex;align-items:center;justify-content:flex-end;gap:.6rem;margin-top:.75rem}
+.dossier-gallery-button{
+  width:48px;height:48px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.28);
+  background:#0d0d0d;color:#fff;font:500 1.1rem var(--fm);transition:background .2s,color .2s,border-color .2s;
+}
+.dossier-gallery-button:hover,.dossier-gallery-button:focus-visible{background:#fff;color:#000;border-color:#fff}
 .dossier-intro{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(0,1.7fr);gap:2rem;padding-bottom:2rem;border-bottom:1px solid var(--line)}
 .dossier-status{
   display:inline-flex;align-items:center;gap:.45rem;font-family:var(--fm);font-size:.55rem;letter-spacing:.17em;
@@ -1459,6 +1478,8 @@ body.modal-open{overflow:hidden}
   .dossier-intro{grid-template-columns:1fr;gap:1.25rem}
   .dossier-facts,.dossier-section ol,.dossier-architecture{grid-template-columns:1fr}
   .dossier-scroll{padding:1.15rem 1.1rem calc(var(--tele-h) + var(--safe-b) + 1.25rem)}
+  .dossier-shot{flex-basis:94%}
+  .dossier-shot figcaption{font-size:.78rem}
   .dossier-section{padding:1.5rem 0}
 }
 
@@ -1603,9 +1624,6 @@ body.lang-flash main{animation:lang .3s ease}
   </video>
   <div class="scrim"></div>
   <div class="orbits" aria-hidden="true"><i></i><i></i><i></i><span class="dot"></span></div>
-  <div class="hero-watermark" aria-hidden="true">
-    <img class="logo" src="assets/images/logo.png" alt="" width="480" height="120" decoding="async">
-  </div>
   <div class="hero-meta">
     LAT 13.8622° N<br>
     LON 100.5144° E<br>
@@ -1751,24 +1769,24 @@ body.lang-flash main{animation:lang .3s ease}
     <div class="project-grid" id="projectGrid">
       <article class="project-card rv" data-project-card style="--d:.24s">
         <div class="project-visual">
-          <img src="assets/images/ops-network.jpg" alt="Operations workstation for the overnight parking log" data-alt-th="หน้าจองานปฏิบัติการสำหรับระบบบันทึกรถจอดค้าง" loading="lazy" width="900" height="600">
+          <img src="assets/images/projects/overnight-live-form.png" alt="Live vehicle entry screen for the overnight building parking log" data-alt-th="หน้าบันทึกทะเบียนรถจากระบบบันทึกรถค้างอาคารที่ใช้งานจริง" loading="lazy" width="1440" height="900">
           <span class="project-code">OPS-LOG // 01</span>
         </div>
         <div class="project-body">
           <div class="project-meta"><span data-i18n="p1_class">RECORD SYSTEM</span><span class="online" data-i18n="p1_status">IN SERVICE</span></div>
-          <h3 data-i18n="p1_title">NACC OVERNIGHT PARKING LOG</h3>
-          <p data-i18n="p1_sub">A focused operational system for recording and reviewing vehicles that remain parked overnight.</p>
-          <div class="tags"><span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">Google Sheets</span><span class="tag">Drive API</span></div>
+          <h3 data-i18n="p1_title">NACC OVERNIGHT BUILDING PARKING LOG</h3>
+          <p data-i18n="p1_sub">A focused operational system for recording vehicles found parked in NACC buildings and analysing repeat or long-stay patterns.</p>
+          <div class="tags"><span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">Google Sheets</span><span class="tag">ReportLab</span></div>
           <div class="project-actions">
             <button class="btn signal mag project-open" type="button" data-project="overnight" data-i18n="explore">EXPLORE SYSTEM</button>
-            <a class="project-source" href="https://github.com/Sleepingknight0/NACC_Request-parking" target="_blank" rel="noopener noreferrer" data-i18n="source">SOURCE CODE ↗</a>
+            <a class="project-source" href="https://github.com/captwcan/naccparking" target="_blank" rel="noopener noreferrer" data-i18n="source">SOURCE CODE ↗</a>
           </div>
         </div>
       </article>
 
       <article class="project-card rv" data-project-card style="--d:.3s">
         <div class="project-visual">
-          <img src="assets/images/studio-screen.jpg" alt="Interface workstation for the parking operations platform" data-alt-th="หน้าจอระบบจัดการที่จอดรถครบวงจร" loading="lazy" width="900" height="600">
+          <img src="assets/images/projects/gen2-role-selector.png" alt="Live role selector for the Gen 2 parking operations platform" data-alt-th="หน้าคัดเลือกบทบาทจากระบบจัดการที่จอดรถ Gen 2 ที่ใช้งานจริง" loading="lazy" width="1440" height="900">
           <span class="project-code">OPS-PLATFORM // G2</span>
         </div>
         <div class="project-body">
@@ -1779,7 +1797,7 @@ body.lang-flash main{animation:lang .3s ease}
           <div class="project-actions">
             <button class="btn signal mag project-open" type="button" data-project="parking" data-i18n="explore">EXPLORE SYSTEM</button>
             <a class="project-source" href="https://github.com/Sleepingknight0/Parking_request" target="_blank" rel="noopener noreferrer" data-i18n="source">SOURCE CODE ↗</a>
-            <a class="project-source" href="https://parking-request-admin.vercel.app" target="_blank" rel="noopener noreferrer" data-i18n="live">LIVE APP ↗</a>
+            <a class="project-source" href="https://nacc-parking-user.vercel.app" target="_blank" rel="noopener noreferrer" data-i18n="live">LIVE APP ↗</a>
           </div>
         </div>
       </article>
@@ -1925,6 +1943,17 @@ body.lang-flash main{animation:lang .3s ease}
       <button class="dossier-close" id="projectDialogClose" type="button" aria-label="Close project details" title="Close (Escape)"><span id="projectDialogCloseText">CLOSE ×</span></button>
     </header>
     <div class="dossier-scroll">
+      <section class="dossier-gallery" id="projectDialogGallery" aria-label="Project interface gallery">
+        <div class="dossier-gallery-head">
+          <span class="dossier-gallery-label" id="projectGalleryLabel">PROJECT INTERFACE</span>
+          <span class="dossier-gallery-count" id="projectGalleryCount" aria-live="polite">01 / 01</span>
+        </div>
+        <div class="dossier-gallery-track" id="projectGalleryTrack" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Project screenshots"></div>
+        <div class="dossier-gallery-controls">
+          <button class="dossier-gallery-button" id="projectGalleryPrev" type="button" aria-label="Previous screenshot">←</button>
+          <button class="dossier-gallery-button" id="projectGalleryNext" type="button" aria-label="Next screenshot">→</button>
+        </div>
+      </section>
       <div class="dossier-intro">
         <div>
           <div class="dossier-status" id="projectDialogStatus"></div>
@@ -2439,76 +2468,84 @@ $('#coords')?.addEventListener('keydown',e=>{
 /* project dossier */
 const PROJECTS={
   overnight:{
-    source:'https://github.com/Sleepingknight0/NACC_Request-parking',live:'',
+    source:'https://github.com/captwcan/naccparking',live:'https://naccparking.streamlit.app/',
+    gallery:[
+      {src:'assets/images/projects/overnight-live-form.png',width:1440,height:900,alt:{en:'Live desktop vehicle-entry screen for the overnight building parking log',th:'หน้าบันทึกทะเบียนรถบนเดสก์ท็อปจากระบบบันทึกรถค้างอาคารจริง'},caption:{en:'Desktop · building summary and vehicle entry',th:'เดสก์ท็อป · สรุปตามอาคารและฟอร์มบันทึกทะเบียน'}},
+      {src:'assets/images/projects/overnight-live-mobile.png',width:390,height:844,orientation:'portrait',alt:{en:'Live mobile view of the overnight building parking log',th:'หน้ามือถือจากระบบบันทึกรถค้างอาคารจริง'},caption:{en:'Mobile · responsive operational view',th:'มือถือ · หน้าปฏิบัติงานแบบ responsive'}}
+    ],
     en:{
-      title:'NACC Overnight Parking Log',status:'IN SERVICE',
-      summary:'A focused operational system for recording and reviewing vehicles that remain parked overnight at the Office of the NACC, Nonthaburi. Its scope is overnight-parking records, not general parking-request management.',
-      relation:'Independent overnight-parking record system. It shares an office context with the Parking Operations Platform (Gen 2), but the two solve different problems and are not generations of one product.',
+      title:'NACC Overnight Building Parking Log',status:'IN SERVICE',
+      summary:'A focused Streamlit system for security staff to record vehicles found remaining in NACC buildings by date, building, license plate, and province, then review repeat and long-stay patterns through a dedicated dashboard.',
+      relation:'A collaborative project maintained in captwcan/naccparking and forked to the owner’s GitHub account. It is separate from the Gen 2 parking-request platform and solves a narrower vehicle-observation problem.',
       facts:[
-        ['System class','Operational record system'],
-        ['Users','Officer · security guard · admin — three role-gated views'],
-        ['Data layer','Google Sheets (7 worksheets) · CSV dev fallback'],
-        ['Delivery','Streamlit web app — Streamlit Community Cloud per repository records'],
-        ['Verified scale','64 commits · 100% Python · 71 pytest cases'],
-        ['Status basis','In service (owner-reported); repository documents production QA']
+        ['System class','Vehicle observation and overnight-parking log'],
+        ['Primary users','Security staff · report viewers · administrator'],
+        ['Data layer','Google Sheets through gspread and service-account authentication'],
+        ['Application surfaces','Vehicle entry form + modular analytics dashboard'],
+        ['Report periods','Daily · weekly · monthly'],
+        ['Delivery','Live Streamlit Community Cloud application']
       ],
       workflow:[
-        'An officer records the overnight-parking request document — agency, dates, parking location, vehicle count and plates, with an optional scanned attachment.',
-        'The system automatically creates a guard job for the request; the job opens for pickup the evening before the parking date.',
-        'The guard downloads a printable parking sign, accepts the job, places the marker on-site, and submits required near/far photo evidence.',
-        'An admin reviews the photos and confirms completion — the job, its dates, and the request close together.',
-        'Monthly reports break activity down by agency and parking location, with CSV export for record-keeping.'
+        'Security staff select the building where a remaining vehicle was found.',
+        'One or more license plates and provinces are added through dynamic vehicle rows.',
+        'The app checks duplicates inside the form and against records already saved for the same date before batch submission.',
+        'Validated observations are appended to Google Sheets and the page updates the current-day totals per building.',
+        'The dashboard analyses repeat and long-stay vehicles and exports daily, weekly, or monthly CSV, PDF, and JPG reports.'
       ],
       architecture:[
-        ['Interface','Streamlit multi-page console with role-gated pages for officer, guard, and admin — no separate backend service.'],
-        ['Data & records','Google Sheets as the system of record: seven Thai-header worksheets translated to internal English field keys at the storage boundary, with a local CSV fallback for development.'],
-        ['Files & documents','Google Drive stores documents and photo evidence via service-account or OAuth modes; ReportLab generates printable parking signs; previews stream server-side into the app.']
+        ['Interface','A Streamlit entry application plus a dashboard page split into overview, period analysis, vehicle analysis, and raw-data modules.'],
+        ['Data & analysis','gspread reads and appends Google Sheets records; pandas normalises dates, groups observations, and calculates repeat or long-stay patterns.'],
+        ['Reporting','ReportLab, Pillow, and bundled Thai fonts generate printable PDF and JPG summaries; CSV export preserves the detailed rows.']
       ],
-      stack:['Python','Streamlit','pandas','Google Sheets API','Google Drive API','ReportLab','Pillow','pytest'],
+      stack:['Python','Streamlit','pandas','gspread','Google Auth','ReportLab','Pillow','openpyxl','pytest'],
       highlights:[
-        'Append-only audit log written on every state-changing action — create, cancel, accept, submit, confirm.',
-        'Soft-delete-only cancellation: reason, actor, and timestamp are recorded; nothing is ever deleted.',
-        'Session-scoped action locks prevent duplicate submissions from double-clicks.',
-        'Buddhist-era dates are detected and normalized to Gregorian automatically.',
-        'Admin self-repair tools — schema validator, orphan-record checks, and data-normalization fixes — built from real production QA findings.'
+        'Dynamic multi-vehicle entry supports adding, removing, clearing, and synchronising plate rows without leaving the form.',
+        'Duplicate detection covers both the current batch and same-day records already stored in Google Sheets.',
+        'The home view exposes per-building and all-building totals before staff begin data entry.',
+        'The dashboard separates overview, period, individual-vehicle, and raw-data analysis for fast operational review.',
+        'Thai typefaces are bundled so exported PDF and JPG reports remain readable and consistent.'
       ]
     },
     th:{
-      title:'ระบบบันทึกรถจอดค้าง ป.ป.ช.',status:'ใช้งานจริง',
-      summary:'ระบบเฉพาะทางสำหรับบันทึกและตรวจสอบยานพาหนะที่จอดค้างคืนของสำนักงาน ป.ป.ช. ประจำจังหวัดนนทบุรี ขอบเขตคือข้อมูลรถจอดค้าง ไม่ใช่ระบบจัดการคำขอที่จอดทั่วไป',
-      relation:'ระบบบันทึกรถจอดค้างที่เป็นอิสระ — อยู่ในบริบทสำนักงานเดียวกับแพลตฟอร์ม Gen 2 แต่แก้คนละโจทย์ และไม่ใช่คนละรุ่นของผลิตภัณฑ์เดียวกัน',
+      title:'ระบบบันทึกรถค้างอาคาร ป.ป.ช.',status:'ใช้งานจริง',
+      summary:'ระบบ Streamlit สำหรับ รปภ. บันทึกรถที่ตรวจพบว่าจอดค้างในอาคาร แยกตามวันที่ อาคาร ทะเบียน และจังหวัด พร้อมแดชบอร์ดวิเคราะห์รถที่พบซ้ำหรือจอดค้างหลายวัน',
+      relation:'โปรเจกต์ที่พัฒนาร่วมกันใน captwcan/naccparking และมี fork อยู่ในบัญชี GitHub ของเจ้าของพอร์ต เป็นคนละระบบกับแพลตฟอร์มคำขอที่จอด Gen 2 และแก้โจทย์การตรวจพบรถค้างโดยเฉพาะ',
       facts:[
-        ['ประเภทระบบ','ระบบบันทึกข้อมูลปฏิบัติการ'],
-        ['ผู้ใช้งาน','เจ้าหน้าที่ · รปภ. · แอดมิน — แบ่งสิทธิ์สามบทบาท'],
-        ['ชั้นข้อมูล','Google Sheets (7 ชีต) · CSV สำรองสำหรับ dev'],
-        ['รูปแบบระบบ','เว็บแอป Streamlit — ปล่อยใช้งานบน Streamlit Community Cloud ตามบันทึกในรีโพซิทอรี'],
-        ['ขนาดที่ยืนยันได้','64 คอมมิต · Python 100% · pytest 71 รายการ'],
-        ['ฐานของสถานะ','ใช้งานจริง (ตามข้อมูลเจ้าของระบบ) พร้อมบันทึกผล QA บนระบบจริงในรีโพซิทอรี']
+        ['ประเภทระบบ','ระบบบันทึกการตรวจพบรถและรถค้างอาคาร'],
+        ['ผู้ใช้งานหลัก','รปภ. · ผู้ดูรายงาน · ผู้ดูแลระบบ'],
+        ['ชั้นข้อมูล','Google Sheets ผ่าน gspread และ service account'],
+        ['หน้าระบบ','ฟอร์มบันทึกรถ + แดชบอร์ดวิเคราะห์แบบแยกโมดูล'],
+        ['ช่วงรายงาน','รายวัน · รายสัปดาห์ · รายเดือน'],
+        ['การเผยแพร่','เว็บแอปใช้งานจริงบน Streamlit Community Cloud']
       ],
       workflow:[
-        'เจ้าหน้าที่บันทึกหนังสือขอจอดค้างคืน — หน่วยงาน วันที่ จุดจอด จำนวนรถและทะเบียน พร้อมแนบไฟล์หนังสือได้',
-        'ระบบสร้างงาน รปภ. ให้อัตโนมัติ โดยเปิดให้รับงานได้ตั้งแต่เย็นก่อนวันจอดหนึ่งวัน',
-        'รปภ. ดาวน์โหลดป้ายจอดรถ รับงาน วางป้าย/กรวยหน้างาน แล้วส่งรูปใกล้–ไกลตามที่ระบบบังคับ',
-        'แอดมินตรวจรูปและยืนยันงานเสร็จ — งาน วันที่ และหนังสือปิดพร้อมกัน',
-        'รายงานรายเดือนแยกตามหน่วยงานและจุดจอด พร้อมส่งออก CSV เพื่อเก็บเป็นหลักฐาน'
+        'รปภ. เลือกอาคารที่ตรวจพบรถจอดค้าง',
+        'เพิ่มทะเบียนรถและจังหวัดได้หลายรายการผ่านแถวข้อมูลแบบ dynamic',
+        'ระบบตรวจรายการซ้ำทั้งในฟอร์มและข้อมูลของวันเดียวกันที่มีอยู่ใน Google Sheets ก่อนบันทึก',
+        'ข้อมูลที่ผ่านการตรวจถูกบันทึกเป็นชุด และหน้าแรกอัปเดตยอดประจำวันแยกตามอาคาร',
+        'แดชบอร์ดวิเคราะห์รถที่พบซ้ำหรือค้างหลายวัน และส่งออกรายงานรายวัน รายสัปดาห์ หรือรายเดือนเป็น CSV, PDF และ JPG'
       ],
       architecture:[
-        ['หน้าจอใช้งาน','คอนโซล Streamlit หลายหน้า แบ่งสิทธิ์ตามบทบาท เจ้าหน้าที่ / รปภ. / แอดมิน โดยไม่มี backend แยก'],
-        ['ข้อมูลบันทึก','Google Sheets เป็นฐานข้อมูลหลัก — เจ็ดชีตหัวคอลัมน์ภาษาไทย แปลงเป็นชื่อฟิลด์อังกฤษภายในระบบที่ชั้นจัดเก็บ พร้อม CSV สำรองสำหรับพัฒนา'],
-        ['ไฟล์และเอกสาร','Google Drive เก็บเอกสารและรูปหลักฐานผ่าน service account หรือ OAuth, ReportLab สร้างป้ายจอดรถสำหรับพิมพ์ และพรีวิวไฟล์ในแอปแบบสตรีมฝั่งเซิร์ฟเวอร์']
+        ['หน้าจอใช้งาน','แอป Streamlit สำหรับบันทึกข้อมูลและหน้าแดชบอร์ดที่แยกเป็นภาพรวม วิเคราะห์ช่วงเวลา วิเคราะห์รายคัน และข้อมูลดิบ'],
+        ['ข้อมูลและการวิเคราะห์','gspread อ่านและเพิ่มข้อมูลใน Google Sheets ส่วน pandas จัดรูปแบบวันที่ จัดกลุ่มรายการ และคำนวณรถที่พบซ้ำหรือค้างหลายวัน'],
+        ['ระบบรายงาน','ReportLab, Pillow และฟอนต์ภาษาไทยที่มากับโปรเจกต์ ใช้สร้างสรุป PDF/JPG พร้อมส่งออกข้อมูลละเอียดเป็น CSV']
       ],
-      stack:['Python','Streamlit','pandas','Google Sheets API','Google Drive API','ReportLab','Pillow','pytest'],
+      stack:['Python','Streamlit','pandas','gspread','Google Auth','ReportLab','Pillow','openpyxl','pytest'],
       highlights:[
-        'บันทึก audit log แบบเพิ่มอย่างเดียวทุกการเปลี่ยนสถานะ — สร้าง ยกเลิก รับงาน ส่งงาน ยืนยัน',
-        'การยกเลิกแบบ soft-delete เท่านั้น — เก็บเหตุผล ผู้ทำรายการ และเวลา ไม่มีการลบข้อมูลทิ้ง',
-        'ล็อกการทำรายการระดับ session กันการกดซ้ำ',
-        'ตรวจจับและแปลงปี พ.ศ. เป็น ค.ศ. อัตโนมัติ',
-        'เครื่องมือซ่อมข้อมูลฝั่งแอดมิน — ตัวตรวจสคีมา เช็กข้อมูลกำพร้า และแก้ข้อมูลอัตโนมัติ — สร้างจากผล QA บนระบบจริง'
+        'ฟอร์มทะเบียนแบบหลายแถวเพิ่ม ลบ ล้าง และปรับจำนวนรายการได้โดยไม่ต้องออกจากหน้า',
+        'ตรวจรายการซ้ำทั้งชุดที่กำลังกรอกและข้อมูลวันเดียวกันใน Google Sheets',
+        'หน้าแรกแสดงยอดรายอาคารและยอดรวมก่อนเริ่มบันทึก ช่วยให้เห็นสถานการณ์ทันที',
+        'แดชบอร์ดแยกภาพรวม ช่วงเวลา รายคัน และข้อมูลดิบ เพื่อลดเวลาค้นหาข้อมูลปฏิบัติการ',
+        'รวมฟอนต์ไทยไว้ในโปรเจกต์ ทำให้รายงาน PDF และ JPG อ่านง่ายและรูปแบบคงที่'
       ]
     }
   },
   parking:{
-    source:'https://github.com/Sleepingknight0/Parking_request',live:'https://parking-request-admin.vercel.app',
+    source:'https://github.com/Sleepingknight0/Parking_request',live:'https://nacc-parking-user.vercel.app',
+    gallery:[
+      {src:'assets/images/projects/gen2-role-selector.png',alt:{en:'Live role selector for the Gen 2 parking operations platform',th:'หน้าคัดเลือกบทบาทจากระบบจัดการที่จอดรถ Gen 2 ที่ใช้งานจริง'},caption:{en:'Field app · four role-based entry points',th:'แอปภาคสนาม · ทางเข้าใช้งานตามบทบาท 4 รูปแบบ'}},
+      {src:'assets/images/projects/gen2-admin-login.png',alt:{en:'Live administrator login for the Gen 2 parking platform',th:'หน้าล็อกอินผู้ดูแลจากระบบจัดการที่จอดรถ Gen 2 ที่ใช้งานจริง'},caption:{en:'Admin console · protected sign-in',th:'คอนโซลผู้ดูแล · หน้าล็อกอินที่มีการป้องกัน'}}
+    ],
     en:{
       title:'NACC Parking Operations Platform — Gen 2',status:'GEN 2 · IN SERVICE',
       summary:'An end-to-end parking operations platform covering request intake, task coordination, printable documents, guard submissions, evidence uploads, review, and work completion.',
@@ -2580,7 +2617,42 @@ const PROJECTS={
   }
 };
 const projectDialog=$('#projectDialog'),projectDialogClose=$('#projectDialogClose');
-let activeProject='',projectTrigger=null;
+const projectGallery=$('#projectDialogGallery'),projectGalleryTrack=$('#projectGalleryTrack');
+const projectGalleryPrev=$('#projectGalleryPrev'),projectGalleryNext=$('#projectGalleryNext'),projectGalleryCount=$('#projectGalleryCount');
+let activeProject='',projectTrigger=null,galleryScrollTick=0;
+function projectGalleryIndex(){
+  if(!projectGalleryTrack?.children.length) return 0;
+  const left=projectGalleryTrack.scrollLeft;
+  return [...projectGalleryTrack.children].reduce((best,slide,index)=>
+    Math.abs(slide.offsetLeft-left)<Math.abs(projectGalleryTrack.children[best].offsetLeft-left)?index:best,0);
+}
+function updateProjectGalleryCount(){
+  const total=projectGalleryTrack?.children.length||0,index=projectGalleryIndex();
+  if(projectGalleryCount) projectGalleryCount.textContent=`${String(index+1).padStart(2,'0')} / ${String(total).padStart(2,'0')}`;
+}
+function moveProjectGallery(direction){
+  if(!projectGalleryTrack?.children.length) return;
+  const total=projectGalleryTrack.children.length;
+  const index=(projectGalleryIndex()+direction+total)%total;
+  projectGalleryTrack.children[index].scrollIntoView({behavior:RM?'auto':'smooth',block:'nearest',inline:'start'});
+}
+function renderProjectGallery(project){
+  if(!projectGalleryTrack||!projectGallery) return;
+  const thai=lang==='th',shots=project.gallery||[];
+  projectGallery.hidden=!shots.length;
+  projectGalleryTrack.textContent='';
+  projectGallery.setAttribute('aria-label',thai?'แกลเลอรีหน้าจอโปรเจกต์':'Project interface gallery');
+  projectGalleryTrack.setAttribute('aria-label',thai?'ภาพหน้าจอโปรเจกต์ เลื่อนซ้ายขวาได้':'Project screenshots, horizontally scrollable');
+  $('#projectGalleryLabel').textContent=thai?'หน้าจอจากระบบจริง':'LIVE PROJECT INTERFACE';
+  projectGalleryPrev.setAttribute('aria-label',thai?'ภาพก่อนหน้า':'Previous screenshot');
+  projectGalleryNext.setAttribute('aria-label',thai?'ภาพถัดไป':'Next screenshot');
+  shots.forEach((shot,index)=>{
+    const figure=document.createElement('figure'),img=document.createElement('img'),caption=document.createElement('figcaption');
+    figure.className=`dossier-shot${shot.orientation==='portrait'?' is-portrait':''}`;img.src=shot.src;img.alt=shot.alt[thai?'th':'en'];img.width=shot.width||1440;img.height=shot.height||900;
+    img.loading=index?'lazy':'eager';caption.textContent=shot.caption[thai?'th':'en'];figure.append(img,caption);projectGalleryTrack.appendChild(figure);
+  });
+  projectGalleryTrack.scrollLeft=0;updateProjectGalleryCount();
+}
 function renderProjectDialog(){
   const project=PROJECTS[activeProject];
   if(!project) return;
@@ -2589,6 +2661,7 @@ function renderProjectDialog(){
   $('#projectDialogStatus').textContent=copy.status;
   $('#projectDialogSummary').textContent=copy.summary;
   $('#projectDialogKicker').textContent=lang==='th'?'มินิโปรเจกต์ // แฟ้มข้อมูลภารกิจ':'MINI PROJECT // MISSION DOSSIER';
+  renderProjectGallery(project);
   const facts=$('#projectDialogFacts'); facts.textContent='';
   copy.facts.forEach(([label,value])=>{
     const box=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd');
@@ -2631,7 +2704,18 @@ projectDialog?.addEventListener('close',()=>{
   document.body.classList.remove('modal-open');projectTrigger?.focus?.({preventScroll:true});projectTrigger=null;
 });
 projectDialog?.addEventListener('click',e=>{if(e.target===projectDialog) closeProjectDialog();});
+projectGalleryPrev?.addEventListener('click',()=>moveProjectGallery(-1));
+projectGalleryNext?.addEventListener('click',()=>moveProjectGallery(1));
+projectGalleryTrack?.addEventListener('scroll',()=>{
+  cancelAnimationFrame(galleryScrollTick);galleryScrollTick=requestAnimationFrame(updateProjectGalleryCount);
+},{passive:true});
+projectGalleryTrack?.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft'||e.key==='ArrowRight'){
+    e.preventDefault();moveProjectGallery(e.key==='ArrowRight'?1:-1);
+  }
+});
 projectDialog?.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){e.preventDefault();closeProjectDialog();return;}
   if(e.key!=='Tab') return;
   const focusable=$$('a[href]:not([hidden]),button:not([disabled])',projectDialog).filter(el=>el.getClientRects().length);
   if(!focusable.length){e.preventDefault();projectDialogClose?.focus();return;}
@@ -2793,8 +2877,8 @@ const TH={
   pr_sub:"จัดลำดับโปรเจกต์ตามขนาดงาน เมกะนำเสนอวิสัยทัศน์ โปรเจกต์ขั้นสูงรองรับระบบซับซ้อน และมินิโปรเจกต์เป็นแค็ตตาล็อกที่ค้นหาได้แม้มีมากกว่าหนึ่งร้อยรายการ",
   jump_mega:"เมกะโปรเจกต์", jump_mega_state:"โปรแกรมวิสัยทัศน์", jump_adv:"โปรเจกต์ขั้นสูง", jump_adv_state:"สงวนขีดความสามารถ", jump_mini:"มินิโปรเจกต์", jump_mini_state:"ใช้งานจริง 02 ระบบ",
   tier_mini:"03 // มินิโปรเจกต์", tier_active:"02 ระบบที่ใช้งานจริง",
-  p1_class:"ระบบบันทึกข้อมูล", p1_status:"ใช้งานจริง", p1_title:"ระบบบันทึกรถจอดค้าง ป.ป.ช.",
-  p1_sub:"ระบบปฏิบัติการเฉพาะทางสำหรับบันทึกและตรวจสอบยานพาหนะที่จอดค้างคืนของสำนักงาน ป.ป.ช.",
+  p1_class:"ระบบบันทึกข้อมูล", p1_status:"ใช้งานจริง", p1_title:"ระบบบันทึกรถค้างอาคาร ป.ป.ช.",
+  p1_sub:"ระบบสำหรับบันทึกรถที่ตรวจพบว่าจอดค้างในอาคาร และวิเคราะห์รถที่พบซ้ำหรือจอดค้างหลายวัน",
   p2_class:"แพลตฟอร์มครบวงจร", p2_status:"GEN 2 · ใช้งานจริง", p2_title:"ระบบจัดการคำขอที่จอดรถและส่งงานครบวงจร — Gen 2",
   p2_sub:"แพลตฟอร์มครบวงจร ครอบคลุมการรับคำขอ การประสานงาน เอกสารสำหรับพิมพ์ การส่งงานของ รปภ. การแนบหลักฐาน การตรวจสอบ และการปิดงาน",
   explore:"ดูรายละเอียดระบบ", source:"ดูซอร์สโค้ด ↗", live:"เปิดระบบจริง ↗",
