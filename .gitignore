@@ -1,0 +1,19 @@
+.playwright-cli/
+output/
+.claude/
+
+# Local source media and generated exports; production copies live under assets/.
+grok-image-*
+grok-video-*
+imagine-*.mp4
+Layer 0.png
+bluewhalex-logo.png
+
+# Historical local snapshot.
+index.mk4-backup.html
+
+# Keep the deployable video set small.
+assets/videos/*
+!assets/videos/hero.mp4
+!assets/videos/ai-sector.mp4
+assets/images/mega-black-hole.png
