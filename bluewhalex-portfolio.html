@@ -2758,23 +2758,23 @@ if(ctx){
     c.width=Math.floor(fW*dpr);
     c.height=Math.floor(fH*dpr);
     fctx.setTransform(dpr,0,0,dpr,0,0);
-    /* fine lattice — small, soft lights */
-    const gap=Math.max(11, Math.round(Math.min(fW,fH)/36));
+    /* medium lattice — readable, not harsh */
+    const gap=Math.max(10, Math.round(Math.min(fW,fH)/32));
     dots=[];
-    for(let y=gap*.5;y<fH+gap;y+=gap){
+    for(let y=gap*.45;y<fH+gap;y+=gap){
       for(let x=gap*.4;x<fW+gap;x+=gap){
         const t=y/fH;
         const edgeX=Math.min(x/fW,1-x/fW);
-        const edgeFade=Math.min(1,edgeX*4.5+.1);
-        const depth=.08+t*.28;
-        const jx=(Math.random()-.5)*1.2;
-        const jy=(Math.random()-.5)*1.2;
+        const edgeFade=Math.min(1,edgeX*5+.12);
+        const depth=.12+t*.42;
+        const jx=(Math.random()-.5)*1.15;
+        const jy=(Math.random()-.5)*1.15;
         dots.push({
           x:x+jx,y:y+jy,
-          r:.35+Math.random()*.45,
-          a:Math.min(.38,depth*edgeFade*(.7+Math.random()*.3)),
+          r:.7+Math.random()*.65,
+          a:Math.min(.55,depth*edgeFade*(.75+Math.random()*.25)),
           tw:Math.random()*Math.PI*2,
-          sp:.008+Math.random()*.018
+          sp:.01+Math.random()*.02
         });
       }
     }
@@ -2785,11 +2785,11 @@ if(ctx){
     fctx.clearRect(0,0,fW,fH);
     for(const d of dots){
       if(!staticFrame) d.tw+=d.sp;
-      const pulse=staticFrame?1:(.88+Math.sin(d.tw)*.12);
-      const a=Math.max(0,Math.min(.4,d.a*pulse));
-      if(a<.02) continue;
+      const pulse=staticFrame?1:(.85+Math.sin(d.tw)*.15);
+      const a=Math.max(0,Math.min(.58,d.a*pulse));
+      if(a<.03) continue;
       fctx.beginPath();
-      fctx.fillStyle=`rgba(220,220,220,${a})`;
+      fctx.fillStyle=`rgba(235,235,235,${a})`;
       fctx.arc(d.x,d.y,d.r,0,Math.PI*2);
       fctx.fill();
     }
