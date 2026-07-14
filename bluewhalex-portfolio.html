@@ -1613,21 +1613,48 @@ html[lang="th"] #reserved .sub::before{content:""}
   .r-scanlines{opacity:.03}
 }
 
+/* footer + compact star-dot grid FX */
 footer{
-  position:relative;z-index:2;padding:2rem 5.5vw 3.4rem;border-top:1px solid var(--line);
-  display:grid;grid-template-columns:1fr auto 1fr;gap:1.2rem;align-items:center;
+  position:relative;z-index:2;isolation:isolate;overflow:hidden;
+  min-height:0;
+  padding:2.4rem 5.5vw calc(2rem + var(--safe-b));
+  display:flex;flex-direction:column;justify-content:flex-end;
+  border-top:1px solid transparent;
+  background:var(--void);
   font-family:var(--fm);font-size:.52rem;letter-spacing:.14em;color:var(--mute);text-transform:uppercase;
 }
-footer .logo{height:28px;width:auto;opacity:.75;justify-self:start;transition:opacity .25s}
+.footer-fx{
+  position:absolute;inset:0;z-index:0;
+  width:100%;height:100%;
+  pointer-events:none;opacity:1;display:block;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 28%,#000 100%);
+  mask-image:linear-gradient(180deg,transparent 0%,#000 28%,#000 100%);
+}
+.footer-fade{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    linear-gradient(180deg,var(--void) 0%,rgba(0,0,0,.45) 24%,transparent 70%),
+    radial-gradient(ellipse 100% 90% at 50% 100%,rgba(255,255,255,.015),transparent 65%);
+}
+.footer-inner{
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:1fr auto 1fr;gap:1.2rem;align-items:center;
+  width:100%;padding-top:1rem;border-top:1px solid rgba(255,255,255,.12);
+}
+footer .logo{height:28px;width:auto;opacity:.8;justify-self:start;transition:opacity .25s}
 footer .logo:hover{opacity:1}
-footer span:nth-child(2){text-align:center;color:var(--mist)}
-footer span:nth-child(3){text-align:right;transition:color .2s}
-footer span:nth-child(3):hover{color:var(--bone)}
+.footer-inner span:nth-child(2){text-align:center;color:var(--mist)}
+.footer-inner span:nth-child(3){text-align:right;transition:color .2s;justify-self:end}
+.footer-inner span:nth-child(3):hover{color:var(--bone)}
 @media(max-width:700px){
-  footer{grid-template-columns:1fr;text-align:center!important;gap:.7rem;padding-bottom:3.6rem}
+  footer{padding:1.6rem 5.5vw calc(2.2rem + var(--safe-b))}
+  .footer-inner{grid-template-columns:1fr;text-align:center!important;gap:.7rem}
   footer .logo{justify-self:center;height:32px}
-  footer span{text-align:center!important}
+  .footer-inner span{text-align:center!important;justify-self:center!important}
   section{padding-bottom:3rem}
+}
+@media(prefers-reduced-motion:reduce){
+  .footer-fx{opacity:.9}
 }
 
 
@@ -2221,11 +2248,15 @@ body.lang-flash main{animation:lang .3s ease}
 </main>
 
 <footer>
-  <a href="#hero" aria-label="BlueWhaleX">
-    <img class="logo" src="assets/images/logo.png" alt="BlueWhaleX" width="160" height="40" decoding="async">
-  </a>
-  <span data-i18n="ft">ALL SYSTEMS NOMINAL</span>
-  <span id="coords" role="button" tabindex="0" title="Click to copy coordinates" aria-label="Copy base coordinates">13.8622° N / 100.5144° E</span>
+  <canvas class="footer-fx" id="footerFx" aria-hidden="true"></canvas>
+  <div class="footer-fade" aria-hidden="true"></div>
+  <div class="footer-inner">
+    <a href="#hero" aria-label="BlueWhaleX">
+      <img class="logo" src="assets/images/logo.png" alt="BlueWhaleX" width="160" height="40" decoding="async">
+    </a>
+    <span data-i18n="ft">ALL SYSTEMS NOMINAL</span>
+    <span id="coords" role="button" tabindex="0" title="Click to copy coordinates" aria-label="Copy base coordinates">13.8622° N / 100.5144° E</span>
+  </div>
 </footer>
 
 <dialog class="project-dialog" id="projectDialog" aria-labelledby="projectDialogTitle">
@@ -2453,7 +2484,7 @@ setTimeout(()=>{ clearInterval(readyWatch); armHeroVideo(); }, 3500);
 /* Grok logo — canvas chroma key (green screen removal) */
 const grokVideo=$('#grokVideo');
 const grokCanvas=$('#grokCanvas');
-let grokRaf=0, grokActive=false;
+let grokRaf=0, grokRvfc=0, grokActive=false;
 const GROK_SIM=.42, GROK_SMTH=.22;
 
 function initGrokChroma(){
@@ -2506,10 +2537,28 @@ function initGrokChroma(){
     return;
   }
 
-  // paint on real video frames when supported (24fps) instead of every RAF tick
+  const cancelSchedule=()=>{
+    if(grokRaf){ cancelAnimationFrame(grokRaf); grokRaf=0; }
+    if(grokRvfc && typeof grokVideo.cancelVideoFrameCallback==='function'){
+      try{ grokVideo.cancelVideoFrameCallback(grokRvfc); }catch{}
+      grokRvfc=0;
+    }
+  };
+
+  // paint on real video frames when supported; always cancel prior handle first
   const schedule=cb=>{
-    if(grokVideo.requestVideoFrameCallback) grokVideo.requestVideoFrameCallback(cb);
-    else grokRaf=requestAnimationFrame(cb);
+    cancelSchedule();
+    if(typeof grokVideo.requestVideoFrameCallback==='function'){
+      grokRvfc=grokVideo.requestVideoFrameCallback(()=>{
+        grokRvfc=0;
+        cb();
+      });
+    }else{
+      grokRaf=requestAnimationFrame(()=>{
+        grokRaf=0;
+        cb();
+      });
+    }
   };
   const paint=()=>{
     if(!grokActive) return;
@@ -2521,7 +2570,7 @@ function initGrokChroma(){
   };
 
   const startLoop=()=>{ if(grokActive) return; grokActive=true; schedule(paint); };
-  const stopLoop=()=>{ grokActive=false; cancelAnimationFrame(grokRaf); };
+  const stopLoop=()=>{ grokActive=false; cancelSchedule(); };
 
   const start=()=>{
     const w=grokVideo.videoWidth, h=grokVideo.videoHeight;
@@ -2692,6 +2741,91 @@ if(ctx){
     if(running&&!RM) requestAnimationFrame(drawStars);
   });
 }
+
+/* footer grid-dot FX — terafab-style star lattice at page bottom */
+(function initFooterFx(){
+  const c=$('#footerFx');
+  if(!c) return;
+  const fctx=c.getContext('2d');
+  if(!fctx) return;
+  let fW=0,fH=0,dots=[],fRunning=true,raf=0;
+
+  function rebuild(){
+    const dpr=Math.min(devicePixelRatio||1,2);
+    fW=c.clientWidth||c.parentElement?.clientWidth||innerWidth;
+    fH=c.clientHeight||Math.round(Math.min(168,innerHeight*.28));
+    if(fW<2||fH<2) return;
+    c.width=Math.floor(fW*dpr);
+    c.height=Math.floor(fH*dpr);
+    fctx.setTransform(dpr,0,0,dpr,0,0);
+    /* fine lattice — small, soft lights */
+    const gap=Math.max(11, Math.round(Math.min(fW,fH)/36));
+    dots=[];
+    for(let y=gap*.5;y<fH+gap;y+=gap){
+      for(let x=gap*.4;x<fW+gap;x+=gap){
+        const t=y/fH;
+        const edgeX=Math.min(x/fW,1-x/fW);
+        const edgeFade=Math.min(1,edgeX*4.5+.1);
+        const depth=.08+t*.28;
+        const jx=(Math.random()-.5)*1.2;
+        const jy=(Math.random()-.5)*1.2;
+        dots.push({
+          x:x+jx,y:y+jy,
+          r:.35+Math.random()*.45,
+          a:Math.min(.38,depth*edgeFade*(.7+Math.random()*.3)),
+          tw:Math.random()*Math.PI*2,
+          sp:.008+Math.random()*.018
+        });
+      }
+    }
+  }
+
+  function paint(staticFrame){
+    if(!fW||!fH) return;
+    fctx.clearRect(0,0,fW,fH);
+    for(const d of dots){
+      if(!staticFrame) d.tw+=d.sp;
+      const pulse=staticFrame?1:(.88+Math.sin(d.tw)*.12);
+      const a=Math.max(0,Math.min(.4,d.a*pulse));
+      if(a<.02) continue;
+      fctx.beginPath();
+      fctx.fillStyle=`rgba(220,220,220,${a})`;
+      fctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+      fctx.fill();
+    }
+  }
+
+  function loop(){
+    if(!fRunning) return;
+    paint(false);
+    raf=requestAnimationFrame(loop);
+  }
+
+  function start(){
+    cancelAnimationFrame(raf);
+    rebuild();
+    if(RM){ paint(true); return; }
+    fRunning=true;
+    raf=requestAnimationFrame(loop);
+  }
+
+  start();
+  addEventListener('resize',()=>{
+    clearTimeout(start._t);
+    start._t=setTimeout(start,120);
+  },{passive:true});
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden){ fRunning=false; cancelAnimationFrame(raf); }
+    else if(!RM){ fRunning=true; raf=requestAnimationFrame(loop); }
+  });
+  /* rebuild when footer enters view first time (size may settle) */
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver((ents)=>{
+      if(ents.some(e=>e.isIntersecting)){ start(); }
+    },{threshold:.05});
+    io.observe(c.parentElement||c);
+  }
+})();
 
 /* scroll */
 const nav=$('#nav'), progress=$('#progress'), bgs=$$('.bg[data-speed]');
