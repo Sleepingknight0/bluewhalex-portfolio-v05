@@ -4,60 +4,56 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A single-page personal tech portfolio for **Kittiphum Prasomsap (BlueWhaleX)**. It is a self-contained static site with a "SpaceX monochrome flight-deck" aesthetic (pure black/white/gray, aerospace/mission terminology) and full English↔Thai bilingual support. There is **no build system, framework, package manager, or test suite** — the deliverable is one hand-authored HTML file with inline CSS and JS.
+A single-page personal tech portfolio for **Kittiphum Prasomsap (BlueWhaleX)**. Self-contained static site, "SpaceX monochrome flight-deck" aesthetic (pure black/white/gray, mission-control terminology), fully bilingual EN↔Thai. **No build system, framework, or package manager** — one hand-authored HTML file (~3,000 lines) with inline CSS and JS.
 
 ## Build / run / test
 
-There is nothing to build or compile. Everything is inline in `index.html`; the only external dependency is Google Fonts (Chakra Petch + IBM Plex Mono) loaded via CDN, so a network connection is needed for correct typography.
-
-Preview locally by serving from the project root (asset paths are relative, so serve the root, don't open a nested copy):
+Nothing to compile. Only external dependency is Google Fonts (Chakra Petch + IBM Plex Mono) via CDN. Preview by serving the project root (asset paths are relative):
 
 ```bash
-python -m http.server 8000    # then open http://localhost:8000/index.html
+python -m http.server 8137    # http://localhost:8137/index.html
 ```
 
-Opening `index.html` directly via `file://` also works. Screenshots from past preview sessions live in `output/playwright/` (the `/playwright` skill was used); `.playwright-cli/` holds its transient page snapshots.
+Browser verification is done with `playwright-cli` (see the `/playwright` skill); screenshots go to `output/playwright/`. There is no test suite — verify changes in a real browser at 1440×900, 1024×768, 390×844, 360×800, in both languages, with the project dialog opened.
 
 ## File layout
 
-- **`index.html`** — the site. This is the only file you normally edit. ~1645 lines: inline `<style>` (~L18–825), HTML body sections (~L920–1167), inline `<script>` IIFE (~L1169–1643).
-- **`bluewhalex-portfolio.html`** — a **byte-identical copy** of `index.html` (distribution/download alias). If you edit `index.html`, re-sync this file or it goes stale.
-- **`index.mk4-backup.html`** — an older ("mk4") snapshot kept as a backup. Do not treat as current.
-- **`assets/images/`** and **`assets/videos/`** — the curated, renamed media the page actually references (9 images + `hero.mp4`).
-- **Root-level `grok-*.jpg/mp4`, `imagine-*.mp4`, `Layer 0.png`, `bluewhalex-logo.png`, and extra clips in `assets/videos/`** — raw/original source material, **not referenced by the live page**. The live asset set is only what's listed under "referenced assets" below.
+- **`index.html`** — the site. The only file you normally edit.
+- **`bluewhalex-portfolio.html`** — byte-identical distribution copy. **After editing `index.html`, re-sync it** (`cp index.html bluewhalex-portfolio.html`) and verify with `git diff --no-index index.html bluewhalex-portfolio.html` (no output = in sync).
+- **`assets/images/`** — referenced images, including `projects/` (real app screenshots used by cards + dialog gallery) and `logo.png`.
+- **`assets/videos/`** — referenced videos: `hero.mp4` (hero background), `grok-logo.mp4` (portrait on a **raw green screen**, keyed live in JS — see below), `ai-sector.mp4` (AI sector background).
+- Root-level media (`grok-*`, `imagine-*`, `GettyImages-*`, loose `.png`s) and `index.mk4-backup.html` are raw source material / old snapshots — **not referenced by the live page**. Same for clips in `assets/videos/` beyond the three above.
 
-Referenced assets: `assets/images/{logo,portrait-suit,ops-network,office-skyline,studio-screen,lab-robotics,cleanroom-wafer,race-garage,whiteboard-flow}.png/.jpg` and `assets/videos/hero.mp4`. Nothing else in the tree is loaded at runtime.
+## Page structure (DOM order)
 
-## Architecture of `index.html`
+`#hero` (bg video + chroma-keyed portrait overlay) → `#m1` "project registry" (all three tiers) → `#specs` → `#log` → `#uplink` (contact) → `#reserved` (AI sector). The registry contains, in order: a jump-nav bar (`.registry-jump`, anchors with `aria-current` tracking), **01 // MEGA PROJECTS** (vision program, intentional empty state), **02 // ADVANCED PROJECTS** (four clearly-labeled bilingual "CONCEPT SLOT" buttons — themes, not real projects; never present them as shipped work), **03 // MINI PROJECTS** (search toolbar + two real project cards).
 
-All runtime behavior is one IIFE (`(function(){ "use strict"; … })()`). Two capability flags gate almost everything and must be respected in any new code:
+`#log` ("FLIGHT LOG / TRAJECTORY") is a career ledger: a `.log-sheet` with `.log-band` groups (`is-now`/`is-past`) of `.log-entry` roles (NACC seal image: `assets/images/nacc.png`). This is the owner's real employment history — org names, titles, and dates are owner-asserted facts; never embellish or reorder them, and keep every string `data-i18n`-keyed.
 
-- `RM` = `prefers-reduced-motion: reduce` → skip/short-circuit animations (boot, starfield, parallax, count-ups, char reveals all check this).
-- `TOUCH` = coarse pointer → disables the custom cursor and magnetic/tilt effects; adds `body.touch`.
+## The two real projects (content integrity)
 
-Runtime systems, each a self-contained block in the IIFE:
+1. **NACC Overnight Building Parking Log** — Streamlit + gspread/Sheets app for security staff logging vehicles found overnight in NACC buildings. Source links to **`captwcan/naccparking`** (upstream); the relation copy states it is a *collaborative project forked to the owner's account* — keep that honest framing. Live: `naccparking.streamlit.app`.
+2. **NACC Parking Operations Platform — Gen 2** — end-to-end parking-request platform, Next.js 15 / React 19 / Supabase / Turborepo monorepo (`Sleepingknight0/Parking_request`). Live user app verified: `nacc-parking-user.vercel.app`.
 
-- **Boot sequence** (`#boot`) — fake telemetry log + progress bar, then `body.ready`. Skippable via click/Esc/Enter/Space; auto-finishes under `RM`.
-- **Starfield** — `<canvas id="stars">` with twinkling stars + occasional meteors; pauses on tab hide.
-- **Custom cursor + magnetic buttons** — dot/ring follower; `.mag` elements attract toward the pointer; sections with `.content` tilt slightly. All non-touch, non-RM only.
-- **Scroll systems** — top progress bar, nav `scrolled` state, and parallax on `.bg[data-speed]` backgrounds via a `--py` CSS var.
-- **Reveal + count-up** — an `IntersectionObserver` adds `.in` to sections on entry, animates `[data-count]` numbers (`data-prefix`/`data-suffix`/`data-dec` modifiers), and reveals `h2.split` heading characters. A second observer drives active-nav highlighting via the `navKey` map.
-- **Backgrounds** — `.bg[data-src]` elements get their `background-image` set from JS after preloading, so sections never flash blank.
-- **Hero video** — `assets/videos/hero.mp4`, muted/looping, with layered fallbacks (autoplay retry on first gesture, poster image underneath) so it degrades gracefully.
-- **Drawer menu** — mobile nav with focus trap + Esc close; number keys `1–6` jump to sections.
-- **Lightbox** — click/Enter on `#mediaGrid .media-card` opens `data-full` full-size with `data-cap` caption.
-- **Clocks** — live UTC clock (`#clock`) and a mission-elapsed timer (`#met`, `MET T+…`).
+These are **two independent systems, never generations of one product**. Never fabricate metrics, users, deployment claims, or technologies; anything in dialog "facts" must be verifiable from the repos or explicitly owner-asserted. The fork `Sleepingknight0/naccparking` must never be presented as original solo work.
 
-## Conventions when editing
+Project screenshots (cards + dialog galleries) are captured from public production pages. Never add screenshots containing credentials, personal records, vehicle registrations, or other operationally sensitive data.
 
-**Design system:** colors, fonts, easings, and layout metrics are CSS custom properties in `:root` (`--void`, `--bone`, `--signal`, `--fd`/`--fm` fonts, `--e`/`--e-out` easings, `--nav-h`, etc.). Reuse these rather than hardcoding. Copy tone is aerospace/mission ("MISSIONS", "FLIGHT LOG", "ESTABLISH UPLINK", "ALL SYSTEMS NOMINAL"). Keep the strict monochrome palette.
+## Runtime systems (one IIFE, `<script>` at end of body)
 
-**Adding a translatable string (bilingual is required):** English is authored inline in the markup and is the source of truth. Add `data-i18n="some_key"` to the element, then add a matching `some_key: "…"` entry to the `TH` dictionary in the script (~L1560). On load, JS snapshots each element's English into `data-en`; the toggle swaps between `data-en` and `TH[key]` and persists the choice in `localStorage['bwx-lang']`. Headings that also animate use `h2.split` and are handled separately by `splitHeading()` — a translated `h2.split` needs both `class="split"` and `data-i18n`.
+- **Boot sequence** → `body.ready`; skippable (click/Esc/Enter/Space); auto-finishes under reduced motion.
+- **Chroma keyer** (`initGrokChroma`): draws `grok-logo.mp4` frames to `#grokCanvas`, keys out the green screen per pixel (distance-from-green + feather + **unconditional despill** — any kept pixel with `g > max(r,b)` gets green clamped; this is what prevents the dark-green hair rim, don't remove it). Uses `requestVideoFrameCallback` when available; skips pixel work while the canvas is hidden (≤520px); under reduced motion renders **one static keyed frame** instead of removing the portrait. Canvas has a CSS `mask-image` fade at the bottom to dissolve the waist-line cut.
+- **Project dossier dialog**: native `<dialog id="projectDialog">` + `showModal()` (native focus trap/Esc), scroll lock via `body.modal-open`, focus restored to the triggering `.project-open` button on close. Content is rendered from the **`PROJECTS`** data object (all copy bilingual `{en:{...},th:{...}}` + `gallery` with real app screenshots). `applyLang()` re-renders an open dialog on language switch.
+- **i18n**: static markup uses `data-i18n` keys → `TH` dictionary; English inline text is snapshotted to `data-en` at load. **Dynamic dialog content must come from `PROJECTS`, not `data-i18n`** (the snapshot only covers load-time markup). Thai `h2.split` headings render as plain text (Thai script must not be char-split); English ones get per-char animation.
+- **Nav**: top bar collapses to a burger **on scroll even on desktop** (`nav#nav.desktop-compact`); the hidden links get `visibility:hidden` so they leave the tab order (keep this — a11y). Number keys 1–6 jump sections; disabled while the dialog is open or while typing.
+- **Registry**: jump-bar docking, Mini-project search/filter toolbar, IntersectionObserver reveals (`.rv`/`.in`), starfield canvas, custom cursor + magnetic buttons (non-touch, non-reduced-motion only).
 
-**Adding a content section:** give it a unique `id`, register that id in the `navKey` map (for nav highlighting), in the active-nav observer's id list, and in the number-key `keys` map if it should be keyboard-jumpable. Use existing section scaffolding (`.content` > `.frame`, `.eyebrow`, `.rv` reveal class, `.panel` variant for text-only sections).
+## Conventions
 
-**Adding a media card:** append a `<figure class="media-card" tabindex="0" role="button" data-full="…" data-cap="…">` to `#mediaGrid` following the existing pattern; the lightbox wires up automatically.
-
-**Animation additions must be gated** by `RM`/`TOUCH` the same way existing blocks are, and any interactive element should have a keyboard path (the code consistently pairs `click` with `keydown` Enter/Space).
-
-Do not introduce a bundler, npm, or a framework unless explicitly asked — the whole point of this project is a single portable HTML file.
+- Design tokens live in `:root` (`--void`, `--bone`, `--signal`, `--fm/--fd` fonts, `--e/--e-out` easings). Reuse them; keep strict monochrome; keep aerospace copy tone in both languages (Thai natural, technical terms may stay English).
+- Every new visible string needs both the inline English and a `TH` entry (or an `{en,th}` pair in `PROJECTS`).
+- Gate any new animation behind the `RM` (reduced motion) and `TOUCH` flags like the existing code; pair every `click` with a keyboard path.
+- Adding a future Advanced/Mega project: add an entry to `PROJECTS` (copy the `parking` shape: title/status/summary/relation/facts/workflow/architecture/stack/highlights, all bilingual, plus `gallery`), add a card `<article>` in the appropriate tier with a `.project-open` button whose `data-project` matches the new key, and update that tier's head/state labels. Only verified or owner-asserted facts.
+- Two-space indentation; kebab-case CSS classes, camelCase JS. Short imperative commits (`fix: preserve Thai heading animation`).
+- Do not introduce a bundler, npm, or a framework — the point of this project is a single portable HTML file.
+- `AGENTS.md` carries overlapping guidance for other agents — keep the two consistent if conventions change.
