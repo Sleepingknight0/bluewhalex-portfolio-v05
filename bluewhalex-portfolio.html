@@ -183,7 +183,7 @@ nav#nav.scrolled{
   user-select:none;-webkit-user-drag:none;
 }
 .wordmark{
-  display:inline-flex;align-items:center;flex-shrink:0;
+  display:inline-flex;align-items:center;flex-shrink:0;min-height:var(--touch);
   line-height:0;position:relative;z-index:1;
   transition:opacity .25s var(--e), transform .25s var(--e), filter .25s var(--e);
 }
@@ -532,8 +532,14 @@ body.ready .rail{opacity:1;transform:translateY(-50%)}
   content:attr(data-label);position:absolute;right:20px;top:50%;transform:translateY(-50%);
   font-family:var(--fm);font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);
   white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none;
+  /* The rail is a fixed overlay and its label extends left over the content column.
+     Most of the page is near-black, but the active Advanced slot is #F0F0F0 — bare
+     --mist text landed there at ~2:1 contrast. A dark chip keeps it legible on any
+     surface without moving the rail out of the design. */
+  padding:.3rem .5rem;border:1px solid var(--line);border-radius:6px;
+  background:rgba(0,0,0,.92);backdrop-filter:blur(6px);
 }
-.rail a:hover::after,.rail a.active::after,.rail a:focus-visible::after{opacity:1;color:var(--mist)}
+.rail a:hover::after,.rail a.active::after,.rail a:focus-visible::after{opacity:1;color:var(--bone)}
 .rail a:hover,.rail a.active,.rail a:focus-visible{
   background:var(--signal);border-color:var(--signal);transform:scale(1.2);
   box-shadow:0 0 14px var(--signal-glow);
@@ -697,6 +703,7 @@ body.ready h1 .line > span,
   opacity:1; transform:none;
 }
 h2{font-size:clamp(2rem,5.5vw,4.4rem);perspective:600px}
+h2 .word{display:inline-block;white-space:nowrap}
 h2 .char{
   display:inline-block;opacity:0;transform:translateY(35%);
   transition:opacity .45s var(--e-out),transform .55s var(--e-out);transition-delay:var(--d,0s);
@@ -850,7 +857,11 @@ section.in .hero-meta{opacity:1}
     transition:top .28s var(--e-out),opacity .55s var(--e-out),transform .55s var(--e-out);
   }
   .project-registry.has-docked-registry .catalog-toolbar{top:calc(var(--nav-compact-h) + var(--safe-t) + var(--registry-docked-h) + .65rem)}
-  .project-registry .tier-head[id]{scroll-margin-top:calc(var(--nav-compact-h) + var(--safe-t) + var(--registry-docked-h) + 24px)}
+  /* Use the UNDOCKED bar height: the anchor scroll is computed while the jump bar
+     still occupies var(--registry-h) of flow. Docking then shrinks it, pulling the
+     heading up by (--registry-h - --registry-docked-h); budgeting for the docked
+     height instead lands the heading under the bar and clips Thai tone marks. */
+  .project-registry .tier-head[id]{scroll-margin-top:calc(var(--nav-compact-h) + var(--safe-t) + var(--registry-h) + 24px)}
 }
 .tier-head{
   display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;
@@ -958,21 +969,106 @@ section.in .hero-meta{opacity:1}
 .advanced-option-copy span{font-size:.82rem;line-height:1.45;color:#aeb0b3}
 .advanced-option.is-active .advanced-option-copy span{color:#3f4144}
 
-/* Mini — searchable, progressively disclosed catalog that stays usable at 100+ items. */
+/* Mini catalog — simple search + show/hide filters. Easy to scan, easy to tap. */
 .catalog-toolbar{
-  position:sticky;top:calc(var(--nav-h) + var(--safe-t) + var(--registry-h) + .7rem);z-index:35;display:grid;grid-template-columns:minmax(220px,1fr) auto;
-  gap:1rem;align-items:end;margin-bottom:1rem;padding:1rem;border:1px solid var(--line);background:rgba(3,3,3,.94);backdrop-filter:blur(16px);
+  position:sticky;top:calc(var(--nav-h) + var(--safe-t) + var(--registry-h) + .55rem);z-index:35;
+  display:grid;gap:.65rem;margin-bottom:1.25rem;padding:0 0 .85rem;
+  border-bottom:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(180deg,rgba(0,0,0,.95) 55%,rgba(0,0,0,.72));
+  backdrop-filter:blur(12px);
 }
-.catalog-search{display:grid;gap:.45rem}
-.catalog-search label,.catalog-count{font-family:var(--fm);font-size:.56rem;letter-spacing:.15em;text-transform:uppercase;color:#c4c5c7}
+.catalog-bar{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.55rem;align-items:center;
+}
+.catalog-search{min-width:0}
 .catalog-search input{
-  width:100%;min-height:var(--touch);padding:.75rem .9rem;border:1px solid rgba(255,255,255,.28);border-radius:0;
-  background:#080808;color:#fff;font:500 1rem var(--fd);outline:none;
+  width:100%;min-height:var(--touch);padding:.75rem 1rem;border:1px solid rgba(255,255,255,.28);border-radius:0;
+  background:#0a0a0a;color:#fff;font:500 1rem/1.4 var(--fd);outline:none;
+  transition:border-color .2s var(--e),box-shadow .2s var(--e);
 }
 .catalog-search input:focus{border-color:#fff;box-shadow:0 0 0 1px #fff}
-.catalog-search input::placeholder{color:#838589}
-.catalog-count{padding-bottom:.8rem;white-space:nowrap}
+.catalog-search input::placeholder{color:#9a9b9e}
+.catalog-toggle{
+  min-height:var(--touch);min-width:9.5rem;display:inline-flex;align-items:center;justify-content:center;gap:.45rem;
+  padding:0 1rem;border:1px solid #fff;background:transparent;color:#fff;
+  font-family:var(--fm);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;cursor:pointer;
+  transition:color .2s var(--e),background .2s var(--e);
+}
+.catalog-toggle:hover,.catalog-toggle:focus-visible{background:#fff;color:#080808}
+.catalog-toggle:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.catalog-toggle[aria-expanded="true"]{background:#fff;color:#080808}
+.catalog-toggle-badge{
+  min-width:1.35rem;height:1.35rem;padding:0 .3rem;display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid currentColor;font-size:.68rem;font-variant-numeric:tabular-nums;font-weight:600;
+}
+.catalog-toggle-mark{display:none}
+.catalog-meta{
+  display:grid;gap:.45rem;justify-items:start;
+}
+.catalog-count{
+  font-family:var(--fm);font-size:.8rem;letter-spacing:.04em;
+  color:#d8d9db;font-variant-numeric:tabular-nums;
+}
+.catalog-active-row{
+  display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;min-width:0;width:100%;
+}
+.catalog-active-row[hidden]{display:none!important}
+.catalog-active{display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;min-width:0}
+.catalog-tag{
+  display:inline-flex;align-items:center;gap:.4rem;min-height:2.4rem;padding:.35rem .55rem .35rem .7rem;
+  border:1px solid rgba(255,255,255,.35);background:#111;color:#fff;
+  font-family:var(--fm);font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600;
+}
+.catalog-tag-x{
+  display:grid;place-items:center;width:1.5rem;height:1.5rem;border:1px solid rgba(255,255,255,.25);
+  background:transparent;color:#fff;font-size:1rem;line-height:1;cursor:pointer;
+}
+.catalog-tag-x:hover,.catalog-tag-x:focus-visible{background:#fff;color:#080808}
+.catalog-tag-x:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.catalog-clear{
+  min-height:2.4rem;padding:0 .2rem;border:0;background:transparent;color:#c8c9cb;
+  font-family:var(--fm);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;
+  text-decoration:underline;text-underline-offset:3px;
+}
+.catalog-clear:hover,.catalog-clear:focus-visible{color:#fff}
+.catalog-clear:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.catalog-drawer{
+  display:grid;gap:1rem;padding:1rem;border:1px solid rgba(255,255,255,.2);background:#090909;
+}
+.catalog-drawer[hidden]{display:none!important}
+.catalog-drawer-kicker{display:none}
+.catalog-group{display:grid;gap:.5rem;min-width:0}
+.catalog-group-label{
+  font-family:var(--fm);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:#fff;font-weight:600;
+}
+.catalog-chips{display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;min-width:0}
+.catalog-chip{
+  min-height:var(--touch);padding:.55rem .9rem;border:1px solid rgba(255,255,255,.28);
+  background:#0c0c0c;color:#d5d6d8;font-family:var(--fm);font-size:.78rem;letter-spacing:.04em;
+  text-transform:uppercase;cursor:pointer;font-weight:500;
+  transition:color .15s var(--e),border-color .15s var(--e),background .15s var(--e);
+}
+.catalog-chip:hover{color:#fff;border-color:#fff;background:#141414}
+.catalog-chip:focus-visible{outline:2px solid #fff;outline-offset:2px;color:#fff}
+.catalog-chip.is-active{color:#080808;background:#fff;border-color:#fff;font-weight:700}
+.catalog-chip.is-active:hover{color:#080808;background:#f2f2f2}
+.catalog-empty{
+  display:grid;gap:.9rem;justify-items:center;padding:2.2rem 1rem;text-align:center;
+  border:1px solid rgba(255,255,255,.2);color:#e0e0e0;
+  font-family:var(--fm);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;
+}
+.catalog-empty[hidden]{display:none!important}
+.catalog-empty .btn{min-width:min(100%,220px)}
+.catalog-more-stacks{
+  min-height:var(--touch);padding:.55rem .9rem;border:1px dashed rgba(255,255,255,.35);
+  background:transparent;color:#c8c9cb;font-family:var(--fm);font-size:.78rem;letter-spacing:.04em;
+  text-transform:uppercase;cursor:pointer;
+}
+.catalog-more-stacks:hover,.catalog-more-stacks:focus-visible{color:#fff;border-color:#fff}
+.catalog-more-stacks:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.catalog-chip.is-extra[hidden]{display:none!important}
 .project-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:1rem}
+.project-card[hidden]{display:none!important}
 .project-card{
   position:relative;min-width:0;background:#070707;border:1px solid rgba(255,255,255,.18);
   overflow:hidden;transition:transform .3s var(--e-out),border-color .25s,box-shadow .3s;
@@ -1024,7 +1120,6 @@ section.in .hero-meta{opacity:1}
 .project-source:hover,.project-source:focus-visible{color:#fff;border-color:#fff}
 .catalog-more{display:flex;justify-content:center;margin-top:1.4rem}
 .catalog-more .btn{min-width:220px}
-.catalog-empty{padding:2.5rem 1rem;text-align:center;border:1px dashed var(--line);color:#b8b9bc;font-family:var(--fm);font-size:.65rem;letter-spacing:.14em;text-transform:uppercase}
 .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 
 @media(max-width:1100px){.project-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -1052,8 +1147,9 @@ section.in .hero-meta{opacity:1}
   .advanced-list{overflow:visible;padding:.65rem}
   .advanced-option{min-height:155px;grid-template-columns:105px 1fr;transform:none!important}
   .advanced-thumb{min-height:130px}
-  .catalog-toolbar{position:relative;top:auto;grid-template-columns:1fr}
-  .catalog-count{padding-bottom:0}
+  .catalog-toolbar{position:relative;top:auto;background:transparent;backdrop-filter:none}
+  .catalog-bar{grid-template-columns:1fr;gap:.5rem}
+  .catalog-toggle{width:100%}
 }
 @media(max-width:460px){
   .project-registry .content{padding-left:1.15rem;padding-right:1.15rem}
@@ -1218,7 +1314,60 @@ section.in .bar i{width:var(--w)}
 }
 
 /* uplink */
-.u-rows{margin-top:2.2rem;max-width:800px;border-top:1px solid var(--line)}
+/* uplink — character-dossier layout: copy left, avatar centre, index right.
+   Layout borrowed from a game character sheet; palette stays monochrome. */
+/* One cell, two layers at every width: the character sits behind and the copy
+   overlaps it — on mobile this mirrors the hero, where the portrait rides above
+   and the text plate covers its lower half. */
+.uplink-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:0;align-items:end}
+.uplink-main,.uplink-avatar{grid-area:1/1}
+.uplink-main{min-width:0;position:relative;z-index:2;align-self:end}
+.uplink-avatar{
+  position:relative;justify-self:center;align-self:start;z-index:0;pointer-events:none;
+  margin:0;overflow:hidden;
+  width:min(560px,100%);
+  /* Art is 505x1100 and the image fills 100% of the box width, so the crop is
+     vertical only — the sides can never be clipped at any viewport. Mobile uses
+     a taller ratio (down past the waist) so the body still reads under the panel. */
+  aspect-ratio:505/760;
+  /* The fade lives on the BOX, not the <img>: the image is 200% of the box, so
+     percentages on it land below the crop and produce a hard edge. On the box
+     they map to the visible area, so the lower body dissolves into the black
+     background gradually instead of being sliced off. */
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 34%,rgba(0,0,0,.82) 55%,rgba(0,0,0,.45) 74%,rgba(0,0,0,.16) 88%,transparent 100%);
+  mask-image:linear-gradient(180deg,#000 0%,#000 34%,rgba(0,0,0,.82) 55%,rgba(0,0,0,.45) 74%,rgba(0,0,0,.16) 88%,transparent 100%);
+}
+.uplink-avatar img{
+  position:absolute;top:0;left:0;
+  width:100%;height:auto;max-width:none;
+  /* owner asked for the artwork's original colour — no filter */
+}
+@media(max-width:899px){
+  /* full-bleed like the hero portrait, so the figure isn't boxed in by the
+     content gutter — same 100vw escape the mega showcase uses */
+  .uplink-avatar{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+}
+@media(min-width:900px){
+  /* Centre the copy in the cell rather than pinning it to the bottom (that pushed
+     the panel past the fold), then nudge it down off dead-centre. */
+  .uplink-main{justify-self:start;align-self:center;margin-top:clamp(.5rem,3.4vh,4rem)}
+  .uplink-avatar{
+    align-self:end;width:min(1080px,94vw);
+    aspect-ratio:505/550;  /* desktop stays at the exact top half */
+  }
+}
+/* the contact block is the framed panel now, not the character */
+.u-rows{
+  margin-top:2.2rem;max-width:800px;
+  border:1px solid var(--line2);border-radius:16px;
+  /* The character now sits centred BEHIND this panel, and its coat peaks at
+     luminance 245 — white text over that is ~1:1. A dark base under the sheen
+     keeps the layered look while guaranteeing the rows stay readable. */
+  background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02)),rgba(0,0,0,.74);
+  backdrop-filter:blur(14px) saturate(.9);padding:.35rem clamp(1rem,2.2vw,1.6rem);
+  box-shadow:0 18px 50px rgba(0,0,0,.45);
+}
+.u-rows > :last-child{border-bottom:0}
 .u-row{
   display:flex;justify-content:space-between;align-items:center;gap:2rem;
   min-height:var(--touch);padding:1.15rem .1rem;border-bottom:1px solid rgba(255,255,255,.1);
@@ -1645,6 +1794,13 @@ footer .logo{height:28px;width:auto;opacity:.8;justify-self:start;transition:opa
 footer .logo:hover{opacity:1}
 .footer-inner span:nth-child(2){text-align:center;color:var(--mist)}
 .footer-inner span:nth-child(3){text-align:right;transition:color .2s;justify-self:end}
+/* touch targets — these three are interactive but were 14–40px tall.
+   Negative margin absorbs the added padding so nothing shifts visually. */
+.footer-inner > a{display:inline-flex;align-items:center;min-height:var(--touch)}
+#coords{
+  display:inline-flex;align-items:center;justify-content:flex-end;min-height:var(--touch);
+  padding:.5rem;margin:-.5rem;cursor:pointer;
+}
 .footer-inner span:nth-child(3):hover{color:var(--bone)}
 @media(max-width:700px){
   footer{padding:1.6rem 5.5vw calc(2.2rem + var(--safe-b))}
@@ -2032,50 +2188,44 @@ body.lang-flash main{animation:lang .3s ease}
       <span class="tier-name" data-i18n="tier_mini">03 // MINI PROJECTS</span>
       <span class="tier-state" data-i18n="tier_active">02 SYSTEMS IN SERVICE</span>
     </div>
-    <div class="catalog-toolbar rv" style="--d:.16s">
-      <div class="catalog-search">
-        <label for="projectSearch" data-i18n="catalog_search_label">SEARCH MINI PROJECTS</label>
-        <input id="projectSearch" type="search" autocomplete="off" placeholder="Search title, technology, or status" data-placeholder-th="ค้นหาชื่อ เทคโนโลยี หรือสถานะ">
+    <div class="catalog-toolbar rv" style="--d:.16s" role="search" aria-label="Search and filter mini projects" data-aria-th="ค้นหาและกรองมินิโปรเจกต์">
+      <div class="catalog-bar">
+        <div class="catalog-search">
+          <label class="sr-only" for="projectSearch" data-i18n="catalog_search_label">Search projects</label>
+          <input id="projectSearch" type="search" autocomplete="off" placeholder="Search projects…" data-placeholder-th="ค้นหาโปรเจกต์…">
+        </div>
+        <button class="catalog-toggle" id="filterToggle" type="button" aria-expanded="false" aria-controls="projectFilters">
+          <span id="filterToggleText" data-i18n="catalog_show_filters">Show filters</span>
+          <span class="catalog-toggle-badge" id="filterActiveCount" aria-hidden="true">0</span>
+        </button>
       </div>
-      <div class="catalog-count" id="projectCount" aria-live="polite">SHOWING 02 OF 02</div>
+      <div class="catalog-meta">
+        <div class="catalog-count" id="projectCount" aria-live="polite">2 projects</div>
+        <div class="catalog-active-row" id="catalogActiveRow" hidden>
+          <div class="catalog-active" id="catalogActive"></div>
+          <button class="catalog-clear" id="projectClear" type="button" data-i18n="catalog_clear_all">Clear all</button>
+        </div>
+      </div>
+      <div class="catalog-drawer" id="projectFilters" hidden>
+        <div class="catalog-group">
+          <div class="catalog-group-label" data-i18n="catalog_filter_class">Type</div>
+          <div class="catalog-chips" id="filterClassChips" role="radiogroup" aria-label="Type" data-aria-th="ประเภท"></div>
+        </div>
+        <div class="catalog-group">
+          <div class="catalog-group-label" data-i18n="catalog_filter_stack">Tech</div>
+          <div class="catalog-chips" id="filterStackChips" role="radiogroup" aria-label="Tech" data-aria-th="เทคโนโลยี"></div>
+        </div>
+        <div class="catalog-group">
+          <div class="catalog-group-label" data-i18n="catalog_filter_status">Status</div>
+          <div class="catalog-chips" id="filterStatusChips" role="radiogroup" aria-label="Status" data-aria-th="สถานะ"></div>
+        </div>
+      </div>
     </div>
-    <div class="project-grid" id="projectGrid">
-      <article class="project-card rv" data-project-card style="--d:.24s">
-        <div class="project-visual">
-          <img src="assets/images/projects/overnight-live-form.png" alt="Live vehicle entry screen for the overnight building parking log" data-alt-th="หน้าบันทึกทะเบียนรถจากระบบบันทึกรถค้างอาคารที่ใช้งานจริง" loading="lazy" width="1440" height="900">
-          <span class="project-code">OPS-LOG // 01</span>
-        </div>
-        <div class="project-body">
-          <div class="project-meta"><span data-i18n="p1_class">RECORD SYSTEM</span><span class="online" data-i18n="p1_status">IN SERVICE</span></div>
-          <h3 data-i18n="p1_title">NACC OVERNIGHT BUILDING PARKING LOG</h3>
-          <p data-i18n="p1_sub">A focused operational system for recording vehicles found parked in NACC buildings and analysing repeat or long-stay patterns.</p>
-          <div class="tags"><span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">Google Sheets</span><span class="tag">ReportLab</span></div>
-          <div class="project-actions">
-            <button class="btn signal mag project-open" type="button" data-project="overnight" data-i18n="explore">EXPLORE SYSTEM</button>
-            <a class="project-source" href="https://github.com/captwcan/naccparking" target="_blank" rel="noopener noreferrer" data-i18n="source">SOURCE CODE ↗</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="project-card rv" data-project-card style="--d:.3s">
-        <div class="project-visual">
-          <img src="assets/images/projects/gen2-role-selector.png" alt="Live role selector for the Gen 2 parking operations platform" data-alt-th="หน้าคัดเลือกบทบาทจากระบบจัดการที่จอดรถ Gen 2 ที่ใช้งานจริง" loading="lazy" width="1440" height="900">
-          <span class="project-code">OPS-PLATFORM // G2</span>
-        </div>
-        <div class="project-body">
-          <div class="project-meta"><span data-i18n="p2_class">END-TO-END PLATFORM</span><span class="online" data-i18n="p2_status">GEN 2 · IN SERVICE</span></div>
-          <h3 data-i18n="p2_title">NACC PARKING OPERATIONS PLATFORM — GEN 2</h3>
-          <p data-i18n="p2_sub">An end-to-end parking operations platform covering request intake, task coordination, printable documents, guard submissions, evidence uploads, review, and work completion.</p>
-          <div class="tags"><span class="tag">TypeScript</span><span class="tag">Next.js 15</span><span class="tag">Supabase</span><span class="tag">Turborepo</span></div>
-          <div class="project-actions">
-            <button class="btn signal mag project-open" type="button" data-project="parking" data-i18n="explore">EXPLORE SYSTEM</button>
-            <a class="project-source" href="https://github.com/Sleepingknight0/Parking_request" target="_blank" rel="noopener noreferrer" data-i18n="source">SOURCE CODE ↗</a>
-            <a class="project-source" href="https://nacc-parking-user.vercel.app" target="_blank" rel="noopener noreferrer" data-i18n="live">LIVE APP ↗</a>
-          </div>
-        </div>
-      </article>
+    <div class="project-grid" id="projectGrid" aria-live="polite"></div>
+    <div class="catalog-empty" id="projectEmpty" hidden>
+      <p data-i18n="catalog_empty">NO PROJECTS MATCH THESE FILTERS</p>
+      <button class="btn ghost" id="projectEmptyClear" type="button" data-i18n="catalog_clear_all">Clear all</button>
     </div>
-    <p class="catalog-empty" id="projectEmpty" data-i18n="catalog_empty" hidden>NO PROJECTS MATCH THIS SEARCH</p>
     <div class="catalog-more"><button class="btn ghost" id="projectMore" type="button" data-i18n="catalog_more" hidden>SHOW 12 MORE</button></div>
   </div>
 </section>
@@ -2194,13 +2344,21 @@ body.lang-flash main{animation:lang .3s ease}
   <div class="bg" data-speed="0.14" data-src="assets/images/office-skyline.jpg" role="img" aria-label="Office skyline"></div>
   <div class="scrim" style="background:linear-gradient(180deg,rgba(0,0,0,.85),rgba(0,0,0,.96))"></div>
   <div class="content">
-    <div class="eyebrow rv"><span class="pip"></span><span data-i18n="up_eb">CONTACT — OPEN FOR MISSIONS</span></div>
-    <h2 class="rv split" style="--d:.08s">ESTABLISH UPLINK</h2>
-    <div class="u-rows rv" style="--d:.16s">
-      <a class="u-row" href="mailto:bwcodex@gmail.com"><span class="k">EMAIL</span><span class="v">bwcodex@gmail.com<span class="arr">↗</span></span></a>
-      <a class="u-row" href="https://github.com/Sleepingknight0" target="_blank" rel="noopener noreferrer"><span class="k">GITHUB</span><span class="v">github.com/Sleepingknight0<span class="arr">↗</span></span></a>
-      <a class="u-row" href="https://www.facebook.com/share/19AGq949MZ/" target="_blank" rel="noopener noreferrer"><span class="k">FACEBOOK</span><span class="v">Kittiphum Prasomsap<span class="arr">↗</span></span></a>
-      <div class="u-row"><span class="k" data-i18n="up_base">BASE</span><span class="v">NONTHABURI · THAILAND · UTC+7</span></div>
+    <div class="uplink-grid">
+      <div class="uplink-main">
+        <h2 class="rv split" style="--d:.08s" data-i18n="up_t">CONTACT</h2>
+        <div class="u-rows rv" style="--d:.16s">
+          <a class="u-row" href="mailto:bwcodex@gmail.com"><span class="k">EMAIL</span><span class="v">bwcodex@gmail.com<span class="arr">↗</span></span></a>
+          <a class="u-row" href="https://github.com/Sleepingknight0" target="_blank" rel="noopener noreferrer"><span class="k">GITHUB</span><span class="v">github.com/Sleepingknight0<span class="arr">↗</span></span></a>
+          <a class="u-row" href="https://www.facebook.com/share/19AGq949MZ/" target="_blank" rel="noopener noreferrer"><span class="k">FACEBOOK</span><span class="v">Kittiphum Prasomsap<span class="arr">↗</span></span></a>
+          <div class="u-row"><span class="k" data-i18n="up_base">BASE</span><span class="v">NONTHABURI · THAILAND · UTC+7</span></div>
+        </div>
+      </div>
+      <figure class="uplink-avatar rv" style="--d:.24s">
+        <img src="assets/images/avatar-2d.webp" width="505" height="1100" loading="lazy" decoding="async"
+             alt="Illustrated 2D avatar of Kittiphum Prasomsap seated on a stool"
+             data-alt-th="ภาพ 2D ของกิตติภูมิ ประสมทรัพย์ ในท่านั่งบนเก้าอี้สตูล">
+      </figure>
     </div>
   </div>
 </section>
@@ -2682,13 +2840,25 @@ function splitHeading(h,text){
   if(!t) return;
   h.setAttribute('aria-label',t); h.textContent='';
   const show=!!(h.closest('section')?.classList.contains('in'))||RM;
-  for(let i=0;i<t.length;i++){
-    const s=document.createElement('span');
-    s.className='char'+(show?' shown':'');
-    s.textContent=t[i]===' '?'\u00A0':t[i];
-    s.style.setProperty('--d',(0.04+i*0.026)+'s');
-    h.appendChild(s);
-  }
+  /* Chars are inline-block, so a bare char-per-span heading can break a line
+     between ANY two letters ("ESTABLIS / H UPLINK"). Group each word in a
+     nowrap wrapper and separate words with real text nodes, so lines break
+     only at spaces. */
+  let i=0;
+  const words=t.split(' ');
+  words.forEach((word,wi)=>{
+    const w=document.createElement('span');
+    w.className='word';
+    for(const ch of word){
+      const s=document.createElement('span');
+      s.className='char'+(show?' shown':'');
+      s.textContent=ch;
+      s.style.setProperty('--d',(0.04+i*0.026)+'s');
+      w.appendChild(s); i++;
+    }
+    h.appendChild(w);
+    if(wi<words.length-1){ h.appendChild(document.createTextNode(' ')); i++; }
+  });
 }
 $$('h2.split').forEach(h=>{ h.dataset.en=h.textContent.replace(/\s+/g,' ').trim(); });
 
@@ -2989,6 +3159,20 @@ $('#coords')?.addEventListener('keydown',e=>{
 const PROJECTS={
   overnight:{
     source:'https://github.com/captwcan/naccparking',live:'https://naccparking.streamlit.app/',
+    catalog:{
+      code:'OPS-LOG // 01',
+      classId:'record',
+      classLabel:{en:'RECORD SYSTEM',th:'ระบบบันทึกข้อมูล'},
+      statusId:'service',
+      statusLabel:{en:'IN SERVICE',th:'ใช้งานจริง'},
+      blurb:{
+        en:'A focused operational system for recording vehicles found parked in NACC buildings and analysing repeat or long-stay patterns.',
+        th:'ระบบสำหรับบันทึกรถที่ตรวจพบว่าจอดค้างในอาคาร และวิเคราะห์รถที่พบซ้ำหรือจอดค้างหลายวัน'
+      },
+      tags:['Python','Streamlit','Google Sheets','ReportLab'],
+      stackTokens:['python','streamlit','sheets','reportlab'],
+      thumb:{src:'assets/images/projects/overnight-live-form.png',width:1440,height:900,alt:{en:'Live vehicle entry screen for the overnight building parking log',th:'หน้าบันทึกทะเบียนรถจากระบบบันทึกรถค้างอาคารที่ใช้งานจริง'}}
+    },
     gallery:[
       {src:'assets/images/projects/overnight-live-form.png',width:1440,height:900,alt:{en:'Live desktop vehicle-entry screen for the overnight building parking log',th:'หน้าบันทึกทะเบียนรถบนเดสก์ท็อปจากระบบบันทึกรถค้างอาคารจริง'},caption:{en:'Desktop · building summary and vehicle entry',th:'เดสก์ท็อป · สรุปตามอาคารและฟอร์มบันทึกทะเบียน'}},
       {src:'assets/images/projects/overnight-live-mobile.png',width:390,height:844,orientation:'portrait',alt:{en:'Live mobile view of the overnight building parking log',th:'หน้ามือถือจากระบบบันทึกรถค้างอาคารจริง'},caption:{en:'Mobile · responsive operational view',th:'มือถือ · หน้าปฏิบัติงานแบบ responsive'}}
@@ -3062,6 +3246,20 @@ const PROJECTS={
   },
   parking:{
     source:'https://github.com/Sleepingknight0/Parking_request',live:'https://nacc-parking-user.vercel.app',
+    catalog:{
+      code:'OPS-PLATFORM // G2',
+      classId:'platform',
+      classLabel:{en:'END-TO-END PLATFORM',th:'แพลตฟอร์มครบวงจร'},
+      statusId:'service',
+      statusLabel:{en:'GEN 2 · IN SERVICE',th:'GEN 2 · ใช้งานจริง'},
+      blurb:{
+        en:'An end-to-end parking operations platform covering request intake, task coordination, printable documents, guard submissions, evidence uploads, review, and work completion.',
+        th:'แพลตฟอร์มครบวงจร ครอบคลุมการรับคำขอ การประสานงาน เอกสารสำหรับพิมพ์ การส่งงานของ รปภ. การแนบหลักฐาน การตรวจสอบ และการปิดงาน'
+      },
+      tags:['TypeScript','Next.js 15','Supabase','Turborepo'],
+      stackTokens:['typescript','nextjs','supabase','turborepo'],
+      thumb:{src:'assets/images/projects/gen2-role-selector.png',width:1440,height:900,alt:{en:'Live role selector for the Gen 2 parking operations platform',th:'หน้าคัดเลือกบทบาทจากระบบจัดการที่จอดรถ Gen 2 ที่ใช้งานจริง'}}
+    },
     gallery:[
       {src:'assets/images/projects/gen2-role-selector.png',alt:{en:'Live role selector for the Gen 2 parking operations platform',th:'หน้าคัดเลือกบทบาทจากระบบจัดการที่จอดรถ Gen 2 ที่ใช้งานจริง'},caption:{en:'Field app · four role-based entry points',th:'แอปภาคสนาม · ทางเข้าใช้งานตามบทบาท 4 รูปแบบ'}},
       {src:'assets/images/projects/gen2-admin-login.png',alt:{en:'Live administrator login for the Gen 2 parking platform',th:'หน้าล็อกอินผู้ดูแลจากระบบจัดการที่จอดรถ Gen 2 ที่ใช้งานจริง'},caption:{en:'Admin console · protected sign-in',th:'คอนโซลผู้ดูแล · หน้าล็อกอินที่มีการป้องกัน'}}
@@ -3217,7 +3415,12 @@ function openProjectDialog(id,trigger){
   if(dossierScroll) dossierScroll.scrollTop=0;
 }
 function closeProjectDialog(){if(projectDialog?.open) projectDialog.close();}
-$$('.project-open').forEach(button=>button.addEventListener('click',()=>openProjectDialog(button.dataset.project,button)));
+$('#projectGrid')?.addEventListener('click',e=>{
+  const button=e.target.closest?.('.project-open');
+  const grid=e.currentTarget;
+  if(!button||!grid.contains(button)) return;
+  openProjectDialog(button.dataset.project,button);
+});
 projectDialogClose?.addEventListener('click',closeProjectDialog);
 projectDialog?.addEventListener('cancel',()=>document.body.classList.remove('modal-open'));
 projectDialog?.addEventListener('close',()=>{
@@ -3365,27 +3568,376 @@ syncProjectLevel=()=>{
 };
 syncProjectLevel();
 
-/* Scalable Mini catalog — search plus progressive disclosure for 100+ cards. */
-const projectSearch=$('#projectSearch'),projectMore=$('#projectMore'),projectCount=$('#projectCount'),projectEmpty=$('#projectEmpty');
-const projectCards=$$('[data-project-card]');
-let projectLimit=12;
+/* Scalable Mini catalog — data-driven cards, auto chips, debounced search, page size 12. */
+const projectGrid=$('#projectGrid');
+const projectSearch=$('#projectSearch'),projectMore=$('#projectMore'),projectCount=$('#projectCount'),projectEmpty=$('#projectEmpty'),projectClear=$('#projectClear'),projectEmptyClear=$('#projectEmptyClear');
+const catalogActive=$('#catalogActive'),catalogActiveRow=$('#catalogActiveRow'),filterToggle=$('#filterToggle'),projectFiltersEl=$('#projectFilters');
+const filterClassChips=$('#filterClassChips'),filterStackChips=$('#filterStackChips'),filterStatusChips=$('#filterStatusChips');
+const STACK_CHIP_LIMIT=4;
+const STACK_LABELS={
+  python:'Python',streamlit:'Streamlit',typescript:'TypeScript',nextjs:'Next.js',supabase:'Supabase',
+  sheets:'Google Sheets',reportlab:'ReportLab',pandas:'pandas',turborepo:'Turborepo',react:'React',
+  zod:'Zod',tailwind:'Tailwind',recharts:'Recharts'
+};
+let projectLimit=12,stackExpanded=false,searchTimer=0,catalogBuilt=false,filtersOpen=false;
+const projectFilters={status:'',stack:'',class:''};
 const searchKey=value=>(value||'').toLocaleLowerCase().normalize('NFKD').replace(/\p{Diacritic}/gu,'');
-function updateProjectCatalog(){
+const pad2=n=>String(n).padStart(2,'0');
+function miniProjectIds(){
+  return Object.keys(PROJECTS).filter(id=>PROJECTS[id]?.catalog);
+}
+function catalogOf(id){
+  return PROJECTS[id]?.catalog||null;
+}
+function stackLabel(token){
+  return STACK_LABELS[token]||token.replace(/[-_]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+}
+function buildSearchIndex(id){
+  const project=PROJECTS[id],c=project.catalog,en=project.en||{},th=project.th||{};
+  return searchKey([
+    id,c.code,c.classId,c.statusId,(c.stackTokens||[]).join(' '),(c.tags||[]).join(' '),
+    c.classLabel?.en,c.classLabel?.th,c.statusLabel?.en,c.statusLabel?.th,
+    c.blurb?.en,c.blurb?.th,en.title,th.title,en.status,th.status,en.summary,th.summary,
+    (en.stack||[]).join(' '),(th.stack||[]).join(' ')
+  ].join(' '));
+}
+function itemMatches(id){
+  const c=catalogOf(id); if(!c) return false;
+  if(projectFilters.class&&c.classId!==projectFilters.class) return false;
+  if(projectFilters.status==='live'&&!PROJECTS[id].live) return false;
+  if(projectFilters.status==='service'&&c.statusId!=='service') return false;
+  if(projectFilters.stack&&!(c.stackTokens||[]).includes(projectFilters.stack)) return false;
   const query=searchKey(projectSearch?.value.trim());
-  const matches=projectCards.filter(card=>!query||searchKey(card.textContent).includes(query));
-  projectCards.forEach(card=>{card.hidden=true;});
+  if(query&&!buildSearchIndex(id).includes(query)) return false;
+  return true;
+}
+function filtersActive(){
+  return !!(projectSearch?.value.trim()||projectFilters.status||projectFilters.stack||projectFilters.class);
+}
+function makeChip(group,value,label,extra){
+  const btn=document.createElement('button');
+  btn.type='button';btn.className='catalog-chip'+(extra?' is-extra':'');
+  btn.role='radio';btn.dataset.filter=group;btn.dataset.value=value;
+  btn.textContent=label;
+  if(extra) btn.hidden=!stackExpanded;
+  return btn;
+}
+function chipLabel(group,value){
+  if(!value) return lang==='th'?(TH.catalog_filter_all||'ทั้งหมด'):'ALL';
+  const chip=document.querySelector(`#projectFilters .catalog-chip[data-filter="${group}"][data-value="${value}"]`);
+  if(chip) return chip.textContent.trim();
+  if(group==='stack') return stackLabel(value);
+  if(group==='status'){
+    if(value==='live') return lang==='th'?(TH.catalog_chip_live||'ออนไลน์'):'LIVE';
+    if(value==='service') return lang==='th'?'ใช้งานจริง':'IN SERVICE';
+  }
+  return value;
+}
+function paintChipState(group){
+  $$(`#projectFilters .catalog-chip[data-filter="${group}"]`).forEach(chip=>{
+    const on=chip.dataset.value===projectFilters[group];
+    chip.classList.toggle('is-active',on);
+    chip.setAttribute('aria-checked',on?'true':'false');
+    chip.tabIndex=on?0:-1;
+  });
+}
+function setFilterChip(group,value){
+  if(!(group in projectFilters)) return;
+  projectFilters[group]=value||'';
+  paintChipState(group);
+}
+function facetActiveCount(){
+  return ['class','stack','status'].reduce((n,key)=>n+(projectFilters[key]?1:0),0);
+}
+function setFiltersOpen(open){
+  filtersOpen=!!open;
+  if(projectFiltersEl){
+    projectFiltersEl.hidden=!filtersOpen;
+    projectFiltersEl.classList.toggle('is-open',filtersOpen);
+  }
+  if(filterToggle){
+    filterToggle.setAttribute('aria-expanded',filtersOpen?'true':'false');
+    const text=$('#filterToggleText');
+    if(text){
+      const openLabel=lang==='th'?(TH.catalog_hide_filters||'ซ่อนตัวกรอง'):'Hide filters';
+      const closedLabel=lang==='th'?(TH.catalog_show_filters||'แสดงตัวกรอง'):'Show filters';
+      text.textContent=filtersOpen?openLabel:closedLabel;
+      text.dataset.en=filtersOpen?'Hide filters':'Show filters';
+      text.dataset.i18n=filtersOpen?'catalog_hide_filters':'catalog_show_filters';
+    }
+  }
+}
+function syncFilterToggleHot(){
+  const n=facetActiveCount();
+  filterToggle?.classList.toggle('is-hot',n>0);
+  const badge=$('#filterActiveCount');
+  if(badge){
+    badge.textContent=String(n);
+    badge.hidden=n===0;
+  }
+}
+function renderActiveTags(){
+  if(!catalogActive||!catalogActiveRow) return;
+  const tags=[];
+  // Active chips only for facet filters (search stays in the field).
+  ['class','stack','status'].forEach(group=>{
+    if(projectFilters[group]) tags.push({group,value:projectFilters[group],label:chipLabel(group,projectFilters[group])});
+  });
+  catalogActive.textContent='';
+  if(!tags.length){
+    catalogActiveRow.hidden=true;
+    syncFilterToggleHot();
+    return;
+  }
+  catalogActiveRow.hidden=false;
+  tags.forEach(tag=>{
+    const pill=document.createElement('span');
+    pill.className='catalog-tag';
+    const text=document.createElement('span');
+    text.textContent=tag.label;
+    const x=document.createElement('button');
+    x.type='button';x.className='catalog-tag-x';
+    x.setAttribute('aria-label',(lang==='th'?'ลบตัวกรอง ':'Remove filter ')+tag.label);
+    x.textContent='×';
+    x.addEventListener('click',()=>{
+      setFilterChip(tag.group,'');
+      projectLimit=12;
+      updateProjectCatalog();
+    });
+    pill.append(text,x);
+    catalogActive.appendChild(pill);
+  });
+  syncFilterToggleHot();
+}
+function bindChipGroup(root){
+  if(!root||root.dataset.bound) return;
+  root.dataset.bound='1';
+  root.addEventListener('click',e=>{
+    const chip=e.target.closest?.('.catalog-chip');
+    if(!chip||!root.contains(chip)) return;
+    selectFilterChip(chip);
+  });
+  root.addEventListener('keydown',e=>{
+    const chip=e.target.closest?.('.catalog-chip');
+    if(!chip||!root.contains(chip)) return;
+    const peers=$$('.catalog-chip',root).filter(c=>!c.hidden);
+    const idx=peers.indexOf(chip);
+    if(idx<0) return;
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();selectFilterChip(peers[(idx+1)%peers.length]);}
+    else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();selectFilterChip(peers[(idx-1+peers.length)%peers.length]);}
+    else if(e.key==='Home'){e.preventDefault();selectFilterChip(peers[0]);}
+    else if(e.key==='End'){e.preventDefault();selectFilterChip(peers[peers.length-1]);}
+    else if(e.key===' '||e.key==='Enter'){e.preventDefault();selectFilterChip(chip);}
+  });
+}
+function collectFacetOptions(){
+  const ids=miniProjectIds();
+  const classMap=new Map(),stackCount=new Map();
+  let hasLive=false,hasService=false;
+  ids.forEach(id=>{
+    const c=catalogOf(id),project=PROJECTS[id];
+    if(!classMap.has(c.classId)) classMap.set(c.classId,c.classLabel);
+    (c.stackTokens||[]).forEach(token=>stackCount.set(token,(stackCount.get(token)||0)+1));
+    if(project.live) hasLive=true;
+    if(c.statusId==='service') hasService=true;
+  });
+  const stacks=[...stackCount.entries()].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])).map(([token])=>token);
+  return {classMap,stacks,hasLive,hasService,total:ids.length};
+}
+function renderFilterChips(){
+  const facets=collectFacetOptions();
+  const allLabel=lang==='th'?(TH.catalog_filter_all||'ทั้งหมด'):'All';
+  if(filterClassChips){
+    filterClassChips.textContent='';
+    filterClassChips.appendChild(makeChip('class','',allLabel));
+    facets.classMap.forEach((label,id)=>{
+      // Prefer short English class words for chip UI; full labels stay on cards.
+      const short=lang==='th'
+        ?(id==='record'?(TH.catalog_chip_record||label.th):id==='platform'?(TH.catalog_chip_platform||label.th):(label.th||label.en))
+        :(id==='record'?'Record':id==='platform'?'Platform':label.en);
+      filterClassChips.appendChild(makeChip('class',id,short));
+    });
+    bindChipGroup(filterClassChips);
+    paintChipState('class');
+  }
+  if(filterStackChips){
+    filterStackChips.textContent='';
+    filterStackChips.appendChild(makeChip('stack','',allLabel));
+    facets.stacks.forEach((token,index)=>{
+      filterStackChips.appendChild(makeChip('stack',token,stackLabel(token),index>=STACK_CHIP_LIMIT));
+    });
+    if(facets.stacks.length>STACK_CHIP_LIMIT){
+      const more=document.createElement('button');
+      more.type='button';more.className='catalog-more-stacks';more.id='stackMoreBtn';
+      more.textContent=stackExpanded
+        ?(lang==='th'?'Show less':'Show less')
+        :(lang==='th'?`Show ${facets.stacks.length-STACK_CHIP_LIMIT} more`:`Show ${facets.stacks.length-STACK_CHIP_LIMIT} more`);
+      if(lang==='th') more.textContent=stackExpanded?'แสดงน้อยลง':`แสดงเพิ่ม ${facets.stacks.length-STACK_CHIP_LIMIT}`;
+      more.addEventListener('click',()=>{
+        stackExpanded=!stackExpanded;
+        $$('.catalog-chip.is-extra',filterStackChips).forEach(chip=>{chip.hidden=!stackExpanded;});
+        more.textContent=stackExpanded
+          ?(lang==='th'?'แสดงน้อยลง':'Show less')
+          :(lang==='th'?`แสดงเพิ่ม ${facets.stacks.length-STACK_CHIP_LIMIT}`:`Show ${facets.stacks.length-STACK_CHIP_LIMIT} more`);
+        if(projectFilters.stack){
+          const active=filterStackChips.querySelector(`.catalog-chip[data-value="${projectFilters.stack}"]`);
+          if(active?.hidden){
+            stackExpanded=true;
+            $$('.catalog-chip.is-extra',filterStackChips).forEach(chip=>{chip.hidden=false;});
+            more.textContent=lang==='th'?'แสดงน้อยลง':'Show less';
+          }
+        }
+      });
+      filterStackChips.appendChild(more);
+    }
+    bindChipGroup(filterStackChips);
+    paintChipState('stack');
+  }
+  if(filterStatusChips){
+    filterStatusChips.textContent='';
+    filterStatusChips.appendChild(makeChip('status','',allLabel));
+    if(facets.hasService) filterStatusChips.appendChild(makeChip('status','service',lang==='th'?'ใช้งานจริง':'In service'));
+    if(facets.hasLive) filterStatusChips.appendChild(makeChip('status','live',lang==='th'?(TH.catalog_chip_live||'ออนไลน์'):'Live'));
+    bindChipGroup(filterStatusChips);
+    paintChipState('status');
+  }
+}
+function renderProjectCard(id,index){
+  const project=PROJECTS[id],c=project.catalog,thai=lang==='th';
+  const copy=project[thai?'th':'en'];
+  const article=document.createElement('article');
+  article.className='project-card rv';
+  article.dataset.projectCard='';
+  article.dataset.projectId=id;
+  article.dataset.status=c.statusId||'';
+  article.dataset.live=project.live?'1':'0';
+  article.dataset.class=c.classId||'';
+  article.dataset.stack=(c.stackTokens||[]).join(' ');
+  article.style.setProperty('--d',`${Math.min(.24+index*.04,.5)}s`);
+  const thumbAlt=c.thumb?.alt?c.thumb.alt[thai?'th':'en']:'';
+  const tags=(c.tags||[]).map(tag=>`<span class="tag">${tag}</span>`).join('');
+  const liveLink=project.live
+    ?`<a class="project-source" href="${project.live}" target="_blank" rel="noopener noreferrer">${thai?(TH.live||'เปิดระบบจริง ↗'):'LIVE APP ↗'}</a>`
+    :'';
+  article.innerHTML=`
+    <div class="project-visual">
+      <img src="${c.thumb.src}" alt="${thumbAlt.replace(/"/g,'&quot;')}" loading="lazy" width="${c.thumb.width||1440}" height="${c.thumb.height||900}">
+      <span class="project-code">${c.code}</span>
+    </div>
+    <div class="project-body">
+      <div class="project-meta"><span>${(thai?c.classLabel.th:c.classLabel.en)}</span><span class="online">${thai?c.statusLabel.th:c.statusLabel.en}</span></div>
+      <h3>${copy.title}</h3>
+      <p>${thai?c.blurb.th:c.blurb.en}</p>
+      <div class="tags">${tags}</div>
+      <div class="project-actions">
+        <button class="btn signal mag project-open" type="button" data-project="${id}">${thai?(TH.explore||'ดูรายละเอียดระบบ'):'EXPLORE SYSTEM'}</button>
+        <a class="project-source" href="${project.source}" target="_blank" rel="noopener noreferrer">${thai?(TH.source||'ดูซอร์สโค้ด ↗'):'SOURCE CODE ↗'}</a>
+        ${liveLink}
+      </div>
+    </div>`;
+  return article;
+}
+function renderProjectCards(){
+  if(!projectGrid) return;
+  const ids=miniProjectIds();
+  projectGrid.textContent='';
+  const frag=document.createDocumentFragment();
+  ids.forEach((id,index)=>frag.appendChild(renderProjectCard(id,index)));
+  projectGrid.appendChild(frag);
+  catalogBuilt=true;
+}
+function updateMiniCounts(total){
+  const n=pad2(total);
+  const jump=document.querySelector('[data-i18n="jump_mini_state"]');
+  const tier=document.querySelector('[data-i18n="tier_active"]');
+  if(jump){
+    jump.textContent=lang==='th'?`ใช้งานจริง ${n} ระบบ`:`${n} IN SERVICE`;
+    jump.dataset.en=`${n} IN SERVICE`;
+  }
+  if(tier){
+    tier.textContent=lang==='th'?`${n} ระบบที่ใช้งานจริง`:`${n} SYSTEMS IN SERVICE`;
+    tier.dataset.en=`${n} SYSTEMS IN SERVICE`;
+  }
+  if(TH){
+    TH.jump_mini_state=`ใช้งานจริง ${n} ระบบ`;
+    TH.tier_active=`${n} ระบบที่ใช้งานจริง`;
+  }
+}
+function projectCards(){
+  return $$('[data-project-card]',projectGrid||document);
+}
+function updateProjectCatalog(){
+  if(!catalogBuilt) renderProjectCards();
+  const cards=projectCards();
+  const matches=cards.filter(card=>itemMatches(card.dataset.projectId));
+  cards.forEach(card=>{card.hidden=true;});
   matches.slice(0,projectLimit).forEach(card=>{card.hidden=false;});
   const shown=Math.min(projectLimit,matches.length);
   if(projectCount){
     projectCount.textContent=lang==='th'
-      ?`แสดง ${String(shown).padStart(2,'0')} จาก ${String(matches.length).padStart(2,'0')} รายการ`
-      :`SHOWING ${String(shown).padStart(2,'0')} OF ${String(matches.length).padStart(2,'0')} MATCHES`;
+      ?`แสดง ${matches.length} จาก ${miniProjectIds().length} โปรเจกต์`
+      :`Showing ${matches.length} of ${miniProjectIds().length} projects`;
   }
-  if(projectMore) projectMore.hidden=shown>=matches.length;
+  if(projectMore){
+    projectMore.hidden=shown>=matches.length;
+    const left=Math.max(0,matches.length-shown);
+    const step=Math.min(12,left);
+    projectMore.textContent=lang==='th'
+      ?`Show ${step} more`
+      :`Show ${step} more`;
+    if(lang==='th') projectMore.textContent=`แสดงเพิ่ม ${step} รายการ`;
+  }
   if(projectEmpty) projectEmpty.hidden=matches.length!==0;
+  renderActiveTags();
+  syncFilterToggleHot();
+  updateMiniCounts(miniProjectIds().length);
 }
-projectSearch?.addEventListener('input',()=>{projectLimit=12;updateProjectCatalog();});
+function selectFilterChip(chip){
+  const group=chip?.dataset.filter;
+  if(!group||!(group in projectFilters)) return;
+  setFilterChip(group,chip.dataset.value||'');
+  projectLimit=12;
+  updateProjectCatalog();
+  chip.focus();
+}
+function clearProjectFilters(){
+  projectFilters.status='';projectFilters.stack='';projectFilters.class='';
+  if(projectSearch) projectSearch.value='';
+  ['status','stack','class'].forEach(group=>paintChipState(group));
+  projectLimit=12;
+  updateProjectCatalog();
+  if(filtersOpen) filterClassChips?.querySelector('.catalog-chip')?.focus();
+  else projectSearch?.focus();
+}
+function rebuildProjectCatalog(){
+  renderFilterChips();
+  renderProjectCards();
+  setFiltersOpen(filtersOpen); // refresh open/closed label for current language
+  updateProjectCatalog();
+}
+function scheduleCatalogSearch(){
+  clearTimeout(searchTimer);
+  searchTimer=setTimeout(()=>{projectLimit=12;updateProjectCatalog();},140);
+}
+projectSearch?.addEventListener('input',scheduleCatalogSearch);
 projectMore?.addEventListener('click',()=>{projectLimit+=12;updateProjectCatalog();});
+projectClear?.addEventListener('click',clearProjectFilters);
+projectEmptyClear?.addEventListener('click',clearProjectFilters);
+filterToggle?.addEventListener('click',()=>{
+  setFiltersOpen(!filtersOpen);
+  if(filtersOpen){
+    filterClassChips?.querySelector('.catalog-chip.is-active, .catalog-chip')?.focus();
+  }
+});
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape'||!filtersOpen||projectDialog?.open) return;
+  const t=e.target;
+  if(t&&(projectFiltersEl?.contains(t)||filterToggle===t||filterToggle?.contains(t))){
+    e.preventDefault();
+    setFiltersOpen(false);
+    filterToggle?.focus();
+  }
+});
 
 /* i18n */
 const TH={
@@ -3417,7 +3969,21 @@ const TH={
   adv_slot_2:"ADV-02 · ช่องแนวคิด", adv_auto_title:"ระบบอัตโนมัติและปัญญาประดิษฐ์", adv_auto_tease:"ระบบอัตโนมัติที่มีมนุษย์กำกับดูแล",
   adv_slot_3:"ADV-03 · ช่องแนวคิด", adv_data_title:"แพลตฟอร์มข้อมูลที่ทนทาน", adv_data_tease:"ไปป์ไลน์ที่มีธรรมาภิบาล การสังเกตการณ์ และรองรับการขยายตัว",
   adv_slot_4:"ADV-04 · ช่องแนวคิด", adv_services_title:"โครงข่ายบริการที่ปลอดภัย", adv_services_tease:"บริการแบบประกอบได้พร้อมการควบคุมตัวตนและนโยบาย",
-  catalog_search_label:"ค้นหามินิโปรเจกต์", catalog_more:"แสดงเพิ่มอีก 12 รายการ", catalog_empty:"ไม่พบโปรเจกต์ที่ตรงกับคำค้น",
+  catalog_search_label:"ค้นหาโปรเจกต์",
+  catalog_show_filters:"แสดงตัวกรอง",
+  catalog_hide_filters:"ซ่อนตัวกรอง",
+  catalog_filters_label:"ตัวกรอง",
+  catalog_clear:"ล้าง",
+  catalog_clear_all:"ล้างทั้งหมด",
+  catalog_filter_class:"ประเภท",
+  catalog_filter_stack:"เทคโนโลยี",
+  catalog_filter_status:"สถานะ",
+  catalog_filter_all:"ทั้งหมด",
+  catalog_chip_live:"ออนไลน์",
+  catalog_chip_record:"ระบบบันทึก",
+  catalog_chip_platform:"แพลตฟอร์ม",
+  catalog_more:"แสดงเพิ่ม",
+  catalog_empty:"ไม่พบโปรเจกต์ที่ตรงกับตัวกรอง",
   no_deployment:"ยังไม่มีภารกิจที่กำหนด", awaiting:"สงวนช่องขีดความสามารถไว้",
   d_workflow:"01 // ขั้นตอนการทำงาน", d_arch:"02 // สถาปัตยกรรมระบบ", d_stack:"03 // เทคโนโลยีที่ตรวจสอบแล้ว", d_hl:"04 // การตัดสินใจเชิงวิศวกรรม",
   sp_eb:"สเปกยาน", sp_t:"ระบบและขีดความสามารถ",
@@ -3439,7 +4005,7 @@ const TH={
   lg4a_r:"กราฟิกดีไซน์ · Mid-level", lg4a_date:"2023–2025 · 2 ปี",
   lg4b_r:"กราฟิกดีไซน์ · Junior", lg4b_date:"2021–2023 · 2 ปี",
   lg4_d:"4 ปีงานลูกค้า สายตาดีไซน์หลังโค้ด",
-  up_eb:"ติดต่อ — พร้อมรับภารกิจใหม่", up_base:"ฐานปฏิบัติการ",
+  up_t:"ติดต่อ", up_base:"ฐานปฏิบัติการ",
   ai_eb:"เซกเตอร์ // พัฒนา AI",
   ai_lock:"ล็อกการเข้าถึง",
   ai_code:"โมดูล // ก่อนปล่อย",
@@ -3552,7 +4118,7 @@ function applyLang(){
   if(projectDialog?.open&&activeProject) renderProjectDialog();
   renderAdvanced(activeAdvanced,false);
   updateMegaToggle();
-  updateProjectCatalog();
+  rebuildProjectCatalog();
 }
 applyLang();
 $$('.lang-btn').forEach(b=>b.addEventListener('click',()=>{
