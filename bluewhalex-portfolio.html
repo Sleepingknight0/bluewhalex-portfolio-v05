@@ -1104,8 +1104,10 @@ section.in .hero-meta{opacity:1}
 .project-meta span{
   font-family:var(--fm);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:#c2c3c5;
 }
-.project-meta .online{color:#fff;display:flex;align-items:center;gap:.45rem}
-.project-meta .online::before{content:"";width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 10px rgba(255,255,255,.5)}
+.project-meta .project-status{color:#c2c3c5;display:flex;align-items:center;gap:.45rem}
+.project-meta .project-status::before{content:"";width:6px;height:6px;border-radius:50%;border:1px solid #777;background:transparent;box-shadow:none}
+.project-meta .project-status.is-active{color:#fff}
+.project-meta .project-status.is-active::before{border-color:#fff;background:#fff;box-shadow:0 0 10px rgba(255,255,255,.5);animation:pulse 1.8s ease-in-out infinite}
 .project-card h3{font-size:clamp(1.35rem,2vw,1.9rem);line-height:1.08;letter-spacing:.01em;text-transform:uppercase;text-wrap:balance}
 .project-card p{color:#c2c3c5;font-size:.94rem;line-height:1.65;max-width:58ch;margin:.8rem 0 1rem;text-wrap:pretty}
 .project-card .tags{margin-top:0}
@@ -1868,9 +1870,11 @@ body.modal-open{overflow:hidden}
 .dossier-intro{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(0,1.7fr);gap:2rem;padding-bottom:2rem;border-bottom:1px solid var(--line)}
 .dossier-status{
   display:inline-flex;align-items:center;gap:.45rem;font-family:var(--fm);font-size:.55rem;letter-spacing:.17em;
-  color:#fff;text-transform:uppercase;margin-bottom:1rem;
+  color:#c2c3c5;text-transform:uppercase;margin-bottom:1rem;
 }
-.dossier-status::before{content:"";width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 12px rgba(255,255,255,.55)}
+.dossier-status::before{content:"";width:7px;height:7px;border-radius:50%;border:1px solid #777;background:transparent;box-shadow:none}
+.dossier-status.is-active{color:#fff}
+.dossier-status.is-active::before{border-color:#fff;background:#fff;box-shadow:0 0 12px rgba(255,255,255,.55);animation:pulse 1.8s ease-in-out infinite}
 .dossier-summary{color:#c2c3c5;font-size:clamp(1rem,1.4vw,1.12rem);line-height:1.75;max-width:64ch}
 .dossier-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}
 .dossier-fact{border:1px solid var(--line);padding:1rem;background:rgba(255,255,255,.02)}
@@ -2088,7 +2092,7 @@ body.lang-flash main{animation:lang .3s ease}
   <div class="content">
     <div class="panel-head">
       <div>
-        <div class="eyebrow rv" data-i18n="pr_eb">MISSION REGISTRY — DEPLOYED WORK</div>
+        <div class="eyebrow rv" data-i18n="pr_eb">MISSION REGISTRY — SELECTED WORK</div>
         <h2 class="rv split" style="--d:.08s" data-i18n="pr_title">PROJECT SYSTEMS</h2>
       </div>
       <div class="panel-index rv" style="--d:.12s">SEC // 01</div>
@@ -2097,7 +2101,7 @@ body.lang-flash main{animation:lang .3s ease}
     <nav class="registry-jump rv" style="--d:.2s" aria-label="Project levels" data-aria-th="ระดับโปรเจกต์">
       <a class="active" href="#mega-projects" aria-current="true"><span class="level-index">01</span><span class="level-copy"><span class="level-label" data-i18n="jump_mega">MEGA PROJECTS</span><b class="level-state" data-i18n="jump_mega_state">VISION PROGRAM</b></span><span class="level-arrow" aria-hidden="true">↗</span></a>
       <a href="#advanced-projects"><span class="level-index">02</span><span class="level-copy"><span class="level-label" data-i18n="jump_adv">ADVANCED PROJECTS</span><b class="level-state" data-i18n="jump_adv_state">CAPACITY RESERVED</b></span><span class="level-arrow" aria-hidden="true">↗</span></a>
-      <a href="#mini-projects"><span class="level-index">03</span><span class="level-copy"><span class="level-label" data-i18n="jump_mini">MINI PROJECTS</span><b class="level-state" data-i18n="jump_mini_state">02 IN SERVICE</b></span><span class="level-arrow" aria-hidden="true">↗</span></a>
+      <a href="#mini-projects"><span class="level-index">03</span><span class="level-copy"><span class="level-label" data-i18n="jump_mini">MINI PROJECTS</span><b class="level-state" data-i18n="jump_mini_state">04 PROJECTS</b></span><span class="level-arrow" aria-hidden="true">↗</span></a>
     </nav>
 
     <div class="tier-head mega-head rv" style="--d:.12s">
@@ -2186,7 +2190,7 @@ body.lang-flash main{animation:lang .3s ease}
 
     <div class="tier-head rv" id="mini-projects" style="--d:.12s">
       <span class="tier-name" data-i18n="tier_mini">03 // MINI PROJECTS</span>
-      <span class="tier-state" data-i18n="tier_active">02 SYSTEMS IN SERVICE</span>
+      <span class="tier-state" data-i18n="tier_active">04 PROJECTS · 02 IN SERVICE</span>
     </div>
     <div class="catalog-toolbar rv" style="--d:.16s" role="search" aria-label="Search and filter mini projects" data-aria-th="ค้นหาและกรองมินิโปรเจกต์">
       <div class="catalog-bar">
@@ -2200,7 +2204,7 @@ body.lang-flash main{animation:lang .3s ease}
         </button>
       </div>
       <div class="catalog-meta">
-        <div class="catalog-count" id="projectCount" aria-live="polite">2 projects</div>
+        <div class="catalog-count" id="projectCount" aria-live="polite">Showing 4 of 4 projects</div>
         <div class="catalog-active-row" id="catalogActiveRow" hidden>
           <div class="catalog-active" id="catalogActive"></div>
           <button class="catalog-clear" id="projectClear" type="button" data-i18n="catalog_clear_all">Clear all</button>
@@ -2290,7 +2294,7 @@ body.lang-flash main{animation:lang .3s ease}
               <span class="log-seal" aria-hidden="true"><img src="assets/images/nacc.png" alt="" width="32" height="32" decoding="async" loading="lazy"></span>
               <span data-i18n="lg_nacc_n">NACC · Nonthaburi</span>
             </div>
-            <p class="log-note" data-i18n="lg1_d">Day job: investigation comms. Built the office parking platform alone.</p>
+            <p class="log-note" data-i18n="lg1_d">Day job: investigation communications. Independently built the office’s official-letter parking request and allocation system.</p>
           </div>
         </article>
       </div>
@@ -3070,7 +3074,7 @@ const io=new IntersectionObserver(entries=>{
     e.target.querySelectorAll('h2.split .char').forEach(c=>c.classList.add('shown'));
     io.unobserve(e.target);
   });
-},{threshold:.12, rootMargin:'0px 0px -8% 0px'});
+},{threshold:0, rootMargin:'0px 0px -8% 0px'});
 $$('section').forEach(s=>{
   if(s.id==='hero'){ s.querySelectorAll('[data-count]').forEach(countUp); return; }
   io.observe(s);
@@ -3162,27 +3166,27 @@ const PROJECTS={
     catalog:{
       code:'OPS-LOG // 01',
       classId:'record',
-      classLabel:{en:'RECORD SYSTEM',th:'ระบบบันทึกข้อมูล'},
+      classLabel:{en:'OVERNIGHT PARKING LOG',th:'บันทึกรถจอดค้างคืน'},
       statusId:'service',
       statusLabel:{en:'IN SERVICE',th:'ใช้งานจริง'},
       blurb:{
-        en:'A focused operational system for recording vehicles found parked in NACC buildings and analysing repeat or long-stay patterns.',
-        th:'ระบบสำหรับบันทึกรถที่ตรวจพบว่าจอดค้างในอาคาร และวิเคราะห์รถที่พบซ้ำหรือจอดค้างหลายวัน'
+        en:'An operational system for recording vehicles parked overnight at NACC buildings and analysing repeat or multi-night records.',
+        th:'ระบบปฏิบัติงานสำหรับบันทึกรถที่จอดค้างคืนในอาคาร ป.ป.ช. และวิเคราะห์รายการที่พบซ้ำหรือจอดค้างหลายคืน'
       },
       tags:['Python','Streamlit','Google Sheets','ReportLab'],
       stackTokens:['python','streamlit','sheets','reportlab'],
-      thumb:{src:'assets/images/projects/overnight-live-form.png',width:1440,height:900,alt:{en:'Live vehicle entry screen for the overnight building parking log',th:'หน้าบันทึกทะเบียนรถจากระบบบันทึกรถค้างอาคารที่ใช้งานจริง'}}
+      thumb:{src:'assets/images/projects/overnight-parking-log-concept.webp',width:1440,height:900,alt:{en:'Monochrome concept of vehicles being logged in an office parking area at night',th:'ภาพคอนเซปต์ขาวดำของการตรวจและบันทึกรถในลานจอดช่วงกลางคืน'}}
     },
     gallery:[
-      {src:'assets/images/projects/overnight-live-form.png',width:1440,height:900,alt:{en:'Live desktop vehicle-entry screen for the overnight building parking log',th:'หน้าบันทึกทะเบียนรถบนเดสก์ท็อปจากระบบบันทึกรถค้างอาคารจริง'},caption:{en:'Desktop · building summary and vehicle entry',th:'เดสก์ท็อป · สรุปตามอาคารและฟอร์มบันทึกทะเบียน'}},
-      {src:'assets/images/projects/overnight-live-mobile.png',width:390,height:844,orientation:'portrait',alt:{en:'Live mobile view of the overnight building parking log',th:'หน้ามือถือจากระบบบันทึกรถค้างอาคารจริง'},caption:{en:'Mobile · responsive operational view',th:'มือถือ · หน้าปฏิบัติงานแบบ responsive'}}
+      {src:'assets/images/projects/overnight-live-form.png',width:1440,height:900,alt:{en:'Live desktop vehicle-entry screen for the overnight parking log',th:'หน้าบันทึกทะเบียนรถจอดค้างคืนบนเดสก์ท็อปจากระบบจริง'},caption:{en:'Desktop · building summary and overnight vehicle entry',th:'เดสก์ท็อป · สรุปตามอาคารและฟอร์มบันทึกรถจอดค้างคืน'}},
+      {src:'assets/images/projects/overnight-live-mobile.png',width:390,height:844,orientation:'portrait',alt:{en:'Live mobile view of the overnight parking log',th:'หน้ามือถือจากระบบบันทึกรถจอดค้างคืนจริง'},caption:{en:'Mobile · responsive operational view',th:'มือถือ · หน้าปฏิบัติงานแบบ responsive'}}
     ],
     en:{
-      title:'NACC Overnight Building Parking Log',status:'IN SERVICE',
-      summary:'A focused Streamlit system for security staff to record vehicles found remaining in NACC buildings by date, building, license plate, and province, then review repeat and long-stay patterns through a dedicated dashboard.',
-      relation:'A collaborative project maintained in captwcan/naccparking and forked to the owner’s GitHub account. It is separate from the Gen 2 parking-request platform and solves a narrower vehicle-observation problem.',
+      title:'NACC Overnight Parking Log',status:'IN SERVICE',
+      summary:'A focused Streamlit system for security staff to record vehicles parked overnight at NACC buildings by date, building, license plate, and province, then review repeat or multi-night records through a dedicated dashboard.',
+      relation:'A collaborative project maintained in captwcan/naccparking and forked to the owner’s GitHub account. It is separate from the official-letter parking request and allocation system and is dedicated to overnight-parking records.',
       facts:[
-        ['System class','Vehicle observation and overnight-parking log'],
+        ['System class','Overnight parked-vehicle record system'],
         ['Primary users','Security staff · report viewers · administrator'],
         ['Data layer','Google Sheets through gspread and service-account authentication'],
         ['Application surfaces','Vehicle entry form + modular analytics dashboard'],
@@ -3190,15 +3194,15 @@ const PROJECTS={
         ['Delivery','Live Streamlit Community Cloud application']
       ],
       workflow:[
-        'Security staff select the building where a remaining vehicle was found.',
+        'Security staff select the building where a vehicle is found parked overnight.',
         'One or more license plates and provinces are added through dynamic vehicle rows.',
         'The app checks duplicates inside the form and against records already saved for the same date before batch submission.',
         'Validated observations are appended to Google Sheets and the page updates the current-day totals per building.',
-        'The dashboard analyses repeat and long-stay vehicles and exports daily, weekly, or monthly CSV, PDF, and JPG reports.'
+        'The dashboard analyses repeat or multi-night records and exports daily, weekly, or monthly CSV, PDF, and JPG reports.'
       ],
       architecture:[
         ['Interface','A Streamlit entry application plus a dashboard page split into overview, period analysis, vehicle analysis, and raw-data modules.'],
-        ['Data & analysis','gspread reads and appends Google Sheets records; pandas normalises dates, groups observations, and calculates repeat or long-stay patterns.'],
+        ['Data & analysis','gspread reads and appends Google Sheets records; pandas normalises dates, groups observations, and calculates repeat or multi-night patterns.'],
         ['Reporting','ReportLab, Pillow, and bundled Thai fonts generate printable PDF and JPG summaries; CSV export preserves the detailed rows.']
       ],
       stack:['Python','Streamlit','pandas','gspread','Google Auth','ReportLab','Pillow','openpyxl','pytest'],
@@ -3211,11 +3215,11 @@ const PROJECTS={
       ]
     },
     th:{
-      title:'ระบบบันทึกรถค้างอาคาร ป.ป.ช.',status:'ใช้งานจริง',
-      summary:'ระบบ Streamlit สำหรับ รปภ. บันทึกรถที่ตรวจพบว่าจอดค้างในอาคาร แยกตามวันที่ อาคาร ทะเบียน และจังหวัด พร้อมแดชบอร์ดวิเคราะห์รถที่พบซ้ำหรือจอดค้างหลายวัน',
-      relation:'โปรเจกต์ที่พัฒนาร่วมกันใน captwcan/naccparking และมี fork อยู่ในบัญชี GitHub ของเจ้าของพอร์ต เป็นคนละระบบกับแพลตฟอร์มคำขอที่จอด Gen 2 และแก้โจทย์การตรวจพบรถค้างโดยเฉพาะ',
+      title:'ระบบบันทึกรถจอดค้างคืน ป.ป.ช.',status:'ใช้งานจริง',
+      summary:'ระบบ Streamlit สำหรับ รปภ. บันทึกรถที่จอดค้างคืนในอาคาร ป.ป.ช. แยกตามวันที่ อาคาร ทะเบียน และจังหวัด พร้อมแดชบอร์ดวิเคราะห์รายการที่พบซ้ำหรือจอดค้างหลายคืน',
+      relation:'โปรเจกต์ที่พัฒนาร่วมกันใน captwcan/naccparking และมี fork ในบัญชี GitHub ของเจ้าของพอร์ต เป็นคนละระบบกับระบบขอและจัดที่จอดรถจากหนังสือราชการ โดยระบบนี้ใช้บันทึกรถจอดค้างคืนโดยเฉพาะ',
       facts:[
-        ['ประเภทระบบ','ระบบบันทึกการตรวจพบรถและรถค้างอาคาร'],
+        ['ประเภทระบบ','ระบบบันทึกรถจอดค้างคืน'],
         ['ผู้ใช้งานหลัก','รปภ. · ผู้ดูรายงาน · ผู้ดูแลระบบ'],
         ['ชั้นข้อมูล','Google Sheets ผ่าน gspread และ service account'],
         ['หน้าระบบ','ฟอร์มบันทึกรถ + แดชบอร์ดวิเคราะห์แบบแยกโมดูล'],
@@ -3223,15 +3227,15 @@ const PROJECTS={
         ['การเผยแพร่','เว็บแอปใช้งานจริงบน Streamlit Community Cloud']
       ],
       workflow:[
-        'รปภ. เลือกอาคารที่ตรวจพบรถจอดค้าง',
+        'รปภ. เลือกอาคารที่ตรวจพบรถจอดค้างคืน',
         'เพิ่มทะเบียนรถและจังหวัดได้หลายรายการผ่านแถวข้อมูลแบบ dynamic',
         'ระบบตรวจรายการซ้ำทั้งในฟอร์มและข้อมูลของวันเดียวกันที่มีอยู่ใน Google Sheets ก่อนบันทึก',
         'ข้อมูลที่ผ่านการตรวจถูกบันทึกเป็นชุด และหน้าแรกอัปเดตยอดประจำวันแยกตามอาคาร',
-        'แดชบอร์ดวิเคราะห์รถที่พบซ้ำหรือค้างหลายวัน และส่งออกรายงานรายวัน รายสัปดาห์ หรือรายเดือนเป็น CSV, PDF และ JPG'
+        'แดชบอร์ดวิเคราะห์รายการที่พบซ้ำหรือจอดค้างหลายคืน และส่งออกรายงานรายวัน รายสัปดาห์ หรือรายเดือนเป็น CSV, PDF และ JPG'
       ],
       architecture:[
         ['หน้าจอใช้งาน','แอป Streamlit สำหรับบันทึกข้อมูลและหน้าแดชบอร์ดที่แยกเป็นภาพรวม วิเคราะห์ช่วงเวลา วิเคราะห์รายคัน และข้อมูลดิบ'],
-        ['ข้อมูลและการวิเคราะห์','gspread อ่านและเพิ่มข้อมูลใน Google Sheets ส่วน pandas จัดรูปแบบวันที่ จัดกลุ่มรายการ และคำนวณรถที่พบซ้ำหรือค้างหลายวัน'],
+        ['ข้อมูลและการวิเคราะห์','gspread อ่านและเพิ่มข้อมูลใน Google Sheets ส่วน pandas จัดรูปแบบวันที่ จัดกลุ่มรายการ และคำนวณรายการที่พบซ้ำหรือจอดค้างหลายคืน'],
         ['ระบบรายงาน','ReportLab, Pillow และฟอนต์ภาษาไทยที่มากับโปรเจกต์ ใช้สร้างสรุป PDF/JPG พร้อมส่งออกข้อมูลละเอียดเป็น CSV']
       ],
       stack:['Python','Streamlit','pandas','gspread','Google Auth','ReportLab','Pillow','openpyxl','pytest'],
@@ -3247,38 +3251,38 @@ const PROJECTS={
   parking:{
     source:'https://github.com/Sleepingknight0/Parking_request',live:'https://nacc-parking-user.vercel.app',
     catalog:{
-      code:'OPS-PLATFORM // G2',
+      code:'OPS-REQUEST // 02',
       classId:'platform',
-      classLabel:{en:'END-TO-END PLATFORM',th:'แพลตฟอร์มครบวงจร'},
+      classLabel:{en:'OFFICIAL-LETTER WORKFLOW',th:'ระบบงานหนังสือราชการ'},
       statusId:'service',
-      statusLabel:{en:'GEN 2 · IN SERVICE',th:'GEN 2 · ใช้งานจริง'},
+      statusLabel:{en:'IN SERVICE',th:'ใช้งานจริง'},
       blurb:{
-        en:'An end-to-end parking operations platform covering request intake, task coordination, printable documents, guard submissions, evidence uploads, review, and work completion.',
-        th:'แพลตฟอร์มครบวงจร ครอบคลุมการรับคำขอ การประสานงาน เอกสารสำหรับพิมพ์ การส่งงานของ รปภ. การแนบหลักฐาน การตรวจสอบ และการปิดงาน'
+        en:'An end-to-end workflow that turns official parking-request letters into approved parking allocations, staff assignments, printable signs, evidence review, and job completion.',
+        th:'ระบบงานเบ็ดเสร็จที่รับคำขอที่จอดรถจากหนังสือราชการ อนุมัติและจัดที่จอด มอบหมายงาน สร้างป้ายจอด ตรวจหลักฐาน และปิดงาน'
       },
       tags:['TypeScript','Next.js 15','Supabase','Turborepo'],
       stackTokens:['typescript','nextjs','supabase','turborepo'],
-      thumb:{src:'assets/images/projects/gen2-role-selector.png',width:1440,height:900,alt:{en:'Live role selector for the Gen 2 parking operations platform',th:'หน้าคัดเลือกบทบาทจากระบบจัดการที่จอดรถ Gen 2 ที่ใช้งานจริง'}}
+      thumb:{src:'assets/images/projects/parking-request-allocation-concept.webp',width:1440,height:900,alt:{en:'Monochrome concept of an official letter flowing into parking allocation and field completion',th:'ภาพคอนเซปต์ขาวดำของหนังสือราชการที่เข้าสู่การจัดที่จอดและปิดงานภาคสนาม'}}
     },
     gallery:[
-      {src:'assets/images/projects/gen2-role-selector.png',alt:{en:'Live role selector for the Gen 2 parking operations platform',th:'หน้าคัดเลือกบทบาทจากระบบจัดการที่จอดรถ Gen 2 ที่ใช้งานจริง'},caption:{en:'Field app · four role-based entry points',th:'แอปภาคสนาม · ทางเข้าใช้งานตามบทบาท 4 รูปแบบ'}},
-      {src:'assets/images/projects/gen2-admin-login.png',alt:{en:'Live administrator login for the Gen 2 parking platform',th:'หน้าล็อกอินผู้ดูแลจากระบบจัดการที่จอดรถ Gen 2 ที่ใช้งานจริง'},caption:{en:'Admin console · protected sign-in',th:'คอนโซลผู้ดูแล · หน้าล็อกอินที่มีการป้องกัน'}}
+      {src:'assets/images/projects/parking-request-role-selector.png',alt:{en:'Live role selector for the NACC parking request and allocation system',th:'หน้าคัดเลือกบทบาทจากระบบขอและจัดที่จอดรถ ป.ป.ช. ที่ใช้งานจริง'},caption:{en:'Field app · four role-based entry points',th:'แอปภาคสนาม · ทางเข้าใช้งานตามบทบาท 4 รูปแบบ'}},
+      {src:'assets/images/projects/parking-request-admin-login.png',alt:{en:'Live administrator login for the NACC parking request and allocation system',th:'หน้าล็อกอินผู้ดูแลจากระบบขอและจัดที่จอดรถ ป.ป.ช. ที่ใช้งานจริง'},caption:{en:'Admin console · protected sign-in',th:'คอนโซลผู้ดูแล · หน้าล็อกอินที่มีการป้องกัน'}}
     ],
     en:{
-      title:'NACC Parking Operations Platform — Gen 2',status:'GEN 2 · IN SERVICE',
-      summary:'An end-to-end parking operations platform covering request intake, task coordination, printable documents, guard submissions, evidence uploads, review, and work completion.',
-      relation:'"Gen 2" is this platform’s own development stage. It is a separate system from the Overnight Parking Log — not a rewrite, and not the same product.',
+      title:'NACC Official-Letter Parking Request & Allocation',status:'IN SERVICE',
+      summary:'An end-to-end workflow that receives parking requests from official government letters, coordinates and allocates parking spaces, prepares operational documents, and carries each request through field execution, evidence review, and closure.',
+      relation:'This official-letter parking request and allocation workflow is separate from the Overnight Parking Log, which records vehicles found parked overnight.',
       facts:[
-        ['System class','End-to-end operations platform'],
+        ['System class','End-to-end official-letter parking workflow'],
         ['Application surfaces','Admin console + field user app — two Next.js apps'],
         ['Roles','5 database-level roles enforced by Postgres row-level security'],
         ['Data platform','Supabase — Postgres · Auth · Storage · Realtime'],
-        ['Verified scale','28 commits · ~96% TypeScript · 7 shared packages'],
+        ['Request origin','Official government correspondence requesting parking arrangements'],
         ['Deployment','Live admin application deployed on Vercel']
       ],
       workflow:[
-        'An officer or comms staffer records an official letter — department, dates, plates, location, and purpose.',
-        'An admin approves or rejects; approved requests enter the assignment pool.',
+        'An officer or communications staffer records an official parking-request letter — department, dates, plates, location, and purpose.',
+        'An admin reviews the request, confirms the parking arrangement, and sends approved work into the assignment pool.',
         'Security staff accept a job, print (or hand-write) per-plate parking signs generated from the request, and start work.',
         'Closing a job requires at least one completion photo, compressed client-side before upload.',
         'Every status change is appended to a history table by a database trigger — independent of application code.'
@@ -3299,20 +3303,20 @@ const PROJECTS={
       ]
     },
     th:{
-      title:'ระบบจัดการคำขอที่จอดรถและส่งงานครบวงจร — Gen 2',status:'GEN 2 · ใช้งานจริง',
-      summary:'แพลตฟอร์มจัดการที่จอดรถแบบครบวงจร ครอบคลุมการรับคำขอ การประสานงาน เอกสารสำหรับพิมพ์ การส่งงานของ รปภ. การแนบหลักฐาน การตรวจสอบ และการปิดงาน',
-      relation:'"Gen 2" คือระยะพัฒนาของแพลตฟอร์มนี้เอง — เป็นคนละระบบกับระบบบันทึกรถจอดค้าง ไม่ใช่การเขียนใหม่ และไม่ใช่ผลิตภัณฑ์เดียวกัน',
+      title:'ระบบขอและจัดที่จอดรถจากหนังสือราชการแบบเบ็ดเสร็จ ป.ป.ช.',status:'ใช้งานจริง',
+      summary:'ระบบงานเบ็ดเสร็จที่รับคำขอที่จอดรถจากหนังสือราชการ ประสานงานและจัดที่จอด จัดทำเอกสารปฏิบัติงาน ส่งงาน รปภ. แนบหลักฐาน ตรวจสอบ และปิดงาน',
+      relation:'ระบบขอและจัดที่จอดรถจากหนังสือราชการนี้เป็นคนละระบบกับระบบบันทึกรถจอดค้างคืน ซึ่งใช้บันทึกรถที่พบจอดค้างข้ามคืนโดยเฉพาะ',
       facts:[
-        ['ประเภทระบบ','แพลตฟอร์มปฏิบัติการครบวงจร'],
+        ['ประเภทระบบ','ระบบงานขอและจัดที่จอดรถจากหนังสือราชการแบบเบ็ดเสร็จ'],
         ['หน้าระบบ','คอนโซลแอดมิน + แอปภาคสนาม — Next.js สองแอป'],
         ['บทบาท','5 บทบาทระดับฐานข้อมูล บังคับด้วย row-level security ของ Postgres'],
         ['แพลตฟอร์มข้อมูล','Supabase — Postgres · Auth · Storage · Realtime'],
-        ['ขนาดที่ยืนยันได้','28 คอมมิต · TypeScript ~96% · แพ็กเกจร่วม 7 ตัว'],
+        ['จุดเริ่มต้นคำขอ','หนังสือราชการที่ขอให้จัดเตรียมที่จอดรถ'],
         ['การเผยแพร่','แอปแอดมินใช้งานจริงบน Vercel']
       ],
       workflow:[
-        'เจ้าหน้าที่หรือพนักงานสื่อสารบันทึกหนังสือราชการ — สำนัก วันที่ ทะเบียนรถ สถานที่ และเหตุผล',
-        'แอดมินอนุมัติหรือไม่อนุมัติ คำขอที่ผ่านเข้าคิวรอมอบหมาย',
+        'เจ้าหน้าที่หรือพนักงานสื่อสารบันทึกหนังสือราชการขอที่จอดรถ — สำนัก วันที่ ทะเบียนรถ สถานที่ และเหตุผล',
+        'แอดมินตรวจคำขอ ยืนยันการจัดที่จอด และส่งงานที่อนุมัติแล้วเข้าคิวรอมอบหมาย',
         'รปภ. รับงาน พิมพ์ (หรือเขียนมือ) ป้ายกรวยที่ระบบสร้างให้ตามทะเบียนรถแต่ละคัน แล้วเริ่มดำเนินการ',
         'การปิดงานต้องแนบรูปงานเสร็จอย่างน้อยหนึ่งรูป โดยบีบอัดที่ฝั่งเบราว์เซอร์ก่อนอัปโหลด',
         'ทุกการเปลี่ยนสถานะถูกบันทึกลงตารางประวัติแบบ append-only โดย trigger ของฐานข้อมูลเอง ไม่ขึ้นกับโค้ดแอป'
@@ -3332,12 +3336,278 @@ const PROJECTS={
         'Feature flags แยก “สร้างเสร็จ” ออกจาก “เปิดใช้” — UI แนบหนังสือถูกปิดไว้จนกว่าจะพร้อมเปิดใช้จริง'
       ]
     }
+  },
+  starlink:{
+    source:'https://github.com/Sleepingknight0/BWX-STARLINK',live:'https://starlink-plum.vercel.app',
+    catalog:{
+      code:'SPACE-VIZ // 01',
+      classId:'visualization',
+      classLabel:{en:'INTERACTIVE 3D EXPLAINER',th:'สื่ออธิบาย 3 มิติแบบโต้ตอบ'},
+      statusId:'live-demo',
+      statusLabel:{en:'LIVE DEMO',th:'เดโมออนไลน์'},
+      blurb:{
+        en:'A bilingual browser-based 3D explainer that traces Dishy, LEO satellites, gateways, and laser links through a nine-step guide and a 24-hour constellation model.',
+        th:'สื่ออธิบายระบบดาวเทียม 3 มิติบนเบราว์เซอร์สองภาษา ถ่ายทอดเส้นทางจากจาน Dishy สู่ดาวเทียม LEO เกตเวย์ และลิงก์เลเซอร์ ผ่านคู่มือ 9 ขั้นและแบบจำลอง 24 ชั่วโมง'
+      },
+      tags:['JavaScript','Three.js','WebGL','Vercel'],
+      stackTokens:['javascript','threejs','webgl','vercel'],
+      thumb:{src:'assets/images/projects/starlink-concept.webp',width:1440,height:900,alt:{en:'Monochrome concept visualization of a satellite network above Earth',th:'ภาพกราฟิกขาวดำแสดงเครือข่ายดาวเทียมเหนือโลก'}}
+    },
+    en:{
+      title:'Starlink Mission Control — 3D Explainer',status:'LIVE DEMO',
+      summary:'A bilingual browser-based experience that combines a guided network explainer with an interactive 24-hour constellation simulation, making the path from a user terminal to satellites, gateways, and inter-satellite links visible and explorable.',
+      relation:'Independent educational visualization; not affiliated with or endorsed by SpaceX or Starlink. Orbital positions are modeled from published parameters rather than live TLE telemetry.',
+      facts:[
+        ['System class','Static browser visualization and interactive explainer'],
+        ['Experiences','9-step Guide + 24-hour Simulation'],
+        ['Languages','Thai + English'],
+        ['Orbit model','Time-based shell model; simulated positions, not live TLE data'],
+        ['Data layer','Local PBF, JSON, and GeoJSON snapshots with Natural Earth boundaries'],
+        ['Delivery','Public static deployment on Vercel']
+      ],
+      workflow:[
+        'Choose Guide for a structured brief or Simulation for direct exploration.',
+        'Guide follows the network path from Dishy through low-Earth orbit, a gateway, and inter-satellite laser links.',
+        'Simulation exposes time speed, layer, shell, coverage, and camera controls across a modeled 24-hour cycle.',
+        'Switch between Thai and English or use the responsive and reduced-motion variants without leaving the experience.'
+      ],
+      architecture:[
+        ['Interface','A static HTML, CSS, and JavaScript experience backed by Three.js scenes, local textures, generated geometry, and media.'],
+        ['Model & data','Local PBF, JSON, and GeoJSON snapshots feed coverage layers while shell constants and Kepler-style calculations drive modeled constellation positions.'],
+        ['Delivery & QA','Static Vercel hosting applies asset caching; Playwright scripts check desktop and mobile flows, language switching, camera states, finite positions, and touch targets.']
+      ],
+      stack:['HTML5','CSS','JavaScript','Three.js r128','WebGL','PBF + Geobuf','Playwright','Vercel'],
+      highlights:[
+        'Combines guided storytelling and an explorable simulation inside one browser experience.',
+        'Keeps modeled orbital positions clearly distinct from live satellite telemetry.',
+        'Maintains source and provenance documentation for technical figures and data snapshots.',
+        'Supports keyboard interaction, touch targets, dialogs, contrast, and reduced motion.',
+        'Uses a responsive layout designed down to a 390-pixel mobile viewport.'
+      ]
+    },
+    th:{
+      title:'ศูนย์ควบคุมภารกิจ Starlink — สื่ออธิบาย 3 มิติ',status:'เดโมออนไลน์',
+      summary:'ประสบการณ์บนเบราว์เซอร์สองภาษาที่รวมคู่มืออธิบายเส้นทางเครือข่ายเข้ากับแบบจำลองกลุ่มดาวเทียม 24 ชั่วโมง ทำให้เส้นทางจากจานผู้ใช้ไปยังดาวเทียม เกตเวย์ และลิงก์ระหว่างดาวเทียมมองเห็นและสำรวจได้',
+      relation:'สื่อการเรียนรู้อิสระ ไม่ได้มีความเกี่ยวข้องหรือได้รับการรับรองจาก SpaceX หรือ Starlink ตำแหน่งวงโคจรเป็นผลจากแบบจำลองตามพารามิเตอร์ที่เผยแพร่ ไม่ใช่ข้อมูล TLE แบบสด',
+      facts:[
+        ['ประเภทระบบ','สื่ออธิบายและภาพจำลองแบบโต้ตอบบนเบราว์เซอร์'],
+        ['รูปแบบการใช้งาน','คู่มือ 9 ขั้น + แบบจำลอง 24 ชั่วโมง'],
+        ['ภาษา','ไทย + อังกฤษ'],
+        ['แบบจำลองวงโคจร','คำนวณตามเวลาและชั้นวงโคจร ไม่ใช่ข้อมูล TLE แบบสด'],
+        ['ชั้นข้อมูล','ไฟล์ PBF, JSON และ GeoJSON ในเครื่อง พร้อมขอบเขตประเทศจาก Natural Earth'],
+        ['การเผยแพร่','เดโมสาธารณะแบบ static บน Vercel']
+      ],
+      workflow:[
+        'เลือกโหมด Guide เพื่อดูคำอธิบายตามลำดับ หรือ Simulation เพื่อสำรวจด้วยตนเอง',
+        'Guide แสดงเส้นทางเครือข่ายจากจาน Dishy ผ่านวงโคจรต่ำ เกตเวย์ และลิงก์เลเซอร์ระหว่างดาวเทียม',
+        'Simulation ให้ปรับความเร็วเวลา ชั้นข้อมูล shell ความครอบคลุม และมุมกล้องตลอดรอบจำลอง 24 ชั่วโมง',
+        'สลับภาษาไทยและอังกฤษ หรือใช้รูปแบบ responsive และ reduced motion ได้โดยไม่ออกจากประสบการณ์'
+      ],
+      architecture:[
+        ['ส่วนติดต่อ','ประสบการณ์แบบ static ด้วย HTML, CSS และ JavaScript ใช้ฉาก Three.js ร่วมกับ texture, geometry และสื่อที่เก็บในโปรเจกต์'],
+        ['แบบจำลองและข้อมูล','ไฟล์ PBF, JSON และ GeoJSON ป้อนชั้นข้อมูลความครอบคลุม ส่วนค่าคงที่ของ shell และการคำนวณแบบ Kepler ใช้สร้างตำแหน่งดาวเทียมจำลอง'],
+        ['การเผยแพร่และ QA','โฮสต์แบบ static บน Vercel พร้อม cache สินทรัพย์ และใช้ Playwright ตรวจ desktop/mobile การสลับภาษา สถานะกล้อง ค่าตำแหน่ง และขนาดพื้นที่สัมผัส']
+      ],
+      stack:['HTML5','CSS','JavaScript','Three.js r128','WebGL','PBF + Geobuf','Playwright','Vercel'],
+      highlights:[
+        'รวมการเล่าเรื่องแบบมีลำดับกับ simulation ที่สำรวจได้ในประสบการณ์เดียว',
+        'แยกตำแหน่งวงโคจรจากแบบจำลองออกจากข้อมูลดาวเทียมแบบสดอย่างชัดเจน',
+        'จัดทำเอกสารแหล่งอ้างอิงของตัวเลขทางเทคนิคและ metadata ของข้อมูล snapshot',
+        'รองรับคีย์บอร์ด touch target ไดอะล็อก contrast และ reduced motion',
+        'ออกแบบ responsive ลงถึงหน้าจอมือถือกว้าง 390 พิกเซล'
+      ]
+    }
+  },
+  chessVision:{
+    source:'https://github.com/Sleepingknight0/chess-vision-assistant',
+    catalog:{
+      code:'CHESS-VISION // 01',
+      classId:'desktop',
+      classLabel:{en:'DESKTOP ANALYSIS TOOL',th:'เครื่องมือวิเคราะห์บนเดสก์ท็อป'},
+      statusId:'desktop-build',
+      statusLabel:{en:'WINDOWS DESKTOP BUILD',th:'แอปเดสก์ท็อป Windows'},
+      blurb:{
+        en:'A Windows practice assistant combining board calibration, chess-state tracking, Stockfish analysis, and a transparent best-move overlay while leaving every move under the player’s control.',
+        th:'ผู้ช่วยฝึกและวิเคราะห์หมากรุกบน Windows ที่ผสานการปรับเทียบกระดาน การติดตามสถานะเกม Stockfish และโอเวอร์เลย์ลูกศรแนะนำ โดยผู้เล่นยังเป็นผู้เดินหมากเองทุกครั้ง'
+      },
+      tags:['Python','PySide6','OpenCV','Stockfish'],
+      stackTokens:['python','pyside6','opencv','stockfish'],
+      thumb:{src:'assets/images/projects/chess-vision-concept.webp',width:1440,height:900,alt:{en:'Monochrome concept visualization of a chessboard under computer-vision analysis',th:'ภาพกราฟิกขาวดำแสดงกระดานหมากรุกภายใต้การวิเคราะห์ด้วยคอมพิวเตอร์วิทัศน์'}}
+    },
+    en:{
+      title:'Chess Vision Assistant',status:'WINDOWS DESKTOP BUILD',
+      summary:'A Windows practice and analysis application that combines calibrated board capture, legal chess-state tracking, Stockfish guidance, and a transparent overlay while keeping every real move under the player’s control.',
+      relation:'For practice and analysis only. The app does not control the mouse, autoplay moves, or bypass anti-cheat. Stockfish is installed separately, and no public executable is currently published.',
+      facts:[
+        ['Platform','Windows 10/11 · Python 3.12–3.13'],
+        ['Engine','Separately installed Stockfish process over UCI'],
+        ['Capture','MSS with optional DXCam acceleration'],
+        ['Analysis options','MultiPV · ponder · Polyglot opening book · Syzygy tablebases'],
+        ['Local data','Profiles, configuration, logs, and PGN exports under %APPDATA%\\ChessVisionAssistant'],
+        ['Release state','Public source and build script; no published binary release or CI-backed result']
+      ],
+      workflow:[
+        'Select the game board, position its four corners, choose orientation, and save a calibration profile.',
+        'Record moves through board-square or UCI input, with calibrated vision modules available to observe board changes.',
+        'Stockfish analyses the current FEN and returns a best move with principal variations.',
+        'The transparent overlay renders arrows or ghost pieces while the player makes and confirms the move manually.',
+        'Review move history or export the recorded game as PGN.'
+      ],
+      architecture:[
+        ['Desktop interface','A multi-page PySide6 application uses background QThread workers to keep screen capture away from the UI thread.'],
+        ['Vision pipeline','Perspective warping, cell occupancy and difference scoring, stability checks, and legal-move candidate matching interpret calibrated board changes.'],
+        ['Chess core','python-chess owns move legality, FEN, castling, en passant, promotion, history, and PGN export.'],
+        ['Engine & overlay','Stockfish UCI analysis is isolated from a Win32/PySide overlay that switches between click-through guidance and interactive square recording.'],
+        ['Storage & security','Profiles persist locally; optional API secrets use Windows DPAPI and diagnostic logs redact recognised credential patterns.']
+      ],
+      stack:['Python 3.12–3.13','PySide6','OpenCV','NumPy','python-chess','Stockfish UCI','MSS','DXCam','Pillow','pytest','PyInstaller','Windows DPAPI'],
+      highlights:[
+        'Maintains a clear safety boundary: no mouse control, autoplay, or anti-cheat bypass.',
+        'Uses time-bounded engine analysis to avoid continuous CPU load while keeping ponder optional.',
+        'Supports opening books and Syzygy endgame tablebases without bundling Stockfish.',
+        'Provides best-move arrows, ghost-board guidance, calibration, and click-to-record overlay modes.',
+        'Includes tests for move tracking, special moves, perspective, orientation, FEN, PGN, and secret storage.',
+        'Keeps Stockfish as a separately installed executable with its upstream GPL terms intact.'
+      ]
+    },
+    th:{
+      title:'ผู้ช่วยวิเคราะห์หมากรุกจากภาพหน้าจอ',status:'แอปเดสก์ท็อป Windows',
+      summary:'แอปฝึกและวิเคราะห์หมากรุกบน Windows ที่รวมการจับภาพกระดานแบบปรับเทียบ การติดตามสถานะเกมที่ถูกกติกา คำแนะนำจาก Stockfish และโอเวอร์เลย์โปร่งใส โดยผู้เล่นยังควบคุมการเดินจริงทุกครั้ง',
+      relation:'ใช้เพื่อฝึกและวิเคราะห์เท่านั้น แอปไม่ควบคุมเมาส์ ไม่เดินหมากอัตโนมัติ และไม่หลบระบบ anti-cheat ผู้ใช้ต้องติดตั้ง Stockfish แยกต่างหาก และขณะนี้ยังไม่มีไฟล์โปรแกรมเผยแพร่สาธารณะ',
+      facts:[
+        ['แพลตฟอร์ม','Windows 10/11 · Python 3.12–3.13'],
+        ['เอนจิน','ติดตั้ง Stockfish แยกและสื่อสารผ่าน UCI'],
+        ['การจับภาพ','MSS พร้อมตัวเลือกเร่งความเร็วด้วย DXCam'],
+        ['ตัวเลือกการวิเคราะห์','MultiPV · ponder · Polyglot opening book · Syzygy tablebases'],
+        ['ข้อมูลในเครื่อง','โปรไฟล์ การตั้งค่า log และไฟล์ PGN ใต้ %APPDATA%\\ChessVisionAssistant'],
+        ['สถานะการเผยแพร่','เปิดเผยซอร์สและสคริปต์ build แต่ยังไม่มี binary release หรือผลทดสอบที่ยืนยันด้วย CI']
+      ],
+      workflow:[
+        'เลือกกระดานเกม วางมุมทั้งสี่ เลือกทิศทาง และบันทึกเป็น calibration profile',
+        'บันทึกการเดินผ่านช่องบนกระดานหรือรูปแบบ UCI โดยมีโมดูล vision ที่ปรับเทียบแล้วสำหรับติดตามการเปลี่ยนแปลง',
+        'Stockfish วิเคราะห์ FEN ปัจจุบันและส่งคืน best move พร้อม principal variation',
+        'โอเวอร์เลย์โปร่งใสแสดงลูกศรหรือ ghost piece ขณะที่ผู้เล่นเป็นผู้เดินและยืนยันหมากด้วยตนเอง',
+        'ตรวจประวัติการเดินหรือส่งออกเกมที่บันทึกเป็นไฟล์ PGN'
+      ],
+      architecture:[
+        ['ส่วนติดต่อเดสก์ท็อป','แอปหลายหน้าด้วย PySide6 ใช้ QThread เบื้องหลังเพื่อแยกงานจับภาพออกจากเธรด UI'],
+        ['กระบวนการ vision','ปรับ perspective คำนวณ occupancy และความต่างของแต่ละช่อง ตรวจความนิ่ง และจับคู่ candidate move ที่ถูกกติกา'],
+        ['แกนหมากรุก','python-chess ดูแลกติกาการเดิน FEN castling en passant promotion ประวัติ และการส่งออก PGN'],
+        ['เอนจินและโอเวอร์เลย์','แยก Stockfish UCI ออกจากโอเวอร์เลย์ Win32/PySide ที่สลับได้ระหว่างโหมด click-through และบันทึกช่องแบบโต้ตอบ'],
+        ['การจัดเก็บและความปลอดภัย','เก็บโปรไฟล์ไว้ในเครื่อง ใช้ Windows DPAPI สำหรับ secret ทางเลือก และปกปิดรูปแบบ credential ที่รู้จักใน diagnostic log']
+      ],
+      stack:['Python 3.12–3.13','PySide6','OpenCV','NumPy','python-chess','Stockfish UCI','MSS','DXCam','Pillow','pytest','PyInstaller','Windows DPAPI'],
+      highlights:[
+        'กำหนดขอบเขตความปลอดภัยชัดเจน — ไม่ควบคุมเมาส์ ไม่เดินอัตโนมัติ และไม่หลบระบบ anti-cheat',
+        'จำกัดเวลาวิเคราะห์ของเอนจินเพื่อลดการใช้ CPU ต่อเนื่อง และเปิด ponder เป็นตัวเลือก',
+        'รองรับ opening book และ Syzygy endgame tablebase โดยไม่รวม Stockfish มากับโปรเจกต์',
+        'มีลูกศร best move, ghost board, calibration และโหมด click-to-record บนโอเวอร์เลย์',
+        'มีชุดทดสอบครอบคลุมการติดตามการเดิน special move perspective ทิศทาง FEN PGN และการเก็บ secret',
+        'แยก Stockfish เป็น executable ที่ผู้ใช้ติดตั้งเองและคงเงื่อนไข GPL ของต้นฉบับ'
+      ]
+    }
+  },
+  aiCliLauncher:{
+    caseStudy:'https://github.com/Sleepingknight0/bluewhalex-portfolio-v05/blob/main/projects/universal-ai-cli-launcher/README.md',
+    catalog:{
+      code:'AI-OPS // 01',
+      classId:'developer-tool',
+      classLabel:{en:'CLI ORCHESTRATION TOOL',th:'เครื่องมือจัดการ AI CLI'},
+      statusId:'local-tool',
+      statusLabel:{en:'LOCAL WINDOWS TOOL',th:'เครื่องมือ Windows ในเครื่อง'},
+      blurb:{
+        en:'A fast PowerShell command center for selecting isolated accounts, launching multiple AI CLIs, and presenting provider-supported usage without blocking startup.',
+        th:'ศูนย์ควบคุม PowerShell สำหรับเลือกบัญชีแบบแยก เปิด AI CLI หลายค่าย และแสดง usage ที่ผู้ให้บริการรองรับโดยไม่หน่วงการเริ่มโปรแกรม'
+      },
+      tags:['PowerShell','Windows','JSON','CLI'],
+      stackTokens:['powershell','windows','json','cli'],
+      thumb:{src:'assets/images/projects/ai-cli-launcher-concept.svg',width:1440,height:900,alt:{en:'Monochrome command-console concept for the Universal AI CLI Launcher',th:'ภาพคอนเซปต์คอนโซลคำสั่งขาวดำของ Universal AI CLI Launcher'}}
+    },
+    en:{
+      title:'Universal AI CLI Launcher',status:'LOCAL WINDOWS TOOL',
+      summary:'A PowerShell-based orchestration layer that turns one ai command into a safe provider and account selector for installed terminal AI tools, with per-account configuration isolation, cached usage telemetry, and exact exit-code and environment restoration.',
+      relation:'A personal developer-tool project built and tested on Windows. It orchestrates installed third-party CLIs but is not affiliated with or endorsed by OpenAI, Anthropic, xAI, Google, or Antigravity. The public portfolio includes this case study; the local installer and credential-bearing profiles are not published.',
+      facts:[
+        ['System class','Local multi-provider CLI orchestrator and account switcher'],
+        ['Platform','Windows · Windows PowerShell 5.1 · PowerShell 7+'],
+        ['Provider model','JSON registry with strategy-driven profile isolation'],
+        ['Validated providers','OpenAI Codex · Claude Code · Grok Build · Antigravity CLI'],
+        ['Measured startup','Approximately 24–29 ms median warm render in the local optimization run'],
+        ['Automated validation','75 passing tests on both supported PowerShell editions · 1 Aug 2026'],
+        ['Distribution','Private local tool · public architecture case study only']
+      ],
+      workflow:[
+        'The ai wrapper loads local configuration, provider index, account index, and sanitized usage cache without launching provider processes.',
+        'The user selects a provider and an account from a compact terminal command center, or supplies both directly for non-interactive use.',
+        'The launcher resolves the real executable, saves every environment variable it will change, and applies the selected account profile.',
+        'Arguments after -- are forwarded as an array to the real CLI; no Invoke-Expression or assembled command string is used.',
+        'A finally block restores the original environment and returns the provider process exit code unchanged.',
+        'Slow discovery and usage refresh happen only through explicit maintenance commands; passive provider metadata updates the next cached view when supported.'
+      ],
+      architecture:[
+        ['Hot path','ai-launcher.ps1 reads four small JSON indexes and renders cached state only. Provider discovery, adapters, diagnostics, and management code are lazy or explicit paths.'],
+        ['Provider registry','Each provider is defined by JSON metadata: command candidates, profile strategy, account capability, login indicator, and optional usage adapter. Unknown strategies fail closed.'],
+        ['Account isolation','Directory-based providers receive an isolated environment such as CODEX_HOME or CLAUDE_CONFIG_DIR. System-keyring providers remain system-default-only rather than pretending to support isolation.'],
+        ['Usage pipeline','Provider adapters normalize supported official data; a cache layer stores sanitized values per account. Claude can update limits passively through its Status Line payload without a new network request.'],
+        ['Security boundary','No authentication file contents are parsed or copied. Managed paths are canonicalized, destructive operations reject escapes and reparse points, and credentials are referenced only by environment-variable name.'],
+        ['Compatibility & QA','StrictMode-compatible modules, UTF-8/ASCII terminal fallbacks, mocked provider fixtures, parser checks, environment restoration tests, argument-boundary tests, and PowerShell 5.1/7 test runs.']
+      ],
+      stack:['PowerShell 5.1 / 7+','JSON provider registry','Windows Terminal + ANSI/ASCII rendering','Native process APIs','Atomic cache and state files','Mocked adapter fixtures'],
+      highlights:[
+        'Migrates existing Codex account paths without copying or modifying authentication files.',
+        'Reduced interactive startup from a 5–10 second refresh-bound flow to millisecond-scale cache-only rendering.',
+        'Preserves quoted arguments, Unicode text, provider exit codes, and pre-existing environment variables.',
+        'Keeps provider-reported, locally observed, estimated, stale, and unavailable usage classifications separate.',
+        'Shows one account-specific telemetry row per profile while keeping unsupported Grok Build and system-keyring usage explicitly unavailable.',
+        'Uses passive Claude Status Line metadata when available, so usage capture does not create a model request or slow launcher startup.'
+      ]
+    },
+    th:{
+      title:'Universal AI CLI Launcher',status:'เครื่องมือ Windows ในเครื่อง',
+      summary:'ชั้น orchestration บน PowerShell ที่เปลี่ยนคำสั่ง ai ให้เป็นตัวเลือก Provider และ Account สำหรับ AI CLI ที่ติดตั้งอยู่ โดยแยก configuration รายบัญชี แสดง usage จาก cache และคืน environment กับ exit code ได้ถูกต้อง',
+      relation:'โปรเจกต์เครื่องมือสำหรับนักพัฒนาที่สร้างและทดสอบบน Windows เป็นการควบคุม CLI ของผู้ให้บริการที่ติดตั้งอยู่ ไม่ได้เกี่ยวข้องหรือได้รับการรับรองจาก OpenAI, Anthropic, xAI, Google หรือ Antigravity พอร์ตนี้เผยแพร่เฉพาะ case study ส่วน installer ในเครื่องและ profile ที่มี credential ไม่ถูกนำขึ้นสาธารณะ',
+      facts:[
+        ['ประเภทระบบ','ตัวจัดการ AI CLI และสลับบัญชีหลาย Provider ในเครื่อง'],
+        ['แพลตฟอร์ม','Windows · Windows PowerShell 5.1 · PowerShell 7+'],
+        ['รูปแบบ Provider','Registry แบบ JSON และกลยุทธ์แยก profile ตาม capability จริง'],
+        ['Provider ที่ตรวจสอบ','OpenAI Codex · Claude Code · Grok Build · Antigravity CLI'],
+        ['ความเร็วที่วัดได้','การ render แบบ warm มี median ประมาณ 24–29 ms ในรอบ optimization บนเครื่องพัฒนา'],
+        ['การทดสอบอัตโนมัติ','ผ่าน 75 tests บน PowerShell ทั้งสองรุ่น · 1 ส.ค. 2026'],
+        ['การเผยแพร่','เครื่องมือ private ในเครื่อง · เผยแพร่เฉพาะเอกสารสถาปัตยกรรม']
+      ],
+      workflow:[
+        'ฟังก์ชัน ai อ่าน configuration, provider index, account index และ usage cache ที่ปกปิดข้อมูลลับ โดยไม่เปิด process ของ Provider',
+        'ผู้ใช้เลือก Provider และ Account จาก command center หรือระบุทั้งสองค่าโดยตรงสำหรับงาน non-interactive',
+        'Launcher หา executable จริง เก็บสถานะ environment variable ทุกตัวที่จะเปลี่ยน และใช้ profile ของบัญชีที่เลือก',
+        'argument หลัง -- ถูกส่งต่อเป็น array ไปยัง CLI จริง โดยไม่ใช้ Invoke-Expression หรือประกอบ command string',
+        'finally คืนค่า environment เดิมและส่ง exit code ของ Provider กลับไปโดยไม่เปลี่ยน',
+        'การค้นหา executable และ refresh usage ที่ช้าถูกย้ายไปคำสั่ง maintenance ส่วนข้อมูล passive ที่ Provider รองรับจะอัปเดต cache สำหรับการเปิดครั้งถัดไป'
+      ],
+      architecture:[
+        ['เส้นทางเริ่มต้น','ai-launcher.ps1 อ่าน JSON index ขนาดเล็กสี่ไฟล์แล้ว render จาก cache เท่านั้น ส่วน discovery, adapter, diagnostics และ management จะโหลดเมื่อจำเป็น'],
+        ['Provider registry','Provider แต่ละตัวกำหนดด้วย metadata JSON ได้แก่ candidate command, profile strategy, account capability, login indicator และ usage adapter ทางเลือก โดย strategy ที่ไม่รู้จักจะ fail closed'],
+        ['การแยกบัญชี','Provider ที่รองรับ directory profile จะได้รับ environment เช่น CODEX_HOME หรือ CLAUDE_CONFIG_DIR ส่วน Provider ที่ใช้ system keyring จะแสดงเป็น system-default-only โดยไม่แกล้งอ้างว่าแยกบัญชีได้'],
+        ['Usage pipeline','Adapter แปลงเฉพาะข้อมูลทางการที่รองรับเป็น schema กลาง แล้ว cache แบบแยกบัญชี Claude สามารถอัปเดต limit แบบ passive จาก Status Line payload โดยไม่สร้าง network request เพิ่ม'],
+        ['ขอบเขตความปลอดภัย','ไม่อ่านหรือคัดลอกเนื้อหาไฟล์ authentication ตรวจ canonical path ก่อนงานทำลาย ปฏิเสธ path escape/reparse point และอ้าง credential ได้เฉพาะชื่อ environment variable'],
+        ['ความเข้ากันได้และ QA','โมดูลผ่าน StrictMode รองรับ UTF-8/ASCII มี fixture จำลอง Provider parser checks ทดสอบคืน environment ขอบเขต argument และรันชุดทดสอบบน PowerShell 5.1/7']
+      ],
+      stack:['PowerShell 5.1 / 7+','JSON provider registry','Windows Terminal + ANSI/ASCII rendering','Native process APIs','Atomic cache และ state files','Mocked adapter fixtures'],
+      highlights:[
+        'ย้ายเส้นทางบัญชี Codex เดิมโดยไม่คัดลอกหรือแก้ไฟล์ authentication',
+        'ลดเวลาเริ่มต้นจาก 5–10 วินาทีที่เคยรอ refresh เหลือการ render จาก cache ระดับมิลลิวินาที',
+        'รักษา quoted arguments, Unicode, exit code ของ Provider และ environment variable เดิมได้ครบ',
+        'แยกข้อมูล provider-reported, locally observed, estimated, stale และ unavailable ออกจากกันอย่างชัดเจน',
+        'แสดง telemetry แยกต่อบัญชี และบอกตรง ๆ เมื่อ Grok Build หรือ Provider ที่ใช้ system keyring ไม่มี interface ที่ปลอดภัย',
+        'รับข้อมูล Claude แบบ passive ผ่าน Status Line เมื่อรองรับ จึงไม่สร้าง model request และไม่ทำให้ launcher เปิดช้าลง'
+      ]
+    }
   }
 };
 const projectDialog=$('#projectDialog'),projectDialogClose=$('#projectDialogClose');
 const projectGallery=$('#projectDialogGallery'),projectGalleryTrack=$('#projectGalleryTrack');
 const projectGalleryPrev=$('#projectGalleryPrev'),projectGalleryNext=$('#projectGalleryNext'),projectGalleryCount=$('#projectGalleryCount');
 let activeProject='',projectTrigger=null,galleryScrollTick=0;
+const projectStatusIsActive=statusId=>statusId==='service'||statusId==='live-demo';
 function projectGalleryIndex(){
   if(!projectGalleryTrack?.children.length) return 0;
   const left=projectGalleryTrack.scrollLeft;
@@ -3376,7 +3646,10 @@ function renderProjectDialog(){
   if(!project) return;
   const copy=project[lang==='th'?'th':'en'];
   $('#projectDialogTitle').textContent=copy.title;
-  $('#projectDialogStatus').textContent=copy.status;
+  const status=$('#projectDialogStatus');
+  status.textContent=copy.status;
+  status.dataset.status=project.catalog?.statusId||'';
+  status.classList.toggle('is-active',projectStatusIsActive(project.catalog?.statusId));
   $('#projectDialogSummary').textContent=copy.summary;
   $('#projectDialogKicker').textContent=lang==='th'?'มินิโปรเจกต์ // แฟ้มข้อมูลภารกิจ':'MINI PROJECT // MISSION DOSSIER';
   renderProjectGallery(project);
@@ -3402,7 +3675,13 @@ function renderProjectDialog(){
     (copy.highlights||[]).forEach(item=>{const li=document.createElement('li');li.textContent=item;highlights.appendChild(li);});
   }
   const source=$('#projectDialogSource'),live=$('#projectDialogLive');
-  source.href=project.source;
+  const referenceUrl=project.source||project.caseStudy||'';
+  if(referenceUrl){
+    source.href=referenceUrl;source.hidden=false;
+    source.textContent=project.source
+      ?(lang==='th'?(TH.source||'ดูซอร์สโค้ด ↗'):'SOURCE CODE ↗')
+      :(lang==='th'?(TH.caseStudy||'อ่านกรณีศึกษา ↗'):'CASE STUDY ↗');
+  }else{source.hidden=true;source.removeAttribute('href');}
   if(project.live){live.href=project.live;live.hidden=false;}else{live.hidden=true;live.removeAttribute('href');}
 }
 function openProjectDialog(id,trigger){
@@ -3577,7 +3856,9 @@ const STACK_CHIP_LIMIT=4;
 const STACK_LABELS={
   python:'Python',streamlit:'Streamlit',typescript:'TypeScript',nextjs:'Next.js',supabase:'Supabase',
   sheets:'Google Sheets',reportlab:'ReportLab',pandas:'pandas',turborepo:'Turborepo',react:'React',
-  zod:'Zod',tailwind:'Tailwind',recharts:'Recharts'
+  zod:'Zod',tailwind:'Tailwind',recharts:'Recharts',javascript:'JavaScript',threejs:'Three.js',
+  webgl:'WebGL',vercel:'Vercel',pyside6:'PySide6',opencv:'OpenCV',stockfish:'Stockfish',
+  powershell:'PowerShell',windows:'Windows',json:'JSON',cli:'CLI'
 };
 let projectLimit=12,stackExpanded=false,searchTimer=0,catalogBuilt=false,filtersOpen=false;
 const projectFilters={status:'',stack:'',class:''};
@@ -3604,8 +3885,7 @@ function buildSearchIndex(id){
 function itemMatches(id){
   const c=catalogOf(id); if(!c) return false;
   if(projectFilters.class&&c.classId!==projectFilters.class) return false;
-  if(projectFilters.status==='live'&&!PROJECTS[id].live) return false;
-  if(projectFilters.status==='service'&&c.statusId!=='service') return false;
+  if(projectFilters.status&&c.statusId!==projectFilters.status) return false;
   if(projectFilters.stack&&!(c.stackTokens||[]).includes(projectFilters.stack)) return false;
   const query=searchKey(projectSearch?.value.trim());
   if(query&&!buildSearchIndex(id).includes(query)) return false;
@@ -3628,8 +3908,9 @@ function chipLabel(group,value){
   if(chip) return chip.textContent.trim();
   if(group==='stack') return stackLabel(value);
   if(group==='status'){
-    if(value==='live') return lang==='th'?(TH.catalog_chip_live||'ออนไลน์'):'LIVE';
-    if(value==='service') return lang==='th'?'ใช้งานจริง':'IN SERVICE';
+    const project=Object.values(PROJECTS).find(item=>item.catalog?.statusId===value);
+    const label=project?.catalog?.statusLabel;
+    if(label) return lang==='th'?label.th:label.en;
   }
   return value;
 }
@@ -3732,17 +4013,15 @@ function bindChipGroup(root){
 }
 function collectFacetOptions(){
   const ids=miniProjectIds();
-  const classMap=new Map(),stackCount=new Map();
-  let hasLive=false,hasService=false;
+  const classMap=new Map(),statusMap=new Map(),stackCount=new Map();
   ids.forEach(id=>{
-    const c=catalogOf(id),project=PROJECTS[id];
+    const c=catalogOf(id);
     if(!classMap.has(c.classId)) classMap.set(c.classId,c.classLabel);
+    if(c.statusId&&!statusMap.has(c.statusId)) statusMap.set(c.statusId,c.statusLabel);
     (c.stackTokens||[]).forEach(token=>stackCount.set(token,(stackCount.get(token)||0)+1));
-    if(project.live) hasLive=true;
-    if(c.statusId==='service') hasService=true;
   });
   const stacks=[...stackCount.entries()].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])).map(([token])=>token);
-  return {classMap,stacks,hasLive,hasService,total:ids.length};
+  return {classMap,statusMap,stacks,total:ids.length};
 }
 function renderFilterChips(){
   const facets=collectFacetOptions();
@@ -3796,8 +4075,9 @@ function renderFilterChips(){
   if(filterStatusChips){
     filterStatusChips.textContent='';
     filterStatusChips.appendChild(makeChip('status','',allLabel));
-    if(facets.hasService) filterStatusChips.appendChild(makeChip('status','service',lang==='th'?'ใช้งานจริง':'In service'));
-    if(facets.hasLive) filterStatusChips.appendChild(makeChip('status','live',lang==='th'?(TH.catalog_chip_live||'ออนไลน์'):'Live'));
+    facets.statusMap.forEach((label,id)=>{
+      filterStatusChips.appendChild(makeChip('status',id,lang==='th'?(label.th||label.en):label.en));
+    });
     bindChipGroup(filterStatusChips);
     paintChipState('status');
   }
@@ -3816,22 +4096,28 @@ function renderProjectCard(id,index){
   article.style.setProperty('--d',`${Math.min(.24+index*.04,.5)}s`);
   const thumbAlt=c.thumb?.alt?c.thumb.alt[thai?'th':'en']:'';
   const tags=(c.tags||[]).map(tag=>`<span class="tag">${tag}</span>`).join('');
+  const statusClass=projectStatusIsActive(c.statusId)?' is-active':'';
   const liveLink=project.live
     ?`<a class="project-source" href="${project.live}" target="_blank" rel="noopener noreferrer">${thai?(TH.live||'เปิดระบบจริง ↗'):'LIVE APP ↗'}</a>`
     :'';
+  const referenceLink=project.source
+    ?`<a class="project-source" href="${project.source}" target="_blank" rel="noopener noreferrer">${thai?(TH.source||'ดูซอร์สโค้ด ↗'):'SOURCE CODE ↗'}</a>`
+    :project.caseStudy
+      ?`<a class="project-source" href="${project.caseStudy}" target="_blank" rel="noopener noreferrer">${thai?(TH.caseStudy||'อ่านกรณีศึกษา ↗'):'CASE STUDY ↗'}</a>`
+      :'';
   article.innerHTML=`
     <div class="project-visual">
       <img src="${c.thumb.src}" alt="${thumbAlt.replace(/"/g,'&quot;')}" loading="lazy" width="${c.thumb.width||1440}" height="${c.thumb.height||900}">
       <span class="project-code">${c.code}</span>
     </div>
     <div class="project-body">
-      <div class="project-meta"><span>${(thai?c.classLabel.th:c.classLabel.en)}</span><span class="online">${thai?c.statusLabel.th:c.statusLabel.en}</span></div>
+      <div class="project-meta"><span>${thai?c.classLabel.th:c.classLabel.en}</span><span class="project-status${statusClass}" data-status="${c.statusId||''}">${thai?c.statusLabel.th:c.statusLabel.en}</span></div>
       <h3>${copy.title}</h3>
       <p>${thai?c.blurb.th:c.blurb.en}</p>
       <div class="tags">${tags}</div>
       <div class="project-actions">
         <button class="btn signal mag project-open" type="button" data-project="${id}">${thai?(TH.explore||'ดูรายละเอียดระบบ'):'EXPLORE SYSTEM'}</button>
-        <a class="project-source" href="${project.source}" target="_blank" rel="noopener noreferrer">${thai?(TH.source||'ดูซอร์สโค้ด ↗'):'SOURCE CODE ↗'}</a>
+        ${referenceLink}
         ${liveLink}
       </div>
     </div>`;
@@ -3846,21 +4132,24 @@ function renderProjectCards(){
   projectGrid.appendChild(frag);
   catalogBuilt=true;
 }
-function updateMiniCounts(total){
-  const n=pad2(total);
+function updateMiniCounts(){
+  const ids=miniProjectIds();
+  const total=ids.length;
+  const service=ids.filter(id=>catalogOf(id)?.statusId==='service').length;
+  const totalPadded=pad2(total),servicePadded=pad2(service);
   const jump=document.querySelector('[data-i18n="jump_mini_state"]');
   const tier=document.querySelector('[data-i18n="tier_active"]');
   if(jump){
-    jump.textContent=lang==='th'?`ใช้งานจริง ${n} ระบบ`:`${n} IN SERVICE`;
-    jump.dataset.en=`${n} IN SERVICE`;
+    jump.textContent=lang==='th'?`${totalPadded} โปรเจกต์`:`${totalPadded} PROJECTS`;
+    jump.dataset.en=`${totalPadded} PROJECTS`;
   }
   if(tier){
-    tier.textContent=lang==='th'?`${n} ระบบที่ใช้งานจริง`:`${n} SYSTEMS IN SERVICE`;
-    tier.dataset.en=`${n} SYSTEMS IN SERVICE`;
+    tier.textContent=lang==='th'?`${total} โปรเจกต์ · ใช้งานจริง ${service} ระบบ`:`${totalPadded} PROJECTS · ${servicePadded} IN SERVICE`;
+    tier.dataset.en=`${totalPadded} PROJECTS · ${servicePadded} IN SERVICE`;
   }
   if(TH){
-    TH.jump_mini_state=`ใช้งานจริง ${n} ระบบ`;
-    TH.tier_active=`${n} ระบบที่ใช้งานจริง`;
+    TH.jump_mini_state=`${totalPadded} โปรเจกต์`;
+    TH.tier_active=`${total} โปรเจกต์ · ใช้งานจริง ${service} ระบบ`;
   }
 }
 function projectCards(){
@@ -3890,7 +4179,7 @@ function updateProjectCatalog(){
   if(projectEmpty) projectEmpty.hidden=matches.length!==0;
   renderActiveTags();
   syncFilterToggleHot();
-  updateMiniCounts(miniProjectIds().length);
+  updateMiniCounts();
 }
 function selectFilterChip(chip){
   const group=chip?.dataset.filter;
@@ -3947,15 +4236,15 @@ const TH={
   hero_sub:"ปฏิบัติการเทคนิคและเทคโนโลยีเกิดใหม่ — เครื่องมือจริงสำหรับงานจริง",
   hero_t1:"เทค OPS", hero_t2:"ราชการ", hero_t3:"สร้างด้วย AI",
   hero_cta:"ดูภารกิจ", hero_cta2:"ติดต่อ", scroll:"เลื่อน",
-  pr_eb:"ทะเบียนภารกิจ — จัดตามขนาดและผลกระทบ", pr_title:"ระบบและโปรเจกต์",
+  pr_eb:"ทะเบียนภารกิจ — ผลงานคัดสรร", pr_title:"ระบบและโปรเจกต์",
   pr_sub:"จัดลำดับโปรเจกต์ตามขนาดงาน เมกะนำเสนอวิสัยทัศน์ โปรเจกต์ขั้นสูงรองรับระบบซับซ้อน และมินิโปรเจกต์เป็นแค็ตตาล็อกที่ค้นหาได้แม้มีมากกว่าหนึ่งร้อยรายการ",
-  jump_mega:"เมกะโปรเจกต์", jump_mega_state:"โปรแกรมวิสัยทัศน์", jump_adv:"โปรเจกต์ขั้นสูง", jump_adv_state:"สงวนขีดความสามารถ", jump_mini:"มินิโปรเจกต์", jump_mini_state:"ใช้งานจริง 02 ระบบ",
-  tier_mini:"03 // มินิโปรเจกต์", tier_active:"02 ระบบที่ใช้งานจริง",
-  p1_class:"ระบบบันทึกข้อมูล", p1_status:"ใช้งานจริง", p1_title:"ระบบบันทึกรถค้างอาคาร ป.ป.ช.",
-  p1_sub:"ระบบสำหรับบันทึกรถที่ตรวจพบว่าจอดค้างในอาคาร และวิเคราะห์รถที่พบซ้ำหรือจอดค้างหลายวัน",
-  p2_class:"แพลตฟอร์มครบวงจร", p2_status:"GEN 2 · ใช้งานจริง", p2_title:"ระบบจัดการคำขอที่จอดรถและส่งงานครบวงจร — Gen 2",
-  p2_sub:"แพลตฟอร์มครบวงจร ครอบคลุมการรับคำขอ การประสานงาน เอกสารสำหรับพิมพ์ การส่งงานของ รปภ. การแนบหลักฐาน การตรวจสอบ และการปิดงาน",
-  explore:"ดูรายละเอียดระบบ", source:"ดูซอร์สโค้ด ↗", live:"เปิดระบบจริง ↗",
+  jump_mega:"เมกะโปรเจกต์", jump_mega_state:"โปรแกรมวิสัยทัศน์", jump_adv:"โปรเจกต์ขั้นสูง", jump_adv_state:"สงวนขีดความสามารถ", jump_mini:"มินิโปรเจกต์", jump_mini_state:"04 โปรเจกต์",
+  tier_mini:"03 // มินิโปรเจกต์", tier_active:"4 โปรเจกต์ · ใช้งานจริง 2 ระบบ",
+  p1_class:"บันทึกรถจอดค้างคืน", p1_status:"ใช้งานจริง", p1_title:"ระบบบันทึกรถจอดค้างคืน ป.ป.ช.",
+  p1_sub:"ระบบปฏิบัติงานสำหรับบันทึกรถที่จอดค้างคืนในอาคาร ป.ป.ช. และวิเคราะห์รายการที่พบซ้ำหรือจอดค้างหลายคืน",
+  p2_class:"ระบบงานหนังสือราชการ", p2_status:"ใช้งานจริง", p2_title:"ระบบขอและจัดที่จอดรถจากหนังสือราชการแบบเบ็ดเสร็จ ป.ป.ช.",
+  p2_sub:"ระบบงานเบ็ดเสร็จที่รับคำขอที่จอดรถจากหนังสือราชการ อนุมัติและจัดที่จอด มอบหมายงาน สร้างป้ายจอด ตรวจหลักฐาน และปิดงาน",
+  explore:"ดูรายละเอียดระบบ", source:"ดูซอร์สโค้ด ↗", caseStudy:"อ่านกรณีศึกษา ↗", live:"เปิดระบบจริง ↗",
   tier_adv:"02 // โปรเจกต์ขั้นสูง", tier_adv_st:"ความซับซ้อนปานกลาง–สูง · สงวนขีดความสามารถ",
   tier_mega:"01 // เมกะโปรเจกต์", tier_mega_st:"โปรแกรมวิสัยทัศน์ · รอการปล่อยภารกิจแรก",
   mega1_chapter:"01 // จุดเริ่มต้น · โลก", mega1_title:"เมกะคือทิศทาง", mega1_sub:"เริ่มจากปัญหาจริงบนโลก แล้วสร้างระบบที่มีขอบเขตไกลกว่าทีมเดียว เวิร์กโฟลว์เดียว หรือช่วงเวลาเดียว",
@@ -3995,7 +4284,7 @@ const TH={
   lg_gfx_n:"Freelance Graphic Designer",
   lg1_r:"เจ้าหน้าที่สืบสวน — สื่อสารและกิจการพิเศษ",
   lg1_date:"ก.ค. 2025 — ตอนนี้",
-  lg1_d:"งานสื่อสารการสืบสวน สร้างระบบที่จอดของสำนักงานคนเดียว",
+  lg1_d:"งานสื่อสารการสืบสวน พัฒนาระบบขอและจัดที่จอดรถจากหนังสือราชการของสำนักงานแบบเบ็ดเสร็จด้วยตนเอง",
   lg2_r:"Technical Operations Associate",
   lg2_date:"2025 — ตอนนี้",
   lg2_d:"เรียนด้วยตนเอง ส่งมอบเครื่องมือจริงด้วย AI",
