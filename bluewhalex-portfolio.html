@@ -491,6 +491,11 @@ section.in .hero-brand,body.ready #hero .hero-brand{opacity:1;transform:none}
   #hero{align-items:flex-end}
 }
 @media(max-width:600px){
+  /* Give the mobile portrait a clear upper stage, then let the copy plate begin
+     at the crossed arms. The section grows naturally so no hero controls are
+     squeezed or clipped on short phones. */
+  #hero{align-items:flex-start}
+  #hero .content{padding-top:clamp(13.5rem,30svh,18rem)}
   #hero .hero-mark{
     gap:.85rem 1rem;padding:.95rem 1.1rem .95rem 1rem;margin-bottom:1.25rem;
     max-width:100%;width:100%;box-sizing:border-box;
@@ -649,18 +654,18 @@ section.in .hero-grok,body.ready #hero .hero-grok{opacity:1}
   section.in .hero-grok,body.ready #hero .hero-grok{opacity:.82}
 }
 @media(max-width:600px){
-  /* phones: portrait rides the empty zone above the mission plate — face stays
-     clear of the text block, torso fades out behind it */
+  /* phones: keep the face above the mission plate and carry the portrait down
+     far enough for the plate to overlap the crossed arms */
   .hero-grok{
     left:0;right:0;width:100%;
     top:calc(var(--nav-h) + var(--safe-t));
-    bottom:auto;height:min(66svh,580px);
+    bottom:auto;height:min(72svh,620px);
   }
   .hero-grok canvas{
     transform:none;
     object-position:68% top;
-    -webkit-mask-image:linear-gradient(180deg,#000 52%,transparent 90%);
-    mask-image:linear-gradient(180deg,#000 52%,transparent 90%);
+    -webkit-mask-image:linear-gradient(180deg,#000 60%,transparent 96%);
+    mask-image:linear-gradient(180deg,#000 60%,transparent 96%);
   }
   section.in .hero-grok,body.ready #hero .hero-grok{opacity:.96}
 }
