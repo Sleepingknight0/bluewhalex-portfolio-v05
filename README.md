@@ -107,7 +107,7 @@ Open [http://localhost:8000/index.html](http://localhost:8000/index.html).
 │   └── videos/                      # Optimized production video
 ├── projects/
 │   └── universal-ai-cli-launcher/   # Public project case study
-├── AGENTS.md                        # Repository conventions
+├── .gitignore                       # Local-only and generated file policy
 └── LICENSE                          # MIT license
 ```
 

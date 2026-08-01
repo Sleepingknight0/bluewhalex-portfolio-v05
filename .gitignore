@@ -1,19 +1,43 @@
-.playwright-cli/
-output/
-.claude/
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.log
 
-# Local source media and generated exports; production copies live under assets/.
-grok-image-*
-grok-video-*
-imagine-*.mp4
-Layer 0.png
-bluewhalex-logo.png
+# Local secrets
+.env
+.env.*
+!.env.example
 
-# Historical local snapshot.
-index.mk4-backup.html
+# Local AI-agent configuration and attachments
+/.claude/
+/.openai/
+/.codex-remote-attachments/
+/.playwright-cli/
+/AGENTS.md
+/CLAUDE.md
 
-# Keep the deployable video set small.
-assets/videos/*
-!assets/videos/hero.mp4
-!assets/videos/ai-sector.mp4
-assets/images/mega-black-hole.png
+# Local test output and generated exports
+/output/
+
+# Local source media; optimized production copies live under assets/
+/GettyImages-*.mp4
+/grok-*
+/imagine-*.mp4
+/Layer 0.png
+/bluewhalex-logo.png
+/nacc.png
+
+# Historical local snapshot
+/index.mk4-backup.html
+
+# Keep only videos referenced by the deployable site
+/assets/videos/*
+!/assets/videos/hero.mp4
+!/assets/videos/ai-sector.mp4
+!/assets/videos/grok-logo.mp4
+
+# Unoptimized source image; the WebP version is deployed
+/assets/images/mega-black-hole.png
