@@ -473,11 +473,6 @@ section.in .hero-brand,body.ready #hero .hero-brand{opacity:1;transform:none}
   color:var(--void);border-color:#fff;background:#fff;
 }
 #hero .scroll-cue{letter-spacing:.14em;bottom:4.5vh;opacity:.85}
-#hero .hero-meta{
-  letter-spacing:.08em;line-height:1.8;font-size:.58rem;
-  top:calc(var(--nav-h) + var(--safe-t) + 3vh);
-  text-shadow:0 2px 12px rgba(0,0,0,.7);
-}
 #hero .scrim{
   background:
     linear-gradient(rgba(0,0,0,.28), rgba(0,0,0,.28)),
@@ -791,14 +786,6 @@ section.in .tag{opacity:1;transform:none}
 .orbits i:nth-child(3){inset:34%;animation-duration:22s;opacity:.4}
 .orbits .dot{display:none}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-.hero-meta{
-  position:absolute;top:calc(var(--nav-h) + var(--safe-t) + 2.5vh);right:5.5vw;z-index:4;
-  font-family:var(--fm);font-size:.55rem;letter-spacing:.06em;color:var(--mute);text-transform:uppercase;
-  text-align:right;line-height:1.75;opacity:0;transition:opacity .7s .3s;
-}
-section.in .hero-meta{opacity:1}
-.hero-meta b{color:var(--mist);font-weight:500}
 
 /* panels */
 .panel{align-items:center;background:var(--ink);padding-bottom:0;min-height:auto}
@@ -1158,12 +1145,21 @@ section.in .hero-meta{opacity:1}
   .catalog-bar{grid-template-columns:1fr;gap:.5rem}
   .catalog-toggle{width:100%}
 }
+@media(max-width:768px){
+  .registry-jump.is-docked{min-height:52px;border-top-color:rgba(255,255,255,.08);border-radius:0 0 12px 12px;background:rgba(2,2,2,.94);box-shadow:0 14px 36px rgba(0,0,0,.52)}
+  .registry-jump.is-docked a{min-height:50px;padding:.25rem .7rem}
+  .registry-jump.is-docked .level-index{font-size:1.15rem;opacity:.72}
+  .registry-jump.is-docked .level-copy{gap:0}
+  .registry-jump.is-docked .level-label{font-size:.62rem;letter-spacing:.13em}
+  .registry-jump.is-docked .level-state{max-height:0;opacity:0;transform:translateY(-4px)}
+  .registry-jump.is-docked .level-arrow{font-size:.75rem}
+}
 @media(max-width:460px){
   .project-registry .content{padding-left:1.15rem;padding-right:1.15rem}
-  .registry-jump{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;top:calc(var(--nav-h) + var(--safe-t));scrollbar-width:none}
+  .registry-jump{display:flex;min-height:64px;overflow-x:auto;scroll-snap-type:x mandatory;top:calc(var(--nav-h) + var(--safe-t));border-radius:14px;scrollbar-width:none}
   .registry-jump::-webkit-scrollbar{display:none}
-  .registry-jump a{flex:0 0 82vw;min-height:74px;scroll-snap-align:start;grid-template-columns:auto 1fr auto}
-  .level-index{font-size:1.55rem}.level-label{font-size:.72rem}.level-state{font-size:.47rem}
+  .registry-jump a{flex:0 0 74vw;min-height:62px;padding:.5rem .75rem;gap:.55rem;scroll-snap-align:start;grid-template-columns:auto 1fr auto}
+  .level-index{font-size:1.35rem}.level-label{font-size:.68rem}.level-state{font-size:.44rem}.level-arrow{font-size:.82rem}
   .tier-head{display:grid;grid-template-columns:1fr;align-items:end;gap:.4rem}
   .tier-state{max-width:none;text-align:left;line-height:1.55}
   .project-grid{grid-template-columns:1fr}
@@ -1213,7 +1209,7 @@ section.in .bar i{width:var(--w)}
   .spec-row .hrs,.spec-head .hrs{display:none}
   .spec-row .bar-wrap{grid-column:1/-1}
   .spec-head{display:none}
-  .orbits,.hero-meta{display:none}
+  .orbits{display:none}
 }
 
 /* log / trajectory — waypoint rail + mission cards */
@@ -1794,21 +1790,13 @@ footer{
 }
 .footer-inner{
   position:relative;z-index:2;
-  display:grid;grid-template-columns:1fr auto 1fr;gap:1.2rem;align-items:center;
+  display:grid;grid-template-columns:1fr auto;gap:1.2rem;align-items:center;
   width:100%;padding-top:1rem;border-top:1px solid rgba(255,255,255,.12);
 }
 footer .logo{height:28px;width:auto;opacity:.8;justify-self:start;transition:opacity .25s}
 footer .logo:hover{opacity:1}
-.footer-inner span:nth-child(2){text-align:center;color:var(--mist)}
-.footer-inner span:nth-child(3){text-align:right;transition:color .2s;justify-self:end}
-/* touch targets — these three are interactive but were 14–40px tall.
-   Negative margin absorbs the added padding so nothing shifts visually. */
+.footer-inner span:nth-child(2){text-align:right;color:var(--mist);justify-self:end}
 .footer-inner > a{display:inline-flex;align-items:center;min-height:var(--touch)}
-#coords{
-  display:inline-flex;align-items:center;justify-content:flex-end;min-height:var(--touch);
-  padding:.5rem;margin:-.5rem;cursor:pointer;
-}
-.footer-inner span:nth-child(3):hover{color:var(--bone)}
 @media(max-width:700px){
   footer{padding:1.6rem 5.5vw calc(2.2rem + var(--safe-b))}
   .footer-inner{grid-template-columns:1fr;text-align:center!important;gap:.7rem}
@@ -1824,8 +1812,10 @@ footer .logo:hover{opacity:1}
 /* project dossier */
 body.modal-open{overflow:hidden}
 .project-dialog{
-  width:min(1080px,calc(100vw - 2rem));max-height:calc(100dvh - 2rem);padding:0;
-  color:var(--bone);background:#080808;border:1px solid rgba(255,255,255,.3);
+  width:min(1180px,calc(100vw - 2rem));max-height:calc(100dvh - 2rem);padding:0;
+  color:var(--bone);background-color:#080808;
+  background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:44px 44px;border:1px solid rgba(255,255,255,.3);
   box-shadow:0 40px 120px rgba(0,0,0,.8);overflow:hidden;margin:auto;
 }
 .project-dialog::backdrop{background:rgba(0,0,0,.78);backdrop-filter:blur(8px)}
@@ -1836,6 +1826,17 @@ body.modal-open{overflow:hidden}
   position:sticky;top:0;z-index:2;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1.25rem;
   align-items:start;padding:1.35rem 1.5rem;border-bottom:1px solid var(--line);background:rgba(8,8,8,.97);
 }
+.dossier-titlegroup{display:flex;align-items:center;gap:1rem;min-width:0}
+.dossier-project-mark{
+  position:relative;flex:0 0 72px;width:72px;height:72px;display:grid;place-items:center;overflow:hidden;
+  border:1px solid rgba(255,255,255,.34);background:#050505;color:#fff;
+  font:600 1.08rem var(--fm);letter-spacing:.14em;
+}
+.dossier-project-mark::before,.dossier-project-mark::after{content:"";position:absolute;pointer-events:none}
+.dossier-project-mark::before{inset:7px;border:1px solid rgba(255,255,255,.11)}
+.dossier-project-mark::after{width:110%;height:1px;background:rgba(255,255,255,.2);transform:rotate(-34deg)}
+.dossier-project-mark img{position:relative;z-index:1;width:76%;height:76%;object-fit:contain;filter:grayscale(1)}
+.dossier-project-mark span{position:relative;z-index:1}
 .dossier-kicker{font-family:var(--fm);font-size:.68rem;letter-spacing:.17em;color:#c2c3c5;text-transform:uppercase;margin-bottom:.55rem}
 .dossier-head h2{font-size:clamp(1.45rem,3vw,2.75rem);line-height:1.05;text-transform:uppercase}
 .dossier-close{
@@ -1872,7 +1873,7 @@ body.modal-open{overflow:hidden}
   background:#0d0d0d;color:#fff;font:500 1.1rem var(--fm);transition:background .2s,color .2s,border-color .2s;
 }
 .dossier-gallery-button:hover,.dossier-gallery-button:focus-visible{background:#fff;color:#000;border-color:#fff}
-.dossier-intro{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(0,1.7fr);gap:2rem;padding-bottom:2rem;border-bottom:1px solid var(--line)}
+.dossier-intro{display:grid;grid-template-columns:minmax(260px,1fr) minmax(0,1.25fr);gap:2rem;padding-bottom:2rem;border-bottom:1px solid var(--line)}
 .dossier-status{
   display:inline-flex;align-items:center;gap:.45rem;font-family:var(--fm);font-size:.55rem;letter-spacing:.17em;
   color:#c2c3c5;text-transform:uppercase;margin-bottom:1rem;
@@ -1888,6 +1889,11 @@ body.modal-open{overflow:hidden}
 .dossier-section{min-height:0;display:block;align-items:initial;overflow:visible;padding:2rem 0;border-bottom:1px solid var(--line)}
 .dossier-section:last-of-type{border-bottom:0}
 .dossier-section h3{font-family:var(--fm);font-size:.68rem;letter-spacing:.19em;text-transform:uppercase;color:#fff;margin-bottom:1rem}
+.dossier-briefing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem}
+.dossier-brief-card{position:relative;min-height:210px;padding:1.15rem;border:1px solid var(--line);background:rgba(255,255,255,.025)}
+.dossier-brief-code{display:flex;align-items:center;gap:.55rem;margin-bottom:1rem;font-family:var(--fm);font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:#fff}
+.dossier-brief-code::before{content:"";width:18px;height:1px;background:#fff}
+.dossier-brief-card p{font-size:.94rem;line-height:1.72;color:#bfc0c3}
 .dossier-section ol{counter-reset:flow;list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}
 .dossier-section ol > li{
   counter-increment:flow;position:relative;min-height:92px;padding:1rem 1rem 1rem 3.25rem;
@@ -1901,8 +1907,11 @@ body.modal-open{overflow:hidden}
 .dossier-layer{padding:1rem;border-top:1px solid #fff;background:rgba(255,255,255,.025)}
 .dossier-layer strong{display:block;font-family:var(--fm);font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:.55rem}
 .dossier-layer span{font-size:.9rem;line-height:1.6;color:#b8b9bc}
-.dossier-stack{display:flex;gap:.5rem;flex-wrap:wrap}
-.dossier-stack span{border:1px solid var(--line);padding:.55rem .75rem;font-family:var(--fm);font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:#d0d1d2}
+.dossier-stack{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}
+.dossier-tech-card{display:grid;grid-template-columns:48px minmax(0,1fr);gap:.9rem;align-items:start;padding:1rem;border:1px solid var(--line);background:rgba(255,255,255,.02)}
+.dossier-tech-mark{width:48px;height:48px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.25);background:#050505;font:600 .62rem var(--fm);letter-spacing:.1em;color:#fff}
+.dossier-tech-copy strong{display:block;margin:.1rem 0 .4rem;font-family:var(--fm);font-size:.65rem;letter-spacing:.11em;text-transform:uppercase;color:#fff}
+.dossier-tech-copy p{font-size:.86rem;line-height:1.6;color:#aeb0b4}
 .dossier-relation{
   margin-top:1.1rem;border:1px dashed var(--line);padding:.85rem 1rem;
   font-size:.85rem;color:#9b9da1;line-height:1.65;max-width:64ch;
@@ -1918,17 +1927,42 @@ body.modal-open{overflow:hidden}
   content:"//";position:absolute;left:0;top:.7rem;
   font-family:var(--fm);font-size:.6rem;color:#fff;letter-spacing:.05em;
 }
+.dossier-video-card{
+  position:relative;width:100%;min-height:280px;display:grid;grid-template-rows:1fr auto;overflow:hidden;text-align:left;
+  border:1px solid rgba(255,255,255,.24);background:#050505;color:#fff;cursor:pointer;
+}
+.dossier-video-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.88));pointer-events:none}
+.dossier-video-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.08);opacity:.5;transition:transform .35s var(--e-out),opacity .25s}
+.dossier-video-card:hover .dossier-video-poster,.dossier-video-card:focus-visible .dossier-video-poster{transform:scale(1.02);opacity:.66}
+.dossier-video-overlay{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;min-height:220px}
+.dossier-video-play{width:76px;height:76px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.65);background:rgba(0,0,0,.64);transition:background .2s,color .2s}
+.dossier-video-play svg{width:26px;height:26px;fill:currentColor;transform:translateX(2px)}
+.dossier-video-card:hover .dossier-video-play,.dossier-video-card:focus-visible .dossier-video-play{background:#fff;color:#000}
+.dossier-video-copy{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1rem;align-items:end;padding:1rem 1.15rem;border-top:1px solid rgba(255,255,255,.18)}
+.dossier-video-copy strong{font-size:clamp(1rem,2vw,1.35rem);line-height:1.25;text-transform:uppercase}
+.dossier-video-copy span{font-family:var(--fm);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:#c8c9cb;white-space:nowrap}
 .dossier-links{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:2rem}
 @media(max-width:700px){
   .project-dialog{width:100vw;max-width:none;max-height:100dvh;height:100dvh;border:0;margin:0}
   .dossier-shell{max-height:100dvh;height:100dvh}
-  .dossier-head{padding:1rem 1.1rem}
+  .dossier-head{padding:1rem 1.1rem;gap:.75rem}
+  .dossier-titlegroup{gap:.75rem}
+  .dossier-project-mark{flex-basis:54px;width:54px;height:54px;font-size:.8rem}
+  .dossier-kicker{font-size:.55rem;letter-spacing:.12em;margin-bottom:.35rem}
   .dossier-intro{grid-template-columns:1fr;gap:1.25rem}
-  .dossier-facts,.dossier-section ol,.dossier-architecture{grid-template-columns:1fr}
+  .dossier-facts,.dossier-section ol,.dossier-architecture,.dossier-briefing-grid,.dossier-stack{grid-template-columns:1fr}
   .dossier-scroll{padding:1.15rem 1.1rem calc(var(--tele-h) + var(--safe-b) + 1.25rem)}
   .dossier-shot{flex-basis:94%}
   .dossier-shot figcaption{font-size:.78rem}
   .dossier-section{padding:1.5rem 0}
+  .dossier-brief-card{min-height:0}
+  .dossier-video-card{min-height:240px}
+  .dossier-video-copy{grid-template-columns:1fr}
+  .dossier-video-copy span{white-space:normal}
+}
+@media(prefers-reduced-motion:reduce){
+  .project-dialog[open]{animation:none}
+  .dossier-video-poster,.dossier-video-play{transition:none}
 }
 
 .toast{
@@ -2035,7 +2069,6 @@ body.lang-flash main{animation:lang .3s ease}
   <button class="lang-btn" type="button" aria-label="Switch language">TH</button>
   <div class="drawer-meta">
     <span>BLUEWHALEX // 2026</span>
-    <span>NONTHABURI · TH</span>
   </div>
 </div>
 
@@ -2052,11 +2085,6 @@ body.lang-flash main{animation:lang .3s ease}
   </video>
   <div class="scrim"></div>
   <div class="orbits" aria-hidden="true"><i></i><i></i><i></i></div>
-  <div class="hero-meta">
-    13.8622 N<br>
-    100.5144 E<br>
-    <b>NONTHABURI · TH</b>
-  </div>
   <div class="hero-grok" aria-hidden="true">
     <video id="grokVideo" src="assets/videos/grok-logo.mp4" muted loop playsinline preload="auto"></video>
     <canvas id="grokCanvas" width="1280" height="720"></canvas>
@@ -2359,8 +2387,8 @@ body.lang-flash main{animation:lang .3s ease}
         <div class="u-rows rv" style="--d:.16s">
           <a class="u-row" href="mailto:bwcodex@gmail.com"><span class="k">EMAIL</span><span class="v">bwcodex@gmail.com<span class="arr">↗</span></span></a>
           <a class="u-row" href="https://github.com/Sleepingknight0" target="_blank" rel="noopener noreferrer"><span class="k">GITHUB</span><span class="v">github.com/Sleepingknight0<span class="arr">↗</span></span></a>
+          <a class="u-row" href="https://www.linkedin.com/in/kittiphum-prasomsap-971565371/" target="_blank" rel="noopener noreferrer"><span class="k">LINKEDIN</span><span class="v">Kittiphum Prasomsap<span class="arr">↗</span></span></a>
           <a class="u-row" href="https://www.facebook.com/share/19AGq949MZ/" target="_blank" rel="noopener noreferrer"><span class="k">FACEBOOK</span><span class="v">Kittiphum Prasomsap<span class="arr">↗</span></span></a>
-          <div class="u-row"><span class="k" data-i18n="up_base">BASE</span><span class="v">NONTHABURI · THAILAND · UTC+7</span></div>
         </div>
       </div>
       <figure class="uplink-avatar rv" style="--d:.24s">
@@ -2387,7 +2415,6 @@ body.lang-flash main{animation:lang .3s ease}
   <div class="r-bracket bl" aria-hidden="true"></div>
   <div class="r-bracket br" aria-hidden="true"></div>
   <div class="r-hud tl" aria-hidden="true">SECTOR 06<em>AI.MODULE</em></div>
-  <div class="r-hud tr" aria-hidden="true">COORD<em>13.86°N · 100.51°E</em></div>
   <div class="r-hud bl" aria-hidden="true">LINK<em><b>SECURE</b> · IDLE</em></div>
   <div class="r-hud br" aria-hidden="true">BUILD<em><b>v0.0</b> · TBD</em></div>
   <div class="content">
@@ -2422,16 +2449,18 @@ body.lang-flash main{animation:lang .3s ease}
       <img class="logo" src="assets/images/logo.png" alt="BlueWhaleX" width="160" height="40" decoding="async">
     </a>
     <span data-i18n="ft">ALL SYSTEMS NOMINAL</span>
-    <span id="coords" role="button" tabindex="0" title="Click to copy coordinates" aria-label="Copy base coordinates">13.8622° N / 100.5144° E</span>
   </div>
 </footer>
 
 <dialog class="project-dialog" id="projectDialog" aria-labelledby="projectDialogTitle">
   <div class="dossier-shell">
     <header class="dossier-head">
-      <div>
-        <div class="dossier-kicker" id="projectDialogKicker">MINI PROJECT // MISSION DOSSIER</div>
-        <h2 id="projectDialogTitle">PROJECT</h2>
+      <div class="dossier-titlegroup">
+        <div class="dossier-project-mark" id="projectDialogMark" aria-hidden="true"><span>PX</span></div>
+        <div>
+          <div class="dossier-kicker" id="projectDialogKicker">MINI PROJECT // MISSION DOSSIER</div>
+          <h2 id="projectDialogTitle">PROJECT</h2>
+        </div>
       </div>
       <button class="dossier-close" id="projectDialogClose" type="button" aria-label="Close project details" title="Close (Escape)"><span id="projectDialogCloseText">CLOSE ×</span></button>
     </header>
@@ -2456,21 +2485,37 @@ body.lang-flash main{animation:lang .3s ease}
         <dl class="dossier-facts" id="projectDialogFacts"></dl>
       </div>
       <section class="dossier-section">
-        <h3 data-i18n="d_workflow">01 // OPERATIONAL WORKFLOW</h3>
+        <h3 data-i18n="d_why">01 // MISSION RATIONALE</h3>
+        <div class="dossier-briefing-grid">
+          <article class="dossier-brief-card"><span class="dossier-brief-code" id="projectProblemLabel">PAIN POINT</span><p id="projectDialogProblem"></p></article>
+          <article class="dossier-brief-card"><span class="dossier-brief-code" id="projectPurposeLabel">WHY BUILD IT</span><p id="projectDialogPurpose"></p></article>
+          <article class="dossier-brief-card"><span class="dossier-brief-code" id="projectOutcomeLabel">OPERATIONAL VALUE</span><p id="projectDialogOutcome"></p></article>
+        </div>
+      </section>
+      <section class="dossier-section">
+        <h3 data-i18n="d_workflow">02 // OPERATIONAL WORKFLOW</h3>
         <ol id="projectDialogWorkflow"></ol>
       </section>
       <section class="dossier-section">
-        <h3 data-i18n="d_arch">02 // SYSTEM ARCHITECTURE</h3>
+        <h3 data-i18n="d_arch">03 // SYSTEM ARCHITECTURE</h3>
         <div class="dossier-architecture" id="projectDialogArchitecture"></div>
       </section>
       <section class="dossier-section">
-        <h3 data-i18n="d_stack">03 // VERIFIED TECHNOLOGY</h3>
+        <h3 data-i18n="d_stack">04 // TECHNOLOGY &amp; RESPONSIBILITY</h3>
         <div class="dossier-stack" id="projectDialogStack"></div>
       </section>
       <section class="dossier-section">
-        <h3 data-i18n="d_hl">04 // ENGINEERING DECISIONS</h3>
+        <h3 data-i18n="d_video">05 // VIDEO WALKTHROUGH</h3>
+        <button class="dossier-video-card" id="projectDialogVideo" type="button">
+          <img class="dossier-video-poster" id="projectDialogVideoPoster" src="assets/images/projects/overnight-parking-log-concept.webp" alt="" width="1440" height="900" loading="lazy">
+          <span class="dossier-video-overlay" aria-hidden="true"><span class="dossier-video-play"><svg viewBox="0 0 24 24" focusable="false"><path d="M8 5v14l11-7z"/></svg></span></span>
+          <span class="dossier-video-copy"><strong id="projectDialogVideoTitle">PROJECT WALKTHROUGH</strong><span id="projectDialogVideoState">VIDEO LINK PENDING</span></span>
+        </button>
+      </section>
+      <section class="dossier-section">
+        <h3 data-i18n="d_hl">06 // ENGINEERING DECISIONS</h3>
         <ul class="dossier-highlights" id="projectDialogHighlights"></ul>
-        <div class="dossier-links">
+        <div class="dossier-links" id="projectDialogLinks">
           <a class="btn signal" id="projectDialogSource" href="#" target="_blank" rel="noopener noreferrer" data-i18n="source">SOURCE CODE ↗</a>
           <a class="btn ghost" id="projectDialogLive" href="#" target="_blank" rel="noopener noreferrer" data-i18n="live" hidden>LIVE APP ↗</a>
         </div>
@@ -3025,7 +3070,7 @@ function onScroll(){
       const navBottom=nav?.getBoundingClientRect().bottom||0;
       const registryRect=registryJump.getBoundingClientRect();
       const projectRect=projectRegistry.getBoundingClientRect();
-      const docked=innerWidth>768&&h.scrollTop>120&&registryRect.top<=navBottom+2&&projectRect.bottom>navBottom+80;
+      const docked=h.scrollTop>120&&registryRect.top<=navBottom+2&&projectRect.bottom>navBottom+80;
       registryJump.classList.toggle('is-docked',docked);
       projectRegistry.classList.toggle('has-docked-registry',docked);
     }
@@ -3150,24 +3195,16 @@ document.addEventListener('keydown',e=>{
   }
 });
 
-/* toast + coords */
+/* toast */
 function toast(msg){
   const t=$('#toast'); if(!t) return;
   t.textContent=msg; t.classList.add('show');
   clearTimeout(toast._tm); toast._tm=setTimeout(()=>t.classList.remove('show'),3500);
 }
-$('#coords')?.addEventListener('click',async()=>{
-  try{ await navigator.clipboard.writeText('13.8622° N / 100.5144° E — Nonthaburi, Thailand'); toast('COORDINATES COPIED'); }
-  catch{ toast('COPY FAILED'); }
-});
-$('#coords')?.addEventListener('keydown',e=>{
-  if(e.key==='Enter'||e.key===' '){ e.preventDefault(); $('#coords').click(); }
-});
 
 /* project dossier */
 const PROJECTS={
   overnight:{
-    source:'https://github.com/captwcan/naccparking',live:'https://naccparking.streamlit.app/',
     catalog:{
       code:'OPS-LOG // 01',
       classId:'record',
@@ -3175,13 +3212,22 @@ const PROJECTS={
       statusId:'service',
       statusLabel:{en:'IN SERVICE',th:'ใช้งานจริง'},
       blurb:{
-        en:'An operational system for recording vehicles parked overnight at NACC buildings and analysing repeat or multi-night records.',
-        th:'ระบบปฏิบัติงานสำหรับบันทึกรถที่จอดค้างคืนในอาคาร ป.ป.ช. และวิเคราะห์รายการที่พบซ้ำหรือจอดค้างหลายคืน'
+        en:'Turns overnight patrol observations into validated, analysis-ready records so repeat vehicles and multi-night patterns can be identified without manual cross-checking.',
+        th:'เปลี่ยนผลตรวจรถจอดค้างคืนให้เป็นข้อมูลที่ตรวจสอบแล้วและพร้อมวิเคราะห์ ช่วยค้นหารถที่พบซ้ำหรือจอดหลายคืนโดยไม่ต้องไล่เทียบข้อมูลด้วยมือ'
       },
       tags:['Python','Streamlit','Google Sheets','ReportLab'],
       stackTokens:['python','streamlit','sheets','reportlab'],
       thumb:{src:'assets/images/projects/overnight-parking-log-concept.webp',width:1440,height:900,alt:{en:'Monochrome concept of vehicles being logged in an office parking area at night',th:'ภาพคอนเซปต์ขาวดำของการตรวจและบันทึกรถในลานจอดช่วงกลางคืน'}}
     },
+    identity:{logo:'assets/images/nacc.png'},
+    video:{title:{en:'Overnight patrol log · product walkthrough',th:'ระบบบันทึกรถจอดค้างคืน · วิดีโอแนะนำการใช้งาน'}},
+    technology:[
+      {name:'Python',mark:'PY',role:{en:'Owns validation, duplicate detection, data preparation, and the reporting workflow.',th:'ดูแลกฎตรวจสอบข้อมูล การตรวจรายการซ้ำ การเตรียมข้อมูล และขั้นตอนสร้างรายงาน'}},
+      {name:'Streamlit',mark:'ST',role:{en:'Delivers a browser-based form and dashboard quickly for desktop and mobile operational use.',th:'สร้างฟอร์มและแดชบอร์ดบนเบราว์เซอร์ให้พร้อมใช้บนเดสก์ท็อปและมือถือได้รวดเร็ว'}},
+      {name:'pandas',mark:'PD',role:{en:'Normalises dates, groups observations, and finds repeat or multi-night vehicle patterns.',th:'จัดรูปแบบวันที่ จัดกลุ่มรายการ และค้นหารูปแบบรถที่พบซ้ำหรือจอดค้างหลายคืน'}},
+      {name:'gspread + Google Auth',mark:'GS',role:{en:'Connects controlled service-account access to Google Sheets for reading and batch appends.',th:'เชื่อม Google Sheets ผ่าน service account เพื่ออ่านข้อมูลและบันทึกหลายรายการเป็นชุดอย่างควบคุมได้'}},
+      {name:'ReportLab + Pillow',mark:'RP',role:{en:'Builds printable PDF and JPG reports with bundled Thai fonts; openpyxl supports spreadsheet output.',th:'สร้างรายงาน PDF/JPG พร้อมฟอนต์ไทยในโปรเจกต์ และใช้ openpyxl รองรับไฟล์สเปรดชีต'}}
+    ],
     gallery:[
       {src:'assets/images/projects/overnight-live-form.png',width:1440,height:900,alt:{en:'Live desktop vehicle-entry screen for the overnight parking log',th:'หน้าบันทึกทะเบียนรถจอดค้างคืนบนเดสก์ท็อปจากระบบจริง'},caption:{en:'Desktop · building summary and overnight vehicle entry',th:'เดสก์ท็อป · สรุปตามอาคารและฟอร์มบันทึกรถจอดค้างคืน'}},
       {src:'assets/images/projects/overnight-live-mobile.png',width:390,height:844,orientation:'portrait',alt:{en:'Live mobile view of the overnight parking log',th:'หน้ามือถือจากระบบบันทึกรถจอดค้างคืนจริง'},caption:{en:'Mobile · responsive operational view',th:'มือถือ · หน้าปฏิบัติงานแบบ responsive'}}
@@ -3189,7 +3235,10 @@ const PROJECTS={
     en:{
       title:'NACC Overnight Parking Log',status:'IN SERVICE',
       summary:'A focused Streamlit system for security staff to record vehicles parked overnight at NACC buildings by date, building, license plate, and province, then review repeat or multi-night records through a dedicated dashboard.',
-      relation:'A collaborative project maintained in captwcan/naccparking and forked to the owner’s GitHub account. It is separate from the official-letter parking request and allocation system and is dedicated to overnight-parking records.',
+      relation:'A collaborative operational project dedicated to overnight-parking observations. It is separate from the official-letter parking request and allocation workflow.',
+      problem:'Patrol observations can become fragmented across handwritten notes or separate spreadsheet rows. When staff must compare dates manually, duplicate entries, repeat vehicles, and multi-night patterns are easy to miss.',
+      purpose:'Give security staff one fast entry flow that works on desktop or mobile, validates each batch before saving, and turns routine patrol data into records that supervisors can analyse immediately.',
+      outcome:'The system creates a traceable daily picture by building, prevents avoidable duplicate records, highlights recurring vehicles, and produces exportable reports without requiring staff to learn a complex database tool.',
       facts:[
         ['System class','Overnight parked-vehicle record system'],
         ['Primary users','Security staff · report viewers · administrator'],
@@ -3222,7 +3271,10 @@ const PROJECTS={
     th:{
       title:'ระบบบันทึกรถจอดค้างคืน ป.ป.ช.',status:'ใช้งานจริง',
       summary:'ระบบ Streamlit สำหรับ รปภ. บันทึกรถที่จอดค้างคืนในอาคาร ป.ป.ช. แยกตามวันที่ อาคาร ทะเบียน และจังหวัด พร้อมแดชบอร์ดวิเคราะห์รายการที่พบซ้ำหรือจอดค้างหลายคืน',
-      relation:'โปรเจกต์ที่พัฒนาร่วมกันใน captwcan/naccparking และมี fork ในบัญชี GitHub ของเจ้าของพอร์ต เป็นคนละระบบกับระบบขอและจัดที่จอดรถจากหนังสือราชการ โดยระบบนี้ใช้บันทึกรถจอดค้างคืนโดยเฉพาะ',
+      relation:'โปรเจกต์ปฏิบัติงานที่พัฒนาร่วมกันสำหรับข้อมูลรถจอดค้างคืนโดยเฉพาะ เป็นคนละระบบกับเวิร์กโฟลว์ขอและจัดที่จอดรถจากหนังสือราชการ',
+      problem:'ผลตรวจเวรอาจกระจายอยู่ในกระดาษหรือหลายแถวของสเปรดชีต เมื่อเจ้าหน้าที่ต้องไล่เทียบวันด้วยตนเอง รายการซ้ำ รถที่พบซ้ำ และรถที่จอดต่อเนื่องหลายคืนจึงหลุดสายตาได้ง่าย',
+      purpose:'สร้างช่องทางกรอกข้อมูลเดียวที่ รปภ. ใช้ได้รวดเร็วทั้งบนคอมพิวเตอร์และมือถือ ตรวจความถูกต้องก่อนบันทึก และเปลี่ยนข้อมูลงานประจำให้พร้อมวิเคราะห์ได้ทันที',
+      outcome:'ระบบทำให้เห็นภาพรายวันแยกตามอาคาร ลดข้อมูลซ้ำที่ป้องกันได้ ชี้รถที่ปรากฏต่อเนื่อง และออกรายงานได้โดยผู้ใช้งานไม่ต้องเรียนรู้ระบบฐานข้อมูลที่ซับซ้อน',
       facts:[
         ['ประเภทระบบ','ระบบบันทึกรถจอดค้างคืน'],
         ['ผู้ใช้งานหลัก','รปภ. · ผู้ดูรายงาน · ผู้ดูแลระบบ'],
@@ -3254,7 +3306,6 @@ const PROJECTS={
     }
   },
   parking:{
-    source:'https://github.com/Sleepingknight0/Parking_request',live:'https://nacc-parking-user.vercel.app',
     catalog:{
       code:'OPS-REQUEST // 02',
       classId:'platform',
@@ -3262,13 +3313,23 @@ const PROJECTS={
       statusId:'service',
       statusLabel:{en:'IN SERVICE',th:'ใช้งานจริง'},
       blurb:{
-        en:'An end-to-end workflow that turns official parking-request letters into approved parking allocations, staff assignments, printable signs, evidence review, and job completion.',
-        th:'ระบบงานเบ็ดเสร็จที่รับคำขอที่จอดรถจากหนังสือราชการ อนุมัติและจัดที่จอด มอบหมายงาน สร้างป้ายจอด ตรวจหลักฐาน และปิดงาน'
+        en:'Transforms an official parking-request letter into one traceable workflow for approval, allocation, field assignment, printable signs, evidence review, and closure.',
+        th:'เปลี่ยนหนังสือราชการขอที่จอดรถให้เป็นเวิร์กโฟลว์เดียวที่ติดตามได้ ตั้งแต่อนุมัติ จัดที่จอด มอบหมายงาน สร้างป้าย ตรวจหลักฐาน จนถึงปิดงาน'
       },
       tags:['TypeScript','Next.js 15','Supabase','Turborepo'],
       stackTokens:['typescript','nextjs','supabase','turborepo'],
       thumb:{src:'assets/images/projects/parking-request-allocation-concept.webp',width:1440,height:900,alt:{en:'Monochrome concept of an official letter flowing into parking allocation and field completion',th:'ภาพคอนเซปต์ขาวดำของหนังสือราชการที่เข้าสู่การจัดที่จอดและปิดงานภาคสนาม'}}
     },
+    identity:{logo:'assets/images/nacc.png'},
+    video:{title:{en:'Official-letter parking workflow · end-to-end demo',th:'ระบบขอและจัดที่จอดรถจากหนังสือราชการ · วิดีโอสาธิตครบขั้นตอน'}},
+    technology:[
+      {name:'TypeScript',mark:'TS',role:{en:'Defines shared domain types so requests, roles, statuses, and API data agree across both applications.',th:'กำหนดชนิดข้อมูลกลางให้คำขอ บทบาท สถานะ และข้อมูล API ตรงกันระหว่างสองแอป'}},
+      {name:'Next.js + React',mark:'NX',role:{en:'Powers the authenticated admin console and the responsive field application used by operational staff.',th:'สร้างคอนโซลแอดมินที่มีการยืนยันตัวตนและแอปภาคสนามแบบ responsive สำหรับเจ้าหน้าที่'}},
+      {name:'Supabase + Postgres',mark:'SB',role:{en:'Provides authentication, relational data, private file storage, realtime updates, RLS, and database triggers.',th:'ดูแลการล็อกอิน ข้อมูลเชิงสัมพันธ์ ไฟล์ private การอัปเดต realtime สิทธิ์ RLS และ trigger ฐานข้อมูล'}},
+      {name:'Zod + React Hook Form',mark:'ZD',role:{en:'Validates user input close to the form while keeping TypeScript contracts aligned with submitted data.',th:'ตรวจข้อมูลใกล้จุดกรอกและทำให้สัญญา TypeScript ตรงกับข้อมูลที่ส่งจริง'}},
+      {name:'pnpm + Turborepo',mark:'TB',role:{en:'Organises two applications and shared typed packages in one buildable, maintainable monorepo.',th:'จัดสองแอปและแพ็กเกจ typed ที่ใช้ร่วมกันให้อยู่ใน monorepo เดียวที่ build และดูแลได้เป็นระบบ'}},
+      {name:'Google APIs + CSV',mark:'GI',role:{en:'Bridges the new workflow with legacy sheet-based operations and supports controlled migration with dry runs.',th:'เชื่อมระบบใหม่กับงานเดิมบน Google Sheets และรองรับการย้ายข้อมูลแบบควบคุมได้ด้วย dry-run'}}
+    ],
     gallery:[
       {src:'assets/images/projects/parking-request-role-selector.png',alt:{en:'Live role selector for the NACC parking request and allocation system',th:'หน้าคัดเลือกบทบาทจากระบบขอและจัดที่จอดรถ ป.ป.ช. ที่ใช้งานจริง'},caption:{en:'Field app · four role-based entry points',th:'แอปภาคสนาม · ทางเข้าใช้งานตามบทบาท 4 รูปแบบ'}},
       {src:'assets/images/projects/parking-request-admin-login.png',alt:{en:'Live administrator login for the NACC parking request and allocation system',th:'หน้าล็อกอินผู้ดูแลจากระบบขอและจัดที่จอดรถ ป.ป.ช. ที่ใช้งานจริง'},caption:{en:'Admin console · protected sign-in',th:'คอนโซลผู้ดูแล · หน้าล็อกอินที่มีการป้องกัน'}}
@@ -3277,6 +3338,9 @@ const PROJECTS={
       title:'NACC Official-Letter Parking Request & Allocation',status:'IN SERVICE',
       summary:'An end-to-end workflow that receives parking requests from official government letters, coordinates and allocates parking spaces, prepares operational documents, and carries each request through field execution, evidence review, and closure.',
       relation:'This official-letter parking request and allocation workflow is separate from the Overnight Parking Log, which records vehicles found parked overnight.',
+      problem:'A single parking request begins as an official letter but can split into messages, spreadsheets, printed signs, staff assignments, and photo evidence. Without one stateful workflow, ownership and completion status are difficult to verify.',
+      purpose:'Create a shared operational record that follows each request from intake to approval, allocation, field execution, evidence review, and closure while enforcing role boundaries and valid status transitions.',
+      outcome:'Administrators gain a current view of every request, field staff receive clear assignments and per-vehicle signs, and the database preserves an append-only history that can be audited after the work is complete.',
       facts:[
         ['System class','End-to-end official-letter parking workflow'],
         ['Application surfaces','Admin console + field user app — two Next.js apps'],
@@ -3311,6 +3375,9 @@ const PROJECTS={
       title:'ระบบขอและจัดที่จอดรถจากหนังสือราชการแบบเบ็ดเสร็จ ป.ป.ช.',status:'ใช้งานจริง',
       summary:'ระบบงานเบ็ดเสร็จที่รับคำขอที่จอดรถจากหนังสือราชการ ประสานงานและจัดที่จอด จัดทำเอกสารปฏิบัติงาน ส่งงาน รปภ. แนบหลักฐาน ตรวจสอบ และปิดงาน',
       relation:'ระบบขอและจัดที่จอดรถจากหนังสือราชการนี้เป็นคนละระบบกับระบบบันทึกรถจอดค้างคืน ซึ่งใช้บันทึกรถที่พบจอดค้างข้ามคืนโดยเฉพาะ',
+      problem:'คำขอหนึ่งรายการเริ่มจากหนังสือราชการ แต่ระหว่างทำงานอาจแยกไปอยู่ในแชต สเปรดชีต ป้ายกระดาษ งานมอบหมาย และรูปหลักฐานหลายจุด หากไม่มีเวิร์กโฟลว์กลางจะตรวจว่าใครรับผิดชอบและงานจบจริงหรือไม่ได้ยาก',
+      purpose:'สร้างบันทึกการทำงานร่วมกันที่ติดตามคำขอตั้งแต่รับเรื่อง อนุมัติ จัดที่จอด ปฏิบัติงาน ตรวจหลักฐาน และปิดงาน พร้อมบังคับขอบเขตสิทธิ์และลำดับสถานะที่ถูกต้อง',
+      outcome:'แอดมินเห็นสถานะล่าสุดของทุกคำขอ รปภ. ได้งานและป้ายรายทะเบียนที่ชัดเจน ส่วนฐานข้อมูลเก็บประวัติแบบ append-only เพื่อให้ตรวจย้อนหลังได้แม้งานเสร็จแล้ว',
       facts:[
         ['ประเภทระบบ','ระบบงานขอและจัดที่จอดรถจากหนังสือราชการแบบเบ็ดเสร็จ'],
         ['หน้าระบบ','คอนโซลแอดมิน + แอปภาคสนาม — Next.js สองแอป'],
@@ -3351,17 +3418,30 @@ const PROJECTS={
       statusId:'live-demo',
       statusLabel:{en:'LIVE DEMO',th:'เดโมออนไลน์'},
       blurb:{
-        en:'A bilingual browser-based 3D explainer that traces Dishy, LEO satellites, gateways, and laser links through a nine-step guide and a 24-hour constellation model.',
-        th:'สื่ออธิบายระบบดาวเทียม 3 มิติบนเบราว์เซอร์สองภาษา ถ่ายทอดเส้นทางจากจาน Dishy สู่ดาวเทียม LEO เกตเวย์ และลิงก์เลเซอร์ ผ่านคู่มือ 9 ขั้นและแบบจำลอง 24 ชั่วโมง'
+        en:'Makes an invisible satellite network understandable through a bilingual nine-step briefing and an explorable 24-hour 3D constellation model.',
+        th:'ทำให้เครือข่ายดาวเทียมที่มองไม่เห็นเข้าใจได้ ผ่านคู่มือสองภาษา 9 ขั้นและแบบจำลองกลุ่มดาวเทียม 3 มิติที่สำรวจได้ตลอดรอบ 24 ชั่วโมง'
       },
       tags:['JavaScript','Three.js','WebGL','Vercel'],
       stackTokens:['javascript','threejs','webgl','vercel'],
       thumb:{src:'assets/images/projects/starlink-concept.webp',width:1440,height:900,alt:{en:'Monochrome concept visualization of a satellite network above Earth',th:'ภาพกราฟิกขาวดำแสดงเครือข่ายดาวเทียมเหนือโลก'}}
     },
+    identity:{mark:'SL'},
+    video:{title:{en:'Starlink Mission Control · guided 3D walkthrough',th:'Starlink Mission Control · วิดีโอแนะนำประสบการณ์ 3 มิติ'}},
+    technology:[
+      {name:'HTML + CSS',mark:'HC',role:{en:'Defines the semantic interface, responsive layout, bilingual controls, and mission-control visual system.',th:'กำหนดโครงสร้าง semantic เลย์เอาต์ responsive การควบคุมสองภาษา และภาพลักษณ์ mission control'}},
+      {name:'JavaScript',mark:'JS',role:{en:'Coordinates guide steps, simulation time, camera modes, interface state, and language switching without a framework.',th:'ประสานขั้น Guide เวลา simulation โหมดกล้อง สถานะหน้าจอ และการสลับภาษาโดยไม่ใช้ framework'}},
+      {name:'Three.js + WebGL',mark:'3D',role:{en:'Renders Earth, satellites, network paths, coverage layers, and synchronized camera transitions in the browser.',th:'เรนเดอร์โลก ดาวเทียม เส้นทางเครือข่าย ชั้นความครอบคลุม และการเปลี่ยนกล้องบนเบราว์เซอร์'}},
+      {name:'PBF + Geobuf',mark:'PB',role:{en:'Decodes compact geographic snapshots for country boundaries and coverage data without a live data dependency.',th:'ถอดข้อมูลภูมิศาสตร์แบบ compact สำหรับขอบเขตประเทศและความครอบคลุมโดยไม่ต้องพึ่งข้อมูลสด'}},
+      {name:'Playwright',mark:'PW',role:{en:'Checks desktop and mobile flows, guide steps, simulation behavior, accessibility states, and console errors.',th:'ตรวจ flow บนเดสก์ท็อป/มือถือ ขั้น Guide พฤติกรรม simulation สถานะ accessibility และ console error'}},
+      {name:'Vercel',mark:'VC',role:{en:'Serves the static experience and applies deployment routing and cache policy to local runtime assets.',th:'เผยแพร่เว็บแบบ static พร้อมจัด routing และนโยบาย cache ให้ไฟล์ runtime ที่เก็บในโปรเจกต์'}}
+    ],
     en:{
       title:'Starlink Mission Control — 3D Explainer',status:'LIVE DEMO',
       summary:'A bilingual browser-based experience that combines a guided network explainer with an interactive 24-hour constellation simulation, making the path from a user terminal to satellites, gateways, and inter-satellite links visible and explorable.',
       relation:'Independent educational visualization; not affiliated with or endorsed by SpaceX or Starlink. Orbital positions are modeled from published parameters rather than live TLE telemetry.',
+      problem:'Satellite networks are difficult to explain with a static diagram: the infrastructure is distributed, orbital positions change with time, and the user cannot see how terminals, gateways, coverage, and laser links form one path.',
+      purpose:'Turn an abstract telecommunications system into a guided spatial experience—first teaching the network step by step, then letting the viewer explore a clearly labelled simulation at their own pace.',
+      outcome:'Non-specialists can build a mental model of the network path, while technical viewers can inspect layers, shells, camera states, and time controls without confusing modeled positions with live telemetry.',
       facts:[
         ['System class','Static browser visualization and interactive explainer'],
         ['Experiences','9-step Guide + 24-hour Simulation'],
@@ -3394,6 +3474,9 @@ const PROJECTS={
       title:'ศูนย์ควบคุมภารกิจ Starlink — สื่ออธิบาย 3 มิติ',status:'เดโมออนไลน์',
       summary:'ประสบการณ์บนเบราว์เซอร์สองภาษาที่รวมคู่มืออธิบายเส้นทางเครือข่ายเข้ากับแบบจำลองกลุ่มดาวเทียม 24 ชั่วโมง ทำให้เส้นทางจากจานผู้ใช้ไปยังดาวเทียม เกตเวย์ และลิงก์ระหว่างดาวเทียมมองเห็นและสำรวจได้',
       relation:'สื่อการเรียนรู้อิสระ ไม่ได้มีความเกี่ยวข้องหรือได้รับการรับรองจาก SpaceX หรือ Starlink ตำแหน่งวงโคจรเป็นผลจากแบบจำลองตามพารามิเตอร์ที่เผยแพร่ ไม่ใช่ข้อมูล TLE แบบสด',
+      problem:'เครือข่ายดาวเทียมอธิบายด้วยภาพนิ่งได้ยาก เพราะโครงสร้างกระจายอยู่หลายจุด ตำแหน่งวงโคจรเปลี่ยนตามเวลา และผู้ใช้มองไม่เห็นว่าจาน เกตเวย์ พื้นที่ครอบคลุม และลิงก์เลเซอร์ต่อกันเป็นเส้นทางเดียวอย่างไร',
+      purpose:'เปลี่ยนระบบโทรคมนาคมที่เป็นนามธรรมให้เป็นประสบการณ์เชิงพื้นที่ เริ่มจากสอนเส้นทางทีละขั้น แล้วเปิดให้ผู้ชมสำรวจแบบจำลองที่ติดป้ายชัดเจนได้ด้วยตนเอง',
+      outcome:'คนทั่วไปสร้างภาพในใจของเส้นทางเครือข่ายได้ ส่วนผู้ชมสายเทคสามารถตรวจ layer, shell, สถานะกล้อง และเวลา โดยไม่สับสนระหว่างตำแหน่งจำลองกับ telemetry จริง',
       facts:[
         ['ประเภทระบบ','สื่ออธิบายและภาพจำลองแบบโต้ตอบบนเบราว์เซอร์'],
         ['รูปแบบการใช้งาน','คู่มือ 9 ขั้น + แบบจำลอง 24 ชั่วโมง'],
@@ -3432,17 +3515,31 @@ const PROJECTS={
       statusId:'desktop-build',
       statusLabel:{en:'WINDOWS DESKTOP BUILD',th:'แอปเดสก์ท็อป Windows'},
       blurb:{
-        en:'A Windows practice assistant combining board calibration, chess-state tracking, Stockfish analysis, and a transparent best-move overlay while leaving every move under the player’s control.',
-        th:'ผู้ช่วยฝึกและวิเคราะห์หมากรุกบน Windows ที่ผสานการปรับเทียบกระดาน การติดตามสถานะเกม Stockfish และโอเวอร์เลย์ลูกศรแนะนำ โดยผู้เล่นยังเป็นผู้เดินหมากเองทุกครั้ง'
+        en:'A human-in-the-loop Windows analysis tool that aligns a visible board with legal game state, Stockfish reasoning, and transparent visual guidance—without autoplay.',
+        th:'เครื่องมือวิเคราะห์หมากรุกบน Windows แบบ human-in-the-loop ที่เชื่อมกระดานบนหน้าจอเข้ากับสถานะเกมที่ถูกกติกา การวิเคราะห์ Stockfish และคำแนะนำแบบโปร่งใส โดยไม่เดินหมากอัตโนมัติ'
       },
       tags:['Python','PySide6','OpenCV','Stockfish'],
       stackTokens:['python','pyside6','opencv','stockfish'],
       thumb:{src:'assets/images/projects/chess-vision-concept.webp',width:1440,height:900,alt:{en:'Monochrome concept visualization of a chessboard under computer-vision analysis',th:'ภาพกราฟิกขาวดำแสดงกระดานหมากรุกภายใต้การวิเคราะห์ด้วยคอมพิวเตอร์วิทัศน์'}}
     },
+    identity:{mark:'CV'},
+    video:{title:{en:'Chess Vision Assistant · calibration and analysis demo',th:'Chess Vision Assistant · วิดีโอสาธิตการปรับเทียบและวิเคราะห์'}},
+    technology:[
+      {name:'Python',mark:'PY',role:{en:'Connects the desktop interface, capture pipeline, chess rules, engine process, overlays, storage, and diagnostics.',th:'เชื่อมหน้าจอเดสก์ท็อป การจับภาพ กติกาหมากรุก เอนจิน โอเวอร์เลย์ การจัดเก็บ และ diagnostics'}},
+      {name:'PySide6 + QThread',mark:'QT',role:{en:'Builds the Windows interface and moves capture or analysis work off the UI thread to keep controls responsive.',th:'สร้างหน้าจอ Windows และย้ายงานจับภาพหรือวิเคราะห์ออกจาก UI thread เพื่อให้การควบคุมตอบสนองต่อเนื่อง'}},
+      {name:'OpenCV + NumPy',mark:'CV',role:{en:'Warps perspective, measures board-cell differences, tracks occupancy, and stabilizes calibrated visual input.',th:'ปรับ perspective วัดความต่างรายช่อง ติดตาม occupancy และทำให้ข้อมูลภาพจากกระดานที่ปรับเทียบมีความนิ่ง'}},
+      {name:'python-chess',mark:'PC',role:{en:'Owns legal move validation, FEN state, special moves, history, and PGN export.',th:'ดูแลกติกาการเดิน สถานะ FEN special move ประวัติ และการส่งออก PGN'}},
+      {name:'Stockfish UCI',mark:'SF',role:{en:'Analyzes legal positions and returns best moves and principal variations through a separate engine process.',th:'วิเคราะห์ตำแหน่งที่ถูกกติกาและส่ง best move กับ principal variation ผ่าน process เอนจินแยก'}},
+      {name:'MSS + DXCam',mark:'SC',role:{en:'Captures the calibrated screen region, with an optional accelerated Windows backend for suitable machines.',th:'จับภาพเฉพาะพื้นที่กระดานที่ปรับเทียบ พร้อม backend เร่งความเร็วบน Windows เป็นตัวเลือก'}},
+      {name:'pytest + PyInstaller',mark:'QA',role:{en:'Validates move, vision, storage, and security behavior, then packages the application for Windows.',th:'ทดสอบการเดิน vision การจัดเก็บ และความปลอดภัย ก่อนแพ็กแอปสำหรับ Windows'}}
+    ],
     en:{
       title:'Chess Vision Assistant',status:'WINDOWS DESKTOP BUILD',
       summary:'A Windows practice and analysis application that combines calibrated board capture, legal chess-state tracking, Stockfish guidance, and a transparent overlay while keeping every real move under the player’s control.',
       relation:'For practice and analysis only. The app does not control the mouse, autoplay moves, or bypass anti-cheat. Stockfish is installed separately, and no public executable is currently published.',
+      problem:'Chess engines understand positions, but a player practising on a visual board still has to translate between screen coordinates, legal game state, engine notation, and the move they must physically make. That context switching interrupts study.',
+      purpose:'Create a human-in-the-loop bridge that calibrates the visible board, maintains a legal internal position, requests time-bounded Stockfish analysis, and explains the result through an aligned overlay.',
+      outcome:'The player receives visual guidance and a reviewable game record while retaining full control of every move. Clear boundaries—no mouse automation, no autoplay, and no anti-cheat bypass—keep the tool focused on permitted training and analysis.',
       facts:[
         ['Platform','Windows 10/11 · Python 3.12–3.13'],
         ['Engine','Separately installed Stockfish process over UCI'],
@@ -3479,6 +3576,9 @@ const PROJECTS={
       title:'ผู้ช่วยวิเคราะห์หมากรุกจากภาพหน้าจอ',status:'แอปเดสก์ท็อป Windows',
       summary:'แอปฝึกและวิเคราะห์หมากรุกบน Windows ที่รวมการจับภาพกระดานแบบปรับเทียบ การติดตามสถานะเกมที่ถูกกติกา คำแนะนำจาก Stockfish และโอเวอร์เลย์โปร่งใส โดยผู้เล่นยังควบคุมการเดินจริงทุกครั้ง',
       relation:'ใช้เพื่อฝึกและวิเคราะห์เท่านั้น แอปไม่ควบคุมเมาส์ ไม่เดินหมากอัตโนมัติ และไม่หลบระบบ anti-cheat ผู้ใช้ต้องติดตั้ง Stockfish แยกต่างหาก และขณะนี้ยังไม่มีไฟล์โปรแกรมเผยแพร่สาธารณะ',
+      problem:'เอนจินหมากรุกเข้าใจตำแหน่งบนกระดาน แต่ผู้เล่นที่ฝึกจากกระดานบนหน้าจอยังต้องแปลงพิกัด สถานะเกม notation ของเอนจิน และหมากที่ต้องเดินจริงไปมา ทำให้จังหวะการเรียนรู้ขาดตอน',
+      purpose:'สร้างสะพานแบบ human-in-the-loop ที่ปรับเทียบกระดานภาพ รักษาสถานะภายในให้ถูกกติกา ขอการวิเคราะห์ Stockfish แบบจำกัดเวลา และอธิบายผลผ่านโอเวอร์เลย์ที่ตรงกับกระดาน',
+      outcome:'ผู้เล่นได้คำแนะนำเชิงภาพและประวัติเกมที่ตรวจย้อนหลังได้ โดยยังควบคุมทุกการเดินเอง ขอบเขตที่ชัดเจน—ไม่ควบคุมเมาส์ ไม่ autoplay และไม่หลบ anti-cheat—ทำให้เครื่องมืออยู่ในบริบทการฝึกและวิเคราะห์ที่ได้รับอนุญาต',
       facts:[
         ['แพลตฟอร์ม','Windows 10/11 · Python 3.12–3.13'],
         ['เอนจิน','ติดตั้ง Stockfish แยกและสื่อสารผ่าน UCI'],
@@ -3521,17 +3621,30 @@ const PROJECTS={
       statusId:'local-tool',
       statusLabel:{en:'LOCAL WINDOWS TOOL',th:'เครื่องมือ Windows ในเครื่อง'},
       blurb:{
-        en:'A fast PowerShell command center for selecting isolated accounts, launching multiple AI CLIs, and presenting provider-supported usage without blocking startup.',
-        th:'ศูนย์ควบคุม PowerShell สำหรับเลือกบัญชีแบบแยก เปิด AI CLI หลายค่าย และแสดง usage ที่ผู้ให้บริการรองรับโดยไม่หน่วงการเริ่มโปรแกรม'
+        en:'One fast ai command for selecting supported account profiles, launching multiple provider CLIs safely, and showing honest cached usage without slowing startup.',
+        th:'รวมการเลือกโปรไฟล์บัญชี การเปิด AI CLI หลายค่ายอย่างปลอดภัย และการแสดง usage จาก cache ที่ตรวจสอบที่มาได้ไว้ในคำสั่ง ai เดียว โดยไม่ทำให้การเริ่มโปรแกรมช้า'
       },
       tags:['PowerShell','Windows','JSON','CLI'],
       stackTokens:['powershell','windows','json','cli'],
       thumb:{src:'assets/images/projects/ai-cli-launcher-concept.png',width:1586,height:992,alt:{en:'Monochrome command-nexus concept connecting AI providers and isolated account profiles',th:'ภาพคอนเซปต์ขาวดำของศูนย์คำสั่งที่เชื่อม AI Provider และโปรไฟล์บัญชีแบบแยก'}}
     },
+    identity:{mark:'AI'},
+    video:{title:{en:'Universal AI CLI Launcher · terminal workflow demo',th:'Universal AI CLI Launcher · วิดีโอสาธิตเวิร์กโฟลว์บนเทอร์มินัล'}},
+    technology:[
+      {name:'PowerShell 5.1 / 7+',mark:'PS',role:{en:'Owns navigation, provider selection, process launch, argument forwarding, environment restoration, and diagnostics.',th:'ดูแลเมนู การเลือก Provider การเปิด process การส่ง argument การคืน environment และ diagnostics'}},
+      {name:'JSON Registry',mark:'JS',role:{en:'Describes providers, command candidates, profile strategies, capabilities, accounts, and indexes without one giant switch statement.',th:'อธิบาย Provider candidate command กลยุทธ์ profile capability บัญชี และ index โดยไม่รวมทุกอย่างไว้ใน switch ขนาดใหญ่'}},
+      {name:'Native Process APIs',mark:'NP',role:{en:'Launches the real executable with original argument boundaries and returns its exit code without command-string evaluation.',th:'เปิด executable จริงโดยรักษาขอบเขต argument และส่ง exit code กลับโดยไม่ประเมิน command string'}},
+      {name:'Local Cache + State',mark:'LC',role:{en:'Keeps the ordinary startup path local and cache-only while recording freshness and provenance for supported usage data.',th:'ทำให้การเปิดปกติอ่านเฉพาะข้อมูลในเครื่องและ cache พร้อมเก็บความสดและที่มาของ usage ที่รองรับ'}},
+      {name:'Usage Adapters',mark:'UA',role:{en:'Normalizes only provider-supported telemetry and keeps reported, observed, stale, estimated, and unavailable states distinct.',th:'แปลงเฉพาะ telemetry ที่ Provider รองรับ และแยก reported, observed, stale, estimated กับ unavailable ออกจากกันชัดเจน'}},
+      {name:'Cross-version Tests',mark:'QA',role:{en:'Validates quoting, Unicode, environment restoration, security boundaries, and provider fixtures on both PowerShell editions.',th:'ตรวจ quoting, Unicode, การคืน environment ขอบเขตความปลอดภัย และ fixture ของ Provider บน PowerShell ทั้งสองรุ่น'}}
+    ],
     en:{
       title:'Universal AI CLI Launcher',status:'LOCAL WINDOWS TOOL',
       summary:'A PowerShell-based orchestration layer that turns one ai command into a safe provider and account selector for installed terminal AI tools, with per-account configuration isolation, cached usage telemetry, and exact exit-code and environment restoration.',
       relation:'A personal developer-tool project built and tested on Windows. It orchestrates installed third-party CLIs but is not affiliated with or endorsed by OpenAI, Anthropic, xAI, Google, or Antigravity. The public portfolio includes this case study; the local installer and credential-bearing profiles are not published.',
+      problem:'AI terminal tools expose different commands, account models, usage interfaces, and credential boundaries. Repeating discovery or network work every time a menu opens created a slow 5–10 second launch path and encouraged unsafe one-size-fits-all account switching.',
+      purpose:'Provide one stable ai command that respects each provider’s real capabilities, isolates configuration only where officially supported, preserves the caller’s environment, and keeps ordinary startup entirely local.',
+      outcome:'The launcher reduced warm menu rendering to roughly 24–29 ms in the documented optimization run, preserved arguments and exit codes, and made unsupported usage or isolation explicit instead of presenting guessed data as fact.',
       facts:[
         ['System class','Local multi-provider CLI orchestrator and account switcher'],
         ['Platform','Windows · Windows PowerShell 5.1 · PowerShell 7+'],
@@ -3571,6 +3684,9 @@ const PROJECTS={
       title:'Universal AI CLI Launcher',status:'เครื่องมือ Windows ในเครื่อง',
       summary:'ชั้น orchestration บน PowerShell ที่เปลี่ยนคำสั่ง ai ให้เป็นตัวเลือก Provider และ Account สำหรับ AI CLI ที่ติดตั้งอยู่ โดยแยก configuration รายบัญชี แสดง usage จาก cache และคืน environment กับ exit code ได้ถูกต้อง',
       relation:'โปรเจกต์เครื่องมือสำหรับนักพัฒนาที่สร้างและทดสอบบน Windows เป็นการควบคุม CLI ของผู้ให้บริการที่ติดตั้งอยู่ ไม่ได้เกี่ยวข้องหรือได้รับการรับรองจาก OpenAI, Anthropic, xAI, Google หรือ Antigravity พอร์ตนี้เผยแพร่เฉพาะ case study ส่วน installer ในเครื่องและ profile ที่มี credential ไม่ถูกนำขึ้นสาธารณะ',
+      problem:'AI CLI แต่ละค่ายมีคำสั่ง รูปแบบบัญชี ช่องทางดู usage และขอบเขต credential ไม่เหมือนกัน การค้นหาโปรแกรมหรือเรียกเครือข่ายใหม่ทุกครั้งทำให้เมนูเคยเปิดช้า 5–10 วินาที และการบังคับสลับบัญชีแบบเดียวกันทุกค่ายอาจไม่ปลอดภัย',
+      purpose:'สร้างคำสั่ง ai ที่คงที่หนึ่งคำสั่ง เคารพ capability จริงของแต่ละ Provider แยก configuration เฉพาะกรณีที่รองรับ คืน environment ของผู้เรียกครบ และทำให้การเปิดปกติใช้เฉพาะข้อมูลในเครื่อง',
+      outcome:'ในรอบ optimization ที่บันทึกไว้ เมนูแบบ warm render ลดเหลือประมาณ 24–29 ms รักษา argument และ exit code ได้ครบ พร้อมบอกตรง ๆ เมื่อ usage หรือการแยกบัญชีไม่รองรับ แทนการเดาค่าให้ดูเหมือนข้อมูลจริง',
       facts:[
         ['ประเภทระบบ','ตัวจัดการ AI CLI และสลับบัญชีหลาย Provider ในเครื่อง'],
         ['แพลตฟอร์ม','Windows · Windows PowerShell 5.1 · PowerShell 7+'],
@@ -3611,6 +3727,7 @@ const PROJECTS={
 const projectDialog=$('#projectDialog'),projectDialogClose=$('#projectDialogClose');
 const projectGallery=$('#projectDialogGallery'),projectGalleryTrack=$('#projectGalleryTrack');
 const projectGalleryPrev=$('#projectGalleryPrev'),projectGalleryNext=$('#projectGalleryNext'),projectGalleryCount=$('#projectGalleryCount');
+const projectDialogVideo=$('#projectDialogVideo'),projectDialogVideoPoster=$('#projectDialogVideoPoster');
 let activeProject='',projectTrigger=null,galleryScrollTick=0;
 const projectStatusIsActive=statusId=>statusId==='service'||statusId==='live-demo';
 function projectGalleryIndex(){
@@ -3631,32 +3748,54 @@ function moveProjectGallery(direction){
 }
 function renderProjectGallery(project){
   if(!projectGalleryTrack||!projectGallery) return;
-  const thai=lang==='th',shots=project.gallery||[];
+  const thai=lang==='th',concept=project.catalog?.thumb;
+  const shots=[
+    ...(concept?[{...concept,caption:{en:'Mission concept · system context',th:'ภาพคอนเซปต์ · บริบทของระบบ'}}]:[]),
+    ...(project.gallery||[])
+  ];
   projectGallery.hidden=!shots.length;
   projectGalleryTrack.textContent='';
-  projectGallery.setAttribute('aria-label',thai?'แกลเลอรีหน้าจอโปรเจกต์':'Project interface gallery');
-  projectGalleryTrack.setAttribute('aria-label',thai?'ภาพหน้าจอโปรเจกต์ เลื่อนซ้ายขวาได้':'Project screenshots, horizontally scrollable');
-  $('#projectGalleryLabel').textContent=thai?'หน้าจอจากระบบจริง':'LIVE PROJECT INTERFACE';
+  projectGallery.setAttribute('aria-label',thai?'แกลเลอรีภาพประกอบโปรเจกต์':'Project mission gallery');
+  projectGalleryTrack.setAttribute('aria-label',thai?'ภาพประกอบโปรเจกต์ เลื่อนซ้ายขวาได้':'Project visuals, horizontally scrollable');
+  $('#projectGalleryLabel').textContent=thai?'ภาพประกอบภารกิจ':'MISSION VISUALS';
   projectGalleryPrev.setAttribute('aria-label',thai?'ภาพก่อนหน้า':'Previous screenshot');
   projectGalleryNext.setAttribute('aria-label',thai?'ภาพถัดไป':'Next screenshot');
+  projectGalleryPrev.parentElement.hidden=shots.length<2;
   shots.forEach((shot,index)=>{
     const figure=document.createElement('figure'),img=document.createElement('img'),caption=document.createElement('figcaption');
-    figure.className=`dossier-shot${shot.orientation==='portrait'?' is-portrait':''}`;img.src=shot.src;img.alt=shot.alt[thai?'th':'en'];img.width=shot.width||1440;img.height=shot.height||900;
-    img.loading=index?'lazy':'eager';caption.textContent=shot.caption[thai?'th':'en'];figure.append(img,caption);projectGalleryTrack.appendChild(figure);
+    figure.className=`dossier-shot${shot.orientation==='portrait'?' is-portrait':''}`;img.src=shot.src;img.alt=shot.alt?.[thai?'th':'en']||'';img.width=shot.width||1440;img.height=shot.height||900;
+    img.loading=index?'lazy':'eager';caption.textContent=shot.caption?.[thai?'th':'en']||'';figure.append(img,caption);projectGalleryTrack.appendChild(figure);
   });
   projectGalleryTrack.scrollLeft=0;updateProjectGalleryCount();
+}
+function renderProjectIdentity(project){
+  const mark=$('#projectDialogMark');
+  if(!mark) return;
+  mark.textContent='';
+  if(project.identity?.logo){
+    const img=document.createElement('img');img.src=project.identity.logo;img.alt='';img.width=64;img.height=64;mark.appendChild(img);
+  }else{
+    const span=document.createElement('span');span.textContent=project.identity?.mark||'PX';mark.appendChild(span);
+  }
 }
 function renderProjectDialog(){
   const project=PROJECTS[activeProject];
   if(!project) return;
-  const copy=project[lang==='th'?'th':'en'];
+  const thai=lang==='th',copy=project[thai?'th':'en'];
+  renderProjectIdentity(project);
   $('#projectDialogTitle').textContent=copy.title;
   const status=$('#projectDialogStatus');
   status.textContent=copy.status;
   status.dataset.status=project.catalog?.statusId||'';
   status.classList.toggle('is-active',projectStatusIsActive(project.catalog?.statusId));
   $('#projectDialogSummary').textContent=copy.summary;
-  $('#projectDialogKicker').textContent=lang==='th'?'มินิโปรเจกต์ // แฟ้มข้อมูลภารกิจ':'MINI PROJECT // MISSION DOSSIER';
+  $('#projectDialogKicker').textContent=`${project.catalog?.code||'PROJECT'} // ${thai?'แฟ้มข้อมูลภารกิจ':'MISSION DOSSIER'}`;
+  $('#projectDialogProblem').textContent=copy.problem||'';
+  $('#projectDialogPurpose').textContent=copy.purpose||'';
+  $('#projectDialogOutcome').textContent=copy.outcome||'';
+  $('#projectProblemLabel').textContent=thai?'PAIN POINT // ปัญหา':'PAIN POINT';
+  $('#projectPurposeLabel').textContent=thai?'WHY // เหตุผลที่สร้าง':'WHY BUILD IT';
+  $('#projectOutcomeLabel').textContent=thai?'VALUE // คุณค่าที่ได้':'OPERATIONAL VALUE';
   renderProjectGallery(project);
   const facts=$('#projectDialogFacts'); facts.textContent='';
   copy.facts.forEach(([label,value])=>{
@@ -3671,13 +3810,27 @@ function renderProjectDialog(){
     box.className='dossier-layer';strong.textContent=label;span.textContent=value;box.append(strong,span);architecture.appendChild(box);
   });
   const stack=$('#projectDialogStack'); stack.textContent='';
-  copy.stack.forEach(item=>{const span=document.createElement('span');span.textContent=item;stack.appendChild(span);});
+  (project.technology||copy.stack.map(name=>({name,mark:name.slice(0,2)}))).forEach(item=>{
+    const card=document.createElement('article'),mark=document.createElement('span'),body=document.createElement('div'),name=document.createElement('strong'),role=document.createElement('p');
+    card.className='dossier-tech-card';mark.className='dossier-tech-mark';body.className='dossier-tech-copy';
+    mark.textContent=item.mark||item.name.slice(0,2).toUpperCase();name.textContent=item.name;role.textContent=item.role?.[thai?'th':'en']||'';
+    body.append(name,role);card.append(mark,body);stack.appendChild(card);
+  });
   const relation=$('#projectDialogRelation');
   if(relation) relation.textContent=copy.relation||'';
   const highlights=$('#projectDialogHighlights');
   if(highlights){
     highlights.textContent='';
     (copy.highlights||[]).forEach(item=>{const li=document.createElement('li');li.textContent=item;highlights.appendChild(li);});
+  }
+  const video=project.video||{},videoTitle=video.title?.[thai?'th':'en']||(thai?'วิดีโอแนะนำโปรเจกต์':'PROJECT WALKTHROUGH');
+  const videoState=video.url?(thai?'เปิดวิดีโอ':'PLAY VIDEO'):(thai?'รอใส่วิดีโอ':'VIDEO LINK PENDING');
+  if(projectDialogVideo&&projectDialogVideoPoster){
+    const poster=video.poster||project.catalog?.thumb;
+    projectDialogVideoPoster.src=poster?.src||'';projectDialogVideoPoster.width=poster?.width||1440;projectDialogVideoPoster.height=poster?.height||900;
+    $('#projectDialogVideoTitle').textContent=videoTitle;$('#projectDialogVideoState').textContent=videoState;
+    projectDialogVideo.dataset.videoUrl=video.url||'';
+    projectDialogVideo.setAttribute('aria-label',`${videoTitle} · ${videoState}`);
   }
   const source=$('#projectDialogSource'),live=$('#projectDialogLive');
   const referenceUrl=project.source||project.caseStudy||'';
@@ -3688,6 +3841,7 @@ function renderProjectDialog(){
       :(lang==='th'?(TH.caseStudy||'อ่านกรณีศึกษา ↗'):'CASE STUDY ↗');
   }else{source.hidden=true;source.removeAttribute('href');}
   if(project.live){live.href=project.live;live.hidden=false;}else{live.hidden=true;live.removeAttribute('href');}
+  $('#projectDialogLinks').hidden=source.hidden&&live.hidden;
 }
 function openProjectDialog(id,trigger){
   if(!projectDialog||!PROJECTS[id]) return;
@@ -3706,6 +3860,11 @@ $('#projectGrid')?.addEventListener('click',e=>{
   openProjectDialog(button.dataset.project,button);
 });
 projectDialogClose?.addEventListener('click',closeProjectDialog);
+projectDialogVideo?.addEventListener('click',()=>{
+  const url=projectDialogVideo.dataset.videoUrl;
+  if(url){window.open(url,'_blank','noopener,noreferrer');return;}
+  toast(lang==='th'?'รอใส่วิดีโอ · เพิ่มลิงก์ YouTube ภายหลัง':'VIDEO LINK PENDING · ADD YOUTUBE URL LATER');
+});
 projectDialog?.addEventListener('cancel',()=>document.body.classList.remove('modal-open'));
 projectDialog?.addEventListener('close',()=>{
   document.body.classList.remove('modal-open');projectTrigger?.focus?.({preventScroll:true});projectTrigger=null;
@@ -4279,7 +4438,7 @@ const TH={
   catalog_more:"แสดงเพิ่ม",
   catalog_empty:"ไม่พบโปรเจกต์ที่ตรงกับตัวกรอง",
   no_deployment:"ยังไม่มีภารกิจที่กำหนด", awaiting:"สงวนช่องขีดความสามารถไว้",
-  d_workflow:"01 // ขั้นตอนการทำงาน", d_arch:"02 // สถาปัตยกรรมระบบ", d_stack:"03 // เทคโนโลยีที่ตรวจสอบแล้ว", d_hl:"04 // การตัดสินใจเชิงวิศวกรรม",
+  d_why:"01 // เหตุผลของภารกิจ", d_workflow:"02 // ขั้นตอนการทำงาน", d_arch:"03 // สถาปัตยกรรมระบบ", d_stack:"04 // เทคโนโลยีและหน้าที่", d_video:"05 // วิดีโอสาธิต", d_hl:"06 // การตัดสินใจเชิงวิศวกรรม",
   sp_eb:"สเปกยาน", sp_t:"ระบบและขีดความสามารถ",
   h_sys:"ระบบ", h_cls:"ประเภท", h_hrs:"ชั่วโมงบิน (ประมาณ)", h_cap:"ความสามารถ",
   lg_eb:"บันทึกการบิน", lg_t:"เส้นทาง",
@@ -4299,7 +4458,7 @@ const TH={
   lg4a_r:"กราฟิกดีไซน์ · Mid-level", lg4a_date:"2023–2025 · 2 ปี",
   lg4b_r:"กราฟิกดีไซน์ · Junior", lg4b_date:"2021–2023 · 2 ปี",
   lg4_d:"4 ปีงานลูกค้า สายตาดีไซน์หลังโค้ด",
-  up_t:"ติดต่อ", up_base:"ฐานปฏิบัติการ",
+  up_t:"ติดต่อ",
   ai_eb:"เซกเตอร์ // พัฒนา AI",
   ai_lock:"ล็อกการเข้าถึง",
   ai_code:"โมดูล // ก่อนปล่อย",
