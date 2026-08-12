@@ -39,7 +39,7 @@
   --nav-compact-h:4.85rem;
   --registry-h:5.4rem;
   --registry-docked-h:3.55rem;
-  --tele-h:0px;
+  --tele-h:0;
   --touch:44px;
   --safe-t:env(safe-area-inset-top,0px);
   --safe-b:env(safe-area-inset-bottom,0px);
@@ -1743,10 +1743,7 @@ html[lang="th"] #reserved .sub::before{content:""}
   .r-hold .r-hold-bar i{animation:none!important}
 }
 @media(max-width:700px){
-  #reserved{
-    min-height:auto;
-    padding:calc(var(--nav-h) + 3vh) 0 calc(var(--tele-h) + 5.5vh);
-  }
+  #reserved{min-height:92svh;padding:calc(var(--nav-h) + 3vh) 0 10vh}
   .r-orbit,.r-orbit2,.r-orbit3{opacity:.35}
   .r-watermark{font-size:4rem;letter-spacing:.16em}
   .r-title{font-size:clamp(1.55rem,7.6vw,2.35rem);padding:.1rem .35rem 0}
@@ -1754,6 +1751,7 @@ html[lang="th"] #reserved .sub::before{content:""}
   .r-title .line{white-space:normal;max-width:100%;padding:.08em .2em .12em}
   html[lang="th"] .r-title{font-size:clamp(1.45rem,6.8vw,2.1rem)}
   .r-title-rail{width:min(14rem,72vw);margin-top:1.05rem}
+  #reserved{padding-bottom:calc(var(--tele-h) + 5.5vh)}
   .r-frame{padding:1.2rem 0}
   #reserved .r-hud{font-size:.42rem;letter-spacing:.12em}
   #reserved .r-hud.bl,#reserved .r-hud.br{display:none}
@@ -1800,10 +1798,11 @@ footer .logo:hover{opacity:1}
 .footer-inner span:nth-child(2){text-align:right;color:var(--mist);justify-self:end}
 .footer-inner > a{display:inline-flex;align-items:center;min-height:var(--touch)}
 @media(max-width:700px){
-  footer{padding:1.6rem 5.5vw calc(2.2rem + var(--safe-b))}
-  .footer-inner{grid-template-columns:1fr;text-align:center!important;gap:.7rem}
-  footer .logo{justify-self:center;height:32px}
-  .footer-inner span{text-align:center!important;justify-self:center!important}
+  footer{padding:1rem 5.5vw calc(1rem + var(--safe-b))}
+  .footer-inner{grid-template-columns:auto minmax(0,1fr);gap:1rem;padding-top:.75rem;text-align:left!important}
+  .footer-inner > a{justify-self:start}
+  footer .logo{height:26px}
+  .footer-inner span{text-align:right!important;justify-self:end!important;line-height:1.4}
   section{padding-bottom:3rem}
 }
 @media(prefers-reduced-motion:reduce){
