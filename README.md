@@ -149,8 +149,6 @@ Project media may originate from operational interfaces. Remove personal records
 - **Kittiphum Prasomsap**
 - **GitHub:** [@Sleepingknight0](https://github.com/Sleepingknight0)
 - **Email:** [bwcodex@gmail.com](mailto:bwcodex@gmail.com)
-- **Location:** Nonthaburi, Thailand · UTC+7
-
 ## License
 
 Released under the [MIT License](LICENSE). Copyright © 2026 Kittiphum Prasomsap.
