@@ -1,52 +1,37 @@
 <div align="center">
-  <img src="assets/images/logo.png" width="108" alt="BlueWhaleX logo">
-  <h1>BlueWhaleX</h1>
-  <p><strong>Technical Operations · Applied Software · Emerging Technology</strong></p>
+  <img src="assets/images/logo.png" width="120" alt="BlueWhaleX logo">
+  <h1>BLUEWHALEX</h1>
+  <p><code>OPERATIONS / SOFTWARE / EMERGING TECHNOLOGY</code></p>
+  <p><strong>Systems built for real work.</strong></p>
   <p>A bilingual portfolio by Kittiphum Prasomsap.</p>
-  <p><a href="https://bluewhalex-pf.vercel.app"><strong>View the Portfolio</strong></a></p>
+  <p><a href="https://bluewhalex-pf.vercel.app"><strong>Explore the Portfolio ↗</strong></a></p>
 </div>
 
-## About
+---
 
-This repository stores the production-ready files used to deploy the BlueWhaleX portfolio to Vercel.
+## Mission
 
-The site presents selected operational systems, interactive visualizations, and developer tools. It is built with semantic HTML, CSS, and vanilla JavaScript, with English and Thai interfaces.
+BlueWhaleX presents software shaped around real operational problems: clearer records, stronger workflows, useful automation, and technology that people can understand.
 
-## Selected Work
+This repository is intentionally lean. It stores the production-ready portfolio deployed to Vercel, not a public product distribution or reusable starter template.
 
-### NACC Overnight Parking Log
+> Real problems. Clear systems. Production-minded delivery.
 
-An internal operational system that turns overnight patrol observations into structured records for review and pattern analysis. Source code and deployment access are private.
+## Selected Systems
 
-### NACC Official-Letter Parking Request & Allocation
+| System | Purpose | Access |
+| --- | --- | --- |
+| **NACC Overnight Parking Log** | Structures overnight patrol observations for review and pattern analysis. | Private |
+| **NACC Official-Letter Parking Request & Allocation** | Coordinates requests, approvals, allocations, field work, evidence, and closure. | Private |
+| **Starlink Mission Control** | Explains satellite-network concepts through a guided bilingual 3D experience. | [Live](https://starlink-plum.vercel.app) · [Code](https://github.com/Sleepingknight0/BWX-STARLINK) |
+| **Chess Vision Assistant** | Combines board recognition, legal game state, Stockfish analysis, and visual guidance. | [Code](https://github.com/Sleepingknight0/chess-vision-assistant) |
+| **Universal AI CLI Launcher** | Unifies account selection and supported AI command-line tools on Windows. | [Case study](projects/universal-ai-cli-launcher/README.md) |
 
-An internal workflow platform for processing official parking requests, approvals, allocations, field assignments, evidence, and closure. Source code and deployment access are private.
+## Portfolio Build
 
-### Starlink Mission Control
+The portfolio is a self-contained static experience built with semantic HTML, CSS, and vanilla JavaScript.
 
-An interactive 3D explainer that presents satellite-network concepts through a guided bilingual experience and a modeled constellation simulation.
-
-[Live demo](https://starlink-plum.vercel.app) · [Source code](https://github.com/Sleepingknight0/BWX-STARLINK)
-
-### Chess Vision Assistant
-
-A Windows desktop analysis tool that combines board recognition, legal game state, Stockfish analysis, and visual guidance without autoplay.
-
-[Source code](https://github.com/Sleepingknight0/chess-vision-assistant)
-
-### Universal AI CLI Launcher
-
-A private Windows developer tool for selecting account profiles and launching supported AI command-line providers through one consistent workflow.
-
-[Read the case study](projects/universal-ai-cli-launcher/README.md)
-
-## Portfolio Site
-
-- Responsive layouts for desktop, tablet, and mobile.
-- English and Thai content.
-- Searchable project catalog and detailed project dossiers.
-- Keyboard navigation and reduced-motion support.
-- Static deployment with no server-side runtime.
+It includes English and Thai content, responsive layouts, a searchable project catalog, detailed system dossiers, keyboard navigation, and reduced-motion support.
 
 `index.html` is the canonical source. `bluewhalex-portfolio.html` is its synchronized distribution copy.
 
