@@ -133,9 +133,10 @@ section[id]{scroll-margin-top:calc(var(--nav-h) + var(--safe-t) + 10px)}
 
 /* chrome */
 .progress{
-  position:fixed;top:0;left:0;height:2px;width:0;z-index:200;
+  position:fixed;top:0;left:0;height:2px;width:100%;z-index:200;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.55) 30%,#fff 70%,transparent);
   box-shadow:0 0 10px rgba(255,255,255,.35);
+  transform:scaleX(0);transform-origin:left center;will-change:transform;
 }
 .skip{
   position:fixed;top:calc(var(--safe-t) + 1rem);left:calc(var(--safe-l) + 1rem);z-index:300;
@@ -2616,7 +2617,7 @@ $$('.bg[data-src]').forEach(bg=>{
 /* Hero video — fade to black at end, then restart */
 const heroVideo=$('#heroVideo');
 const heroSec=document.getElementById('hero');
-let heroVideoArmed=false;
+let heroVideoArmed=false,heroInView=true;
 function armHeroVideo(){
   if(heroVideoArmed) return;
   heroVideoArmed=true;
@@ -2647,6 +2648,7 @@ function armHeroVideo(){
     heroVideo.classList.remove('ready','fading');
   };
   const tryPlay=()=>{
+    if(!heroInView||document.hidden) return;
     const p=heroVideo.play();
     if(p && typeof p.then==='function') p.then(ok).catch(fail);
     else if(!heroVideo.paused) ok();
@@ -2660,6 +2662,12 @@ function armHeroVideo(){
     const finish=()=>{
       try{ heroVideo.currentTime=0; }catch{}
       heroVideo.playbackRate=1;
+      if(!heroInView||document.hidden){
+        heroVideo.classList.remove('fading');
+        heroSec?.classList.remove('bg-fading');
+        looping=false;
+        return;
+      }
       const p=heroVideo.play();
       const show=()=>{
         requestAnimationFrame(()=>{
@@ -2694,9 +2702,17 @@ function armHeroVideo(){
   window.addEventListener('pointerdown', gesture, {passive:true});
   window.addEventListener('keydown', gesture);
 
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(([entry])=>{
+      heroInView=entry.isIntersecting;
+      if(heroInView) tryPlay();
+      else heroVideo.pause();
+    },{rootMargin:'120px 0px',threshold:0}).observe(heroSec);
+  }
+
   document.addEventListener('visibilitychange', ()=>{
     if(document.hidden) heroVideo.pause();
-    else if(document.body.classList.contains('ready')) tryPlay();
+    else if(heroInView&&document.body.classList.contains('ready')) tryPlay();
   });
 }
 const readyWatch=setInterval(()=>{
@@ -2707,8 +2723,11 @@ setTimeout(()=>{ clearInterval(readyWatch); armHeroVideo(); }, 3500);
 /* Grok logo — canvas chroma key (green screen removal) */
 const grokVideo=$('#grokVideo');
 const grokCanvas=$('#grokCanvas');
-let grokRaf=0, grokRvfc=0, grokActive=false;
+let grokRaf=0,grokRvfc=0,grokActive=false,grokInView=true,grokLastPaint=0;
 const GROK_SIM=.42, GROK_SMTH=.22;
+const GROK_COMPACT=matchMedia('(max-width:600px)').matches;
+const GROK_RENDER_MAX=GROK_COMPACT?420:560;
+const GROK_FRAME_MS=1000/(GROK_COMPACT||TOUCH?16:20);
 
 function initGrokChroma(){
   if(!grokVideo||!grokCanvas){
@@ -2719,6 +2738,17 @@ function initGrokChroma(){
   if(!ctx) return;
 
   // single keyed pass over the current video frame
+  const sizeCanvas=()=>{
+    const sourceW=grokVideo.videoWidth,sourceH=grokVideo.videoHeight;
+    if(!sourceW||!sourceH) return;
+    const targetW=Math.min(sourceW,GROK_RENDER_MAX);
+    const targetH=Math.round(targetW*(sourceH/sourceW));
+    if(grokCanvas.width!==targetW||grokCanvas.height!==targetH){
+      grokCanvas.width=targetW;
+      grokCanvas.height=targetH;
+    }
+  };
+
   const keyFrame=()=>{
     if(!grokVideo.videoWidth||!grokCanvas.width) return;
     ctx.drawImage(grokVideo,0,0,grokCanvas.width,grokCanvas.height);
@@ -2749,7 +2779,7 @@ function initGrokChroma(){
     const still=()=>{
       const w=grokVideo.videoWidth, h=grokVideo.videoHeight;
       if(!w||!h) return;
-      grokCanvas.width=w; grokCanvas.height=h;
+      sizeCanvas();
       grokVideo.addEventListener('seeked', keyFrame, {once:true});
       try{ grokVideo.currentTime=.6; }catch{ keyFrame(); }
       setTimeout(keyFrame, 600); // fallback if seeked never fires
@@ -2772,39 +2802,44 @@ function initGrokChroma(){
   const schedule=cb=>{
     cancelSchedule();
     if(typeof grokVideo.requestVideoFrameCallback==='function'){
-      grokRvfc=grokVideo.requestVideoFrameCallback(()=>{
+      grokRvfc=grokVideo.requestVideoFrameCallback(now=>{
         grokRvfc=0;
-        cb();
+        cb(now);
       });
     }else{
       grokRaf=requestAnimationFrame(()=>{
         grokRaf=0;
-        cb();
+        cb(performance.now());
       });
     }
   };
-  const paint=()=>{
+  const paint=now=>{
     if(!grokActive) return;
     if(!grokVideo.videoWidth){ schedule(paint); return; }
-    // hidden (mobile breakpoint) — keep the loop alive but skip the heavy pixel work
     if(!grokCanvas.clientWidth){ schedule(paint); return; }
-    keyFrame();
+    if(!grokLastPaint||now-grokLastPaint>=GROK_FRAME_MS){
+      grokLastPaint=now;
+      keyFrame();
+    }
     schedule(paint);
   };
 
-  const startLoop=()=>{ if(grokActive) return; grokActive=true; schedule(paint); };
-  const stopLoop=()=>{ grokActive=false; cancelSchedule(); };
+  const startLoop=()=>{
+    if(grokActive||!grokInView||document.hidden) return;
+    grokActive=true;grokLastPaint=0;schedule(paint);
+  };
+  const stopLoop=()=>{ grokActive=false;grokLastPaint=0;cancelSchedule(); };
 
   const start=()=>{
     const w=grokVideo.videoWidth, h=grokVideo.videoHeight;
     if(!w||!h) return;
-    grokCanvas.width=w;
-    grokCanvas.height=h;
+    sizeCanvas();
     grokVideo.muted=true;
     grokVideo.defaultMuted=true;
     grokVideo.playsInline=true;
     grokVideo.setAttribute('playsinline','');
     grokVideo.loop=true;
+    if(!grokInView||document.hidden) return;
     const play=grokVideo.play();
     if(play&&play.then) play.then(startLoop).catch(()=>{});
     else startLoop();
@@ -2820,9 +2855,19 @@ function initGrokChroma(){
   };
   window.addEventListener('pointerdown', gesture, {passive:true});
 
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(([entry])=>{
+      grokInView=entry.isIntersecting;
+      if(!grokInView){ stopLoop();grokVideo.pause(); }
+      else if(document.body.classList.contains('ready')&&!document.hidden){
+        grokVideo.play().then(startLoop).catch(()=>{});
+      }
+    },{rootMargin:'120px 0px',threshold:0}).observe(heroSec||grokCanvas);
+  }
+
   document.addEventListener('visibilitychange',()=>{
     if(document.hidden){ stopLoop(); grokVideo.pause(); }
-    else if(document.body.classList.contains('ready')){
+    else if(grokInView&&document.body.classList.contains('ready')){
       grokVideo.play().then(startLoop).catch(()=>{});
     }
   });
@@ -2930,7 +2975,8 @@ $$('h2.split').forEach(h=>{ h.dataset.en=h.textContent.replace(/\s+/g,' ').trim(
 /* stars */
 const canvas=$('#stars');
 const ctx=canvas?canvas.getContext('2d'):null;
-let W=0,H=0,stars=[],meteors=[],running=true;
+let W=0,H=0,stars=[],meteors=[],running=true,starLast=0;
+const STAR_FRAME_MS=1000/(TOUCH?24:30);
 function resizeStars(){
   if(!canvas||!ctx) return;
   W=canvas.width=innerWidth; H=canvas.height=innerHeight;
@@ -2941,15 +2987,18 @@ function resizeStars(){
     tw:(Math.random()*0.02+0.004)*(Math.random()<.5?1:-1)
   }));
 }
-function drawStars(){
+function drawStars(now=performance.now()){
   if(!ctx||!running) return;
+  if(starLast&&now-starLast<STAR_FRAME_MS){ requestAnimationFrame(drawStars);return; }
+  const step=starLast?Math.min(3,(now-starLast)/(1000/60)):1;
+  starLast=now;
   ctx.clearRect(0,0,W,H);
   // soft monochrome nebula
   const g=ctx.createRadialGradient(W*.75,H*.2,0,W*.75,H*.2,W*.4);
   g.addColorStop(0,'rgba(255,255,255,0.035)'); g.addColorStop(1,'transparent');
   ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
   for(const s of stars){
-    s.a+=s.tw; if(s.a>1||s.a<0) s.tw*=-1;
+    s.a+=s.tw*step; if(s.a>1||s.a<0) s.tw*=-1;
     ctx.beginPath();
     ctx.fillStyle=`rgba(245,245,245,${0.2+s.a*.55})`;
     ctx.arc(s.x,s.y,s.r*s.z,0,Math.PI*2); ctx.fill();
@@ -2963,7 +3012,7 @@ function drawStars(){
     gr.addColorStop(0,`rgba(255,255,255,${m.life})`); gr.addColorStop(1,'transparent');
     ctx.strokeStyle=gr; ctx.lineWidth=1.3; ctx.beginPath();
     ctx.moveTo(m.x,m.y); ctx.lineTo(m.x-m.len,m.y-m.len*.4); ctx.stroke();
-    m.x+=m.vx; m.y+=m.vy; m.life-=.016;
+    m.x+=m.vx*step; m.y+=m.vy*step; m.life-=.016*step;
     if(m.life<=0) meteors.splice(i,1);
   }
   if(!RM) requestAnimationFrame(drawStars);
@@ -2973,7 +3022,7 @@ if(ctx){
   if(!RM) requestAnimationFrame(drawStars);
   document.addEventListener('visibilitychange',()=>{
     running=!document.hidden;
-    if(running&&!RM) requestAnimationFrame(drawStars);
+    if(running&&!RM){ starLast=0;requestAnimationFrame(drawStars); }
   });
 }
 
@@ -2983,7 +3032,7 @@ if(ctx){
   if(!c) return;
   const fctx=c.getContext('2d');
   if(!fctx) return;
-  let fW=0,fH=0,dots=[],fRunning=true,raf=0;
+  let fW=0,fH=0,dots=[],fRunning=false,fInView=false,raf=0;
 
   function rebuild(){
     const dpr=Math.min(devicePixelRatio||1,2);
@@ -3040,26 +3089,32 @@ if(ctx){
     cancelAnimationFrame(raf);
     rebuild();
     if(RM){ paint(true); return; }
+    if(!fInView||document.hidden) return;
     fRunning=true;
     raf=requestAnimationFrame(loop);
   }
 
-  start();
+  function stop(){
+    fRunning=false;
+    cancelAnimationFrame(raf);
+  }
+
   addEventListener('resize',()=>{
     clearTimeout(start._t);
-    start._t=setTimeout(start,120);
+    if(fInView) start._t=setTimeout(start,120);
   },{passive:true});
   document.addEventListener('visibilitychange',()=>{
-    if(document.hidden){ fRunning=false; cancelAnimationFrame(raf); }
-    else if(!RM){ fRunning=true; raf=requestAnimationFrame(loop); }
+    if(document.hidden) stop();
+    else if(fInView) start();
   });
-  /* rebuild when footer enters view first time (size may settle) */
+  /* Paint only while the footer is visible; it is far below the initial viewport. */
   if('IntersectionObserver' in window){
     const io=new IntersectionObserver((ents)=>{
-      if(ents.some(e=>e.isIntersecting)){ start(); }
+      fInView=ents.some(e=>e.isIntersecting);
+      if(fInView) start(); else stop();
     },{threshold:.05});
     io.observe(c.parentElement||c);
-  }
+  }else{ fInView=true;start(); }
 })();
 
 /* scroll */
@@ -3074,7 +3129,7 @@ function onScroll(){
     const h=document.documentElement;
     const max=h.scrollHeight-h.clientHeight;
     const p=max>0?(h.scrollTop/max):0;
-    if(progress) progress.style.width=(p*100)+'%';
+    if(progress) progress.style.transform=`scaleX(${p})`;
     nav?.classList.toggle('scrolled', h.scrollTop>32);
     nav?.classList.toggle('desktop-compact', innerWidth>768&&h.scrollTop>120);
     if(registryJump&&projectRegistry){
