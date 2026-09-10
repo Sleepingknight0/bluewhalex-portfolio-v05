@@ -24,7 +24,7 @@ This repository is intentionally lean. It stores the production-ready portfolio 
 | **NACC Overnight Parking Log** | Structures overnight patrol observations for review and pattern analysis. | Private |
 | **NACC Official-Letter Parking Request & Allocation** | Coordinates requests, approvals, allocations, field work, evidence, and closure. | Private |
 | **Starlink Mission Control** | Explains satellite-network concepts through a guided bilingual 3D experience. | [Live](https://starlink-plum.vercel.app) · [Code](https://github.com/Sleepingknight0/BWX-STARLINK) |
-| **Chess Vision Assistant** | Combines board recognition, legal game state, Stockfish analysis, and visual guidance. | [Code](https://github.com/Sleepingknight0/chess-vision-assistant) |
+| **Chess Vision Assistant** | Records moves by hand, tracks legal game state, analyzes with Stockfish, and draws overlay guidance. | [Code](https://github.com/Sleepingknight0/chess-vision-assistant) |
 | **Universal AI CLI Launcher** | Unifies account selection and supported AI command-line tools on Windows. | [Case study](projects/universal-ai-cli-launcher/README.md) |
 
 ## Portfolio Build
