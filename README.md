@@ -11,7 +11,7 @@
 
 ## Mission
 
-BlueWhaleX presents software shaped around real operational problems: clearer records, stronger workflows, useful automation, and technology that people can understand.
+BlueWhaleX presents software built around real operational problems: clearer records, stronger workflows, useful automation, and technology that people can understand.
 
 This repository is intentionally lean. It stores the production-ready portfolio deployed to Vercel, not a public product distribution or reusable starter template.
 
